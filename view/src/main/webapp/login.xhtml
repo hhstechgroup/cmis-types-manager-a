@@ -15,15 +15,17 @@
             color: #4a4a4a;
             padding: 10px; /* Поля вокруг текста */
         }
+        h1{
+            text-align: center;
+        }
     </style>
 </h:head>
 <h:body>
     <div id="centerLayer">
+        <h1>Login</h1>
         <h:form id="form">
             <h:panelGrid columns="3" id="grid" cellpadding="5" title="Login">
-                <f:facet name="header">
-                    Login
-                </f:facet>
+
                 <h:outputLabel for="username" value="Username:"/>
                 <p:inputText value="#{login.username}"
                              id="username" label="username"/>

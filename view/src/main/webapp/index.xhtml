@@ -16,6 +16,11 @@
             padding: 10px; /* Поля вокруг текста */
             font-family: "Times new roman";
         }
+        .tree{
+            width:100%;
+            border:0;
+            font-family: "Times new roman";
+        }
 
         h1 {
             text-align: center;
@@ -29,13 +34,13 @@
         <h:form id="form">
             <p:tree value="#{treeBean.root}" var="node" id="tree" styleClass="tree">
                 <p:treeNode id="treeNode" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
-
+                    <h:outputText value="#{node.displayName}" id="lblNode"/>
                 </p:treeNode>
             </p:tree>
 
         </h:form>
         <h:form>
-            <h:outputText value="#{node.displayName}" id="lblNode"/>
+            <p:commandButton id="logoutButton" value="Logout" action="#{login.doLogout}"/>
         </h:form>
 
     </div>
