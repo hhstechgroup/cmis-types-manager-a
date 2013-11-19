@@ -1,0 +1,44 @@
+<html xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Type tree</title>
+    <style>
+        body {
+            background: #f0f0f0;
+            color: #4a4a4a;
+        }
+
+        #centerLayer {
+            margin-left: 30%; /* Отступ слева */
+            width: 40%; /* Ширина слоя */
+            background: #fff; /* Цвет фона */
+            padding: 10px; /* Поля вокруг текста */
+            font-family: "Times new roman";
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+    </style>
+</h:head>
+<h:body>
+    <div id="centerLayer">
+        <h1>Type Tree</h1>
+        <h:form id="form">
+            <p:tree value="#{treeBean.root}" var="node" id="tree" styleClass="tree">
+                <p:treeNode id="treeNode" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+
+                </p:treeNode>
+            </p:tree>
+
+        </h:form>
+        <h:form>
+            <h:outputText value="#{node.displayName}" id="lblNode"/>
+        </h:form>
+
+    </div>
+
+</h:body>
+</html>

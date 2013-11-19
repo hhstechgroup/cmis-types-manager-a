@@ -1,0 +1,51 @@
+<html xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Login page</title>
+    <style>
+        body {
+            background: #f0f0f0; /* Цвет фона */
+        }
+
+        #centerLayer {
+            margin-left: 30%; /* Отступ слева */
+            width: 40%; /* Ширина слоя */
+            background: #fff; /* Цвет фона */
+            color: #4a4a4a;
+            padding: 10px; /* Поля вокруг текста */
+        }
+    </style>
+</h:head>
+<h:body>
+    <div id="centerLayer">
+        <h:form id="form">
+            <h:panelGrid columns="3" id="grid" cellpadding="5" title="Login">
+                <f:facet name="header">
+                    Login
+                </f:facet>
+                <h:outputLabel for="username" value="Username:"/>
+                <p:inputText value="#{login.username}"
+                             id="username" label="username"/>
+                <h:outputLabel for="username" value=""/>
+
+                <h:outputLabel for="password" value="Password:"/>
+                <p:password value="#{login.password}"
+                            id="password" label="password"/>
+                <h:outputLabel for="username" value=""/>
+
+                <h:outputLabel for="url" value="URL:"/>
+                <p:inputText value="#{login.url}"
+                             id="url" required="true" label="URL"/>
+                <p:inputText value="#{login.port}"
+                             id="d" required="true" label="URL" maxlength="4" size="1"/>
+
+                <p:commandButton id="loginButton" value="Login"
+                                 action="#{login.doLogin}" update="grid"/>
+
+            </h:panelGrid>
+
+        </h:form>
+    </div>
+</h:body>
+</html>
