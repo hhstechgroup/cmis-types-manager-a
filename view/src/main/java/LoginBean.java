@@ -1,3 +1,5 @@
+import org.primefaces.event.NodeSelectEvent;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -58,12 +60,10 @@ public class LoginBean implements Serializable {
     public void setUrl(String url) {
         this.url = url;
     }
-
     public String doLogin() {
-
         String page = "";
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
-        service = CMISTypeManagerService.getInstance();
+       // service = CMISTypeManagerService.getInstance();
         service.setName(username);
         service.setPass(password);
         service.setPort(port);

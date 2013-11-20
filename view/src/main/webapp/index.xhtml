@@ -16,9 +16,10 @@
             padding: 10px; /* Поля вокруг текста */
             font-family: "Times new roman";
         }
-        .tree{
-            width:100%;
-            border:0;
+
+        .tree {
+            width: 100%;
+            border: 0;
             font-family: "Times new roman";
         }
 
@@ -32,16 +33,22 @@
     <div id="centerLayer">
         <h1>Type Tree</h1>
         <h:form id="form">
-            <p:tree value="#{treeBean.root}" var="node" id="tree" styleClass="tree">
+
+            <p:tree value="#{treeBean.root}" var="node" id="tree"
+                    styleClass="tree"
+                    dynamic="true"
+                    selectionMode="single" selection="#{treeBean.selected}">
+                <p:ajax event="select" listener="#{treeBean.onNodeSelect}" update=":createBtn"/>
                 <p:treeNode id="treeNode" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
-                    <h:outputText value="#{node.displayName}" id="lblNode"/>
+                    <h:outputText value="#{node}" id="lblNode"/>
                 </p:treeNode>
             </p:tree>
+        </h:form>
 
-        </h:form>
-        <h:form>
-            <p:commandButton id="logoutButton" value="Logout" action="#{login.doLogout}"/>
-        </h:form>
+        <p:commandButton id="createBtn" value="Create type" action="#{treeBean.create}"
+                         disabled="#{treeBean.disableBtn}"/>
+
+        <p:commandButton id="logoutButton" value="Logout" action="#{login.doLogout}"/>
 
     </div>
 

@@ -101,6 +101,9 @@ public class CMISTypeManagerService {
         dto.setCreateble(objType.isCreatable());
         dto.setFileable(objType.isFileable());
         dto.setFulltextIndexed(objType.isFulltextIndexed());
+        dto.setMutabilityCanCreate(objType.getTypeMutability().canCreate());
+        dto.setMutabilityCanDelete(objType.getTypeMutability().canDelete());
+        dto.setMutabilityCanUpdate(objType.getTypeMutability().canUpdate());
 
         Iterator i = objType.getChildren().iterator();
         List<TypeDTO> childs = new ArrayList<TypeDTO>();

@@ -10,6 +10,34 @@ public class TypeDTO implements Serializable {
     private boolean isFileable;
     private boolean isFulltextIndexed;
 
+    private boolean mutabilityCanCreate;//Mutability
+    private boolean mutabilityCanDelete;
+    private boolean mutabilityCanUpdate;
+
+    public void setMutabilityCanCreate(boolean mutabilityCanCreate) {
+        this.mutabilityCanCreate = mutabilityCanCreate;
+    }
+
+    public void setMutabilityCanDelete(boolean mutabilityCanDelete) {
+        this.mutabilityCanDelete = mutabilityCanDelete;
+    }
+
+    public void setMutabilityCanUpdate(boolean mutabilityCanUpdate) {
+        this.mutabilityCanUpdate = mutabilityCanUpdate;
+    }
+
+    public boolean isMutabilityCanCreate() {
+        return mutabilityCanCreate;
+    }
+
+    public boolean isMutabilityCanDelete() {
+        return mutabilityCanDelete;
+    }
+
+    public boolean isMutabilityCanUpdate() {
+        return mutabilityCanUpdate;
+    }
+
     private List<TypeDTO> childs= new ArrayList<TypeDTO>();
 
     public List<TypeDTO> getChilds() {
@@ -66,5 +94,9 @@ public class TypeDTO implements Serializable {
 
     public void setFulltextIndexed(boolean fulltextIndexed) {
         isFulltextIndexed = fulltextIndexed;
+    }
+    @Override
+    public String toString(){
+        return this.getDisplayName();
     }
 }
