@@ -6,22 +6,22 @@
               version="2.0">
 
     <!--<navigation-rule>-->
-        <!--<from-view-id>login.xhtml</from-view-id>-->
-        <!--<navigation-case>-->
-            <!--<from-action>#{login.doLogin}</from-action>-->
-            <!--&lt;!&ndash;<from-outcome>Main Page</from-outcome>&ndash;&gt;-->
-            <!--<to-view-id>index.xhtml</to-view-id>-->
-        <!--</navigation-case>-->
+    <!--<from-view-id>login.xhtml</from-view-id>-->
+    <!--<navigation-case>-->
+    <!--<from-action>#{login.doLogin}</from-action>-->
+    <!--&lt;!&ndash;<from-outcome>Main Page</from-outcome>&ndash;&gt;-->
+    <!--<to-view-id>index.xhtml</to-view-id>-->
+    <!--</navigation-case>-->
 
     <!--</navigation-rule>-->
 
     <!--<navigation-rule>-->
-        <!--<from-view-id>index.xhtml</from-view-id>-->
-        <!--<navigation-case>-->
-            <!--<from-action>#{login.doLogout}</from-action>-->
-            <!--&lt;!&ndash;<from-outcome>Logout</from-outcome>&ndash;&gt;-->
-            <!--<to-view-id>login.xhtml</to-view-id>-->
-        <!--</navigation-case>-->
+    <!--<from-view-id>index.xhtml</from-view-id>-->
+    <!--<navigation-case>-->
+    <!--<from-action>#{login.doLogout}</from-action>-->
+    <!--&lt;!&ndash;<from-outcome>Logout</from-outcome>&ndash;&gt;-->
+    <!--<to-view-id>login.xhtml</to-view-id>-->
+    <!--</navigation-case>-->
     <!--</navigation-rule>-->
 
 

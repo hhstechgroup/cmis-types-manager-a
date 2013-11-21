@@ -1,53 +1,40 @@
-<html xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
-    <title>Login page</title>
-    <style>
-        body {
-            background: #f0f0f0; /* Цвет фона */
-        }
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="template1.xhtml"
+                xmlns:uib="http://engagepoint.com/uib">
 
-        #centerLayer {
-            margin-left: 30%; /* Отступ слева */
-            width: 40%; /* Ширина слоя */
-            background: #fff; /* Цвет фона */
-            color: #4a4a4a;
-            padding: 10px; /* Поля вокруг текста */
-        }
-        h1{
-            text-align: center;
-        }
-    </style>
-</h:head>
-<h:body>
-    <div id="centerLayer">
-        <h1>Login</h1>
-        <h:form id="form">
-            <h:panelGrid columns="3" id="grid" cellpadding="5" title="Login">
+    <ui:define name="mainContent">
 
-                <h:outputLabel for="username" value="Username:"/>
-                <p:inputText value="#{login.username}"
-                             id="username" label="username"/>
-                <h:outputLabel for="username" value=""/>
+            <h1>Login</h1>
+            <h:form id="form">
+                <p:panelGrid columns="3" id="grid" cellpadding="5" title="Login">
 
-                <h:outputLabel for="password" value="Password:"/>
-                <p:password value="#{login.password}"
-                            id="password" label="password"/>
-                <h:outputLabel for="username" value=""/>
+                    <h:outputLabel for="username" value="Username:"/>
+                    <p:inputText value="#{login.username}"
+                                 id="username" label="username"/>
+                    <h:outputLabel for="username" value=""/>
 
-                <h:outputLabel for="url" value="URL:"/>
-                <p:inputText value="#{login.url}"
-                             id="url" required="true" label="URL"/>
-                <p:inputText value="#{login.port}"
-                             id="d" required="true" label="URL" maxlength="4" size="1"/>
+                    <h:outputLabel for="password" value="Password:"/>
+                    <p:password value="#{login.password}"
+                                id="password" label="password"/>
+                    <h:outputLabel for="username" value=""/>
 
-                <p:commandButton id="loginButton" value="Login"
-                                 action="#{login.doLogin}" update="grid"/>
+                    <h:outputLabel for="url" value="URL:"/>
+                    <p:inputText value="#{login.url}"
+                                 id="url" required="true" label="URL"/>
+                    <p:inputText value="#{login.port}"
+                                 id="d" required="true" label="URL" maxlength="4" size="5"/>
 
-            </h:panelGrid>
+                    <p:commandButton id="loginButton" value="Login"
+                                     action="#{login.doLogin}" update="grid"/>
 
-        </h:form>
-    </div>
-</h:body>
-</html>
+                </p:panelGrid>
+
+            </h:form>
+
+    </ui:define>
+</ui:composition>
