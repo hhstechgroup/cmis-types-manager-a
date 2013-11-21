@@ -1,13 +1,8 @@
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,12 +12,23 @@ public class TreeBean implements Serializable {
 
     private static final long serialVersionUID = 2023524722101427935L;
     private TreeNode root;
-    private TreeNode selected;
+    private TreeNode selected =null;
+    private TypeDTO  currentDTO = null;
 
     private boolean disableBtn = true;
 
     //    @PostConstruct
-//    public void init() {
+
+    public TypeDTO getCurrentDTO() {
+        return currentDTO;
+    }
+
+    public void setCurrentDTO(TypeDTO currentDTO) {
+        this.currentDTO = currentDTO;
+    }
+
+
+    //    public void init() {
 //        List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
 //
 //        root = new DefaultTreeNode("Root", null);
@@ -38,7 +44,6 @@ public class TreeBean implements Serializable {
 //            }
 //        }
 //    }
-
 
     public TreeBean() {
         List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
@@ -63,11 +68,11 @@ public class TreeBean implements Serializable {
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        TypeDTO t = (TypeDTO) selected.getData();
+        currentDTO = (TypeDTO) selected.getData();
        //can test functionality with this code
-       //if (selected != null && t.isMutabilityCanUpdate())
+       //if (selected != null && currentDTO.isMutabilityCanUpdate())
        //as all types are can create - true
-        if (selected != null && t.isMutabilityCanCreate())
+             if (selected != null && currentDTO.isMutabilityCanCreate())
             disableBtn = false;
         else
             disableBtn = true;
@@ -89,4 +94,6 @@ public class TreeBean implements Serializable {
         }
         return;
     }
-}
+
+    
+}  

@@ -10,16 +10,15 @@
         }
 
         #centerLayer {
-            margin-left: 30%; /* Отступ слева */
-            width: 40%; /* Ширина слоя */
+            margin-left: 20%; /* Отступ слева */
+            width: 60%; /* Ширина слоя */
             background: #fff; /* Цвет фона */
             padding: 10px; /* Поля вокруг текста */
             font-family: "Times new roman";
         }
-
-        .tree {
-            width: 100%;
-            border: 0;
+        .tree{
+            width:100%;
+            border:0;
             font-family: "Times new roman";
         }
 
@@ -32,19 +31,42 @@
 <h:body>
     <div id="centerLayer">
         <h1>Type Tree</h1>
+        <h:panelGrid columns="2" cellspacing="40">
         <h:form id="form">
 
             <p:tree value="#{treeBean.root}" var="node" id="tree"
                     styleClass="tree"
                     dynamic="true"
                     selectionMode="single" selection="#{treeBean.selected}">
-                <p:ajax event="select" listener="#{treeBean.onNodeSelect}" update=":createBtn"/>
+                <p:ajax event="select" listener="#{treeBean.onNodeSelect}" update=":createBtn, :atributesForm"/>
                 <p:treeNode id="treeNode" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
                     <h:outputText value="#{node}" id="lblNode"/>
                 </p:treeNode>
             </p:tree>
         </h:form>
 
+        <h:form id="atributesForm">
+            <h1>Type atributes</h1>
+                <h:panelGrid id="atributesGrid" columns="2">
+                    Name:
+                    <p:inputText id="atribute" value="#{treeBean.currentDTO.displayName}" />
+                    Description:
+                    <p:inputText id="atr_description" value="#{treeBean.currentDTO.description}" />
+                    Createable:
+                    <p:inputText id="atr_createble" value="#{treeBean.currentDTO.createble}" />
+                    Fileable:
+                    <p:inputText id="atr_fileable" value="#{treeBean.currentDTO.fileable}" />
+                    Full text Indexed:
+                    <p:inputText id="atr_fulltextIndexed" value="#{treeBean.currentDTO.fulltextIndexed}" />
+                    Queryable:
+                    <p:inputText id="atr_queryable" value="#{treeBean.currentDTO.queryable}" />
+                </h:panelGrid>
+       </h:form>
+            
+            
+        </h:panelGrid>
+        
+        
         <p:commandButton id="createBtn" value="Create type" action="#{treeBean.create}"
                          disabled="#{treeBean.disableBtn}"/>
 
