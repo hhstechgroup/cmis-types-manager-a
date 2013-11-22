@@ -19,6 +19,11 @@ public class CMISTypeManagerService {
     private CMISTypeManagerService() {
     }
 
+    public static synchronized CMISTypeManagerService getInstance2() {
+
+        return cmisTypeManagerService;
+    }
+
     public static synchronized CMISTypeManagerService getInstance() {
         if (cmisTypeManagerService == null) {
             cmisTypeManagerService = new CMISTypeManagerService();
@@ -70,10 +75,11 @@ public class CMISTypeManagerService {
     }
 
     public void disconnect(){
+        cmisTypeManagerService = null;
         session.getBinding().close();
 
         //???
-      //  session = null;
+        session = null;
     }
 
     public Session getSession() {

@@ -2,12 +2,13 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class TreeBean implements Serializable {
 
     private static final long serialVersionUID = 2023524722101427935L;

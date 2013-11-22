@@ -59,11 +59,12 @@ public class LoginBean implements Serializable {
         this.url = url;
     }
 
+
     public String doLogin() {
 
         String page = "";
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
-        service = CMISTypeManagerService.getInstance();
+
         service.setName(username);
         service.setPass(password);
         service.setPort(port);
@@ -71,9 +72,11 @@ public class LoginBean implements Serializable {
         try{
             service.connect();
             sessionID = service.getSession().toString();
-            page = "index";
+            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            httpSession.setAttribute("sessionID",sessionID);
+            page = "index?faces-redirect=true";
         }catch (Exception e){
-            //   e.getMessage();
+            sessionID=null;
             page = "error";
         }
 
@@ -88,8 +91,9 @@ public class LoginBean implements Serializable {
         password = null;
         url = null;
         port = null;
+        sessionID=null;
 
         CMISTypeManagerService.getInstance().disconnect();
-        return "login";
+        return "login?faces-redirect=true";
     }
 }

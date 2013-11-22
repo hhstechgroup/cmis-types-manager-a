@@ -1,17 +1,16 @@
 <html xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <title>Error page</title>
 </h:head>
 <h:body>
-    <ui:composition template="template1.xhtml">
-            <ui:define name="mainContent">
     <h:form>
-        Incorrect login data
-        <p:commandButton value="Go back" action="login"/>
+        Incorrect login data. refresh the page!
+        <br/>
+        <p>#{login.sessionID}</p>
+
+
     </h:form>
-            </ui:define>
-    </ui:composition>
 </h:body>
 </html>
