@@ -56,20 +56,20 @@
         <h:form id="Add" prependId="false" >
             <uib:modal id="AddModal" header="New Type">
                 <p:panelGrid id="atributesGrid" columns="2">
-                        Name:
-                        <p:inputText id="atribute"/>
-                        Description:
-                        <p:inputText id="description"/>
-                        Createable:
-                        <p:inputText id="createble"/>
-                        Fileable:
-                        <p:inputText id="fileable"/>
-                        Full text Indexed:
-                        <p:inputText id="fulltextIndexed"/>
-                        Queryable:
-                        <p:inputText id="queryable"/>
-                        Parent:
-                        <p:inputText id="parent" value="#{treeBean.currentDTO.displayName}" disabled="true"/>
+                    Name:
+                    <uib:input id="atribute"/>
+                    Description:
+                    <uib:input id="description"/>
+                    Createable:
+                    <uib:input id="createble" placeholder="Parent value: #{treeBean.currentDTO.createble}"/>
+                    Fileable:
+                    <uib:input id="fileabale" placeholder="Parent value: #{treeBean.currentDTO.fileable}"/>
+                    Full text Indexed:
+                    <uib:input id="fulltextIndexed" placeholder="Parent value: #{treeBean.currentDTO.fulltextIndexed}"/>
+                    Queryable:
+                    <uib:input id="queryable" placeholder="Parent value: #{treeBean.currentDTO.queryable}"/>
+                    Parent:
+                    <uib:input id="parent" value="#{treeBean.currentDTO.displayName}" disabled="true"/>
                 </p:panelGrid>
 
 
