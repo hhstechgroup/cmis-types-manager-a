@@ -7,9 +7,7 @@
                 template="template1.xhtml"
                 xmlns:uib="http://engagepoint.com/uib">
 
-
-    <ui:define name="mainContent">
-
+<ui:define name="mainContent">
 
         <p:panelGrid>
             <p:row>
@@ -20,7 +18,7 @@
                                 dynamic="true"
                                 selectionMode="single" selection="#{treeBean.selected}">
                             <p:ajax event="select" listener="#{treeBean.onNodeSelect}"
-                                    update=":createBtn, :atributesForm"/>
+                                    update=":createBtn :atributesForm :Add"/>
                             <p:treeNode id="treeNode" expandedIcon="ui-icon-folder-open"
                                         collapsedIcon="ui-icon-folder-collapsed">
                                 <h:outputText value="#{node}" id="lblNode"/>
@@ -50,9 +48,40 @@
             </p:row>
 
         </p:panelGrid>
-        <p:commandButton id="createBtn" value="Create type" action="#{treeBean.create}"
-                         disabled="#{treeBean.disableBtn}"/>
+
+        <p:commandButton id="createBtn" value="Create type" oncomplete="jQuery('#AddModal').modal('show');return false;"
+                         disabled="#{treeBean.disableBtn}" />
         <p:commandButton id="logoutButton" value="Logout" action="#{login.doLogout}"/>
+
+        <h:form id="Add" prependId="false" >
+            <uib:modal id="AddModal" header="New Type">
+                <p:panelGrid id="atributesGrid" columns="2">
+                        Name:
+                        <p:inputText id="atribute"/>
+                        Description:
+                        <p:inputText id="description"/>
+                        Createable:
+                        <p:inputText id="createble"/>
+                        Fileable:
+                        <p:inputText id="fileable"/>
+                        Full text Indexed:
+                        <p:inputText id="fulltextIndexed"/>
+                        Queryable:
+                        <p:inputText id="queryable"/>
+                        Parent:
+                        <p:inputText id="parent" value="#{treeBean.currentDTO.displayName}" disabled="true"/>
+                </p:panelGrid>
+
+
+                <f:facet name="footer">
+                    <p:commandButton title="Cancel" id="cancelButton" mode="client" value="Cancel"
+                                     styleClass="secondary"
+                                     oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
+                    <p:commandButton title="Add" id="AddButton" mode="client" value="Add"
+                                     oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
+                </f:facet>
+            </uib:modal>
+        </h:form>
 
 
     </ui:define>

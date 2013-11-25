@@ -4,7 +4,7 @@ import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import java.util.*;
 
-public class CMISTypeManagerService {
+public final class CMISTypeManagerService {
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
@@ -17,11 +17,6 @@ public class CMISTypeManagerService {
     private String repoID = "A1";                                           //may change to
 
     private CMISTypeManagerService() {
-    }
-
-    public static synchronized CMISTypeManagerService getInstance2() {
-
-        return cmisTypeManagerService;
     }
 
     public static synchronized CMISTypeManagerService getInstance() {
@@ -47,7 +42,8 @@ public class CMISTypeManagerService {
         this.pass = pass;
     }
 
-    public void connect() throws Exception{
+    public void connect() throws NullPointerException{
+        String http = "http://";
         SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
@@ -55,21 +51,21 @@ public class CMISTypeManagerService {
         parameter.put(SessionParameter.PASSWORD, pass);
 
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
-        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, "http://"+ url + ":" + port + repo + "/services/ACLService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, "http://"+ url + ":" + port + repo + "/services/DiscoveryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, "http://"+ url + ":" + port + repo + "/services/MultiFilingService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, "http://"+ url + ":" + port + repo + "/services/NavigationService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, "http://"+ url + ":" + port + repo+  "/services/ObjectService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, "http://"+ url + ":" + port + repo + "services/PolicyService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, "http://"+ url + ":" + port + repo + "/services/RelationshipService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,"http://"+ url + ":" + port + repo + "/services/RepositoryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, "http://"+ url + ":" + port + repo + "/services/VersioningService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, http + url + ":" + port + repo + "/services/ACLService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, http + url + ":" + port + repo + "/services/DiscoveryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, http + url + ":" + port + repo + "/services/MultiFilingService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, http + url + ":" + port + repo + "/services/NavigationService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, http + url + ":" + port + repo+  "/services/ObjectService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, http + url + ":" + port + repo + "services/PolicyService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, http + url + ":" + port + repo + "/services/RelationshipService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,http + url + ":" + port + repo + "/services/RepositoryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, http + url + ":" + port + repo + "/services/VersioningService?wsdl");
         parameter.put(SessionParameter.REPOSITORY_ID, repoID);
 
         session = factory.createSession(parameter);
 
         if(session==null){
-            throw new Exception("no such session");
+            throw new NullPointerException("no such session");
         }
 
     }
@@ -115,20 +111,9 @@ public class CMISTypeManagerService {
         List<TypeDTO> childs = new ArrayList<TypeDTO>();
         while(i.hasNext())
         {
-            TypeDTO dtoChild = new TypeDTO();
             ObjectType child = (ObjectType)i.next();
-/*
-            dtoChild.setDisplayName(child.getDisplayName());
-            dtoChild.setDescription(child.getDescription());
-            dtoChild.setFileable(child.isFileable());
-            dtoChild.setQueryable(child.isQueryable());
-            dtoChild.setCreateble(child.isCreatable());
-            dtoChild.setFileable(child.isFileable());
-            dtoChild.setFulltextIndexed(child.isFulltextIndexed());*/
 
             childs.add(getInf(child));
-
-            //childs.add(dtoChild);
         }
         dto.setChilds(childs);
 
