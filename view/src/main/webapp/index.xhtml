@@ -138,7 +138,7 @@
                                  styleClass="secondary"
                                  oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
                 <p:commandButton title="Add" id="AddButton" action="#{treeBean.addType}"   mode="client" value="Add"
-                                 oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
+                                 oncomplete="jQuery('#AddModal').modal('hide');return false;" update=":form"/>
             </f:facet>
         </uib:modal>
     </h:form>
