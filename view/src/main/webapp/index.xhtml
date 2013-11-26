@@ -16,7 +16,7 @@
         <uib:gridRow>
             <uib:gridColumn column="12"  styleClass="mar30">
 
-                <p:commandButton id="createBtn" value="Create type" styleClass="secondary small" icon="ui-icon-edit" oncomplete="jQuery('#AddModal').modal('show');return false;"
+                <p:commandButton id="createBtn" value="Create type" action="#{treeBean.createType}" styleClass="secondary small" icon="ui-icon-edit" oncomplete="jQuery('#AddModal').modal('show');return false;"
                                  disabled="#{treeBean.disableBtn}"/>
                 <p:commandButton id="logoutButton" styleClass="secondary small" value="Logout" action="#{login.doLogout}"/>
             </uib:gridColumn>
@@ -113,33 +113,35 @@
         </uib:gridRow>
     </uib:gridContainer>
 
-        <h:form id="Add" prependId="false" >
-            <uib:modal id="AddModal" header="New Type">
-                <p:panelGrid id="atributesGrid" columns="2">
-                    Name:
-                    <uib:input id="atribute"/>
-                    Description:
-                    <uib:input id="description"/>
-                    Createable:
-                    <uib:input id="createble" placeholder="Parent value: #{treeBean.currentDTO.creatable}"/>
-                    Fileable:
-                    <uib:input id="fileabale" placeholder="Parent value: #{treeBean.currentDTO.fileable}"/>
-                    Full text Indexed:
-                    <uib:input id="fulltextIndexed" placeholder="Parent value: #{treeBean.currentDTO.fulltextIndexed}"/>
-                    Queryable:
-                    <uib:input id="queryable" placeholder="Parent value: #{treeBean.currentDTO.queryable}"/>
-                    Parent:
-                    <uib:input id="parent" value="#{treeBean.currentDTO.displayName}" disabled="true"/>
-                </p:panelGrid>
+    <h:form id="Add" prependId="false" >
+        <uib:modal id="AddModal" header="New Type">
+            <p:panelGrid id="atributesGrid" columns="2">
+                Name:
+                <uib:input id="displayName" placeholder="Input value:" value = "#{treeBean.newDTO.displayName}" required="true"/>
+                Description:
+                <uib:input id="description" placeholder="Input value:" value = "#{treeBean.newDTO.description}" required="true"/>
+                Id:
+                <uib:input id="id" placeholder="Input value:" value = "#{treeBean.newDTO.id}" required="true"/>
+                Query name:
+                <uib:input id="queryName" placeholder="Input value:" value = "#{treeBean.newDTO.queryName}" required="true"/>
+                Local name:
+                <uib:input id="localName" placeholder="Input value:" value = "#{treeBean.newDTO.localName}" required="true"/>
+                Local name space:
+                <uib:input id="localNameSpace" placeholder="Input value: " value = "#{treeBean.newDTO.localNamespace}" required="true"/>
+                Parent:
+                <uib:input id="parent" value="#{treeBean.currentDTO.id}" disabled="true"/>
+            </p:panelGrid>
 
-                <f:facet name="footer">
-                    <p:commandButton title="Cancel" id="cancelButton" mode="client" value="Cancel"
-                                     styleClass="secondary"
-                                     oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
-                    <p:commandButton title="Add" id="AddButton" mode="client" value="Add"
-                                     oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
-                </f:facet>
-            </uib:modal>
-        </h:form>
+
+            <f:facet name="footer">
+                <p:commandButton title="Cancel" id="cancelButton" mode="client" value="Cancel"
+                                 styleClass="secondary"
+                                 oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
+                <p:commandButton title="Add" id="AddButton" action="#{treeBean.addType}"   mode="client" value="Add"
+                                 oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
+            </f:facet>
+        </uib:modal>
+    </h:form>
+
     </ui:define>
 </ui:composition>
