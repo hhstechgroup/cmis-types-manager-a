@@ -108,7 +108,7 @@ public class CMISTypeManagerService {
      * @throws Exception must throw exceptions
      */
     public TypeDTO createType(TypeDTO newType) {
-        TypeDTO returnedTypeDTO = new TypeDTO();
+        TypeDTO returnedTypeDTO = null;
         ObjectType createdType = null;
         try {
             ObjectType parentType = getTypeById(newType.getParentTypeId());
