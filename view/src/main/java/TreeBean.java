@@ -15,6 +15,15 @@ public class TreeBean implements Serializable {
     private TreeNode root;
     private TreeNode selected = null;
     private TypeDTO  currentDTO = null;
+    private TypeDTO newDTO = null;
+
+    public TypeDTO getNewDTO() {
+        return newDTO;
+    }
+
+    public void setNewDTO(TypeDTO newDTO) {
+        this.newDTO = newDTO;
+    }
 
     private boolean disableBtn = true;
 
@@ -30,14 +39,12 @@ public class TreeBean implements Serializable {
         List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
 
         root = new DefaultTreeNode("Root", null);
-        //TypeDTO testType = CMISTypeManagerService.getInstance().createType(testMethodCreateType("Test"));
-        //TreeNode treeNode = new DefaultTreeNode(testType, root);
         render(list, root);
-        //render(list, treeNode);
 
     }
 
     public TreeNode getRoot() {
+
         return root;
     }
 
@@ -79,48 +86,42 @@ public class TreeBean implements Serializable {
         return;
     }
 
-    private TypeDTO testMethodCreateType(String name) {
+    public void createType(){
+        newDTO = new TypeDTO();
+        newDTO.setParentTypeId(currentDTO.getId());
+        newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
+        //newDTO.setChildren(null);
+        newDTO.setId(currentDTO.getParentTypeId());
 
-        TypeDTO returnedType = new TypeDTO();
+        //newDTO.setDisplayName();
+        //newDTO.setDescription();
+        //newDTO.setQueryName();
+        //newDTO.getLocalName();
+        //newDTO.setLocalNamespace(currentDTO.getLocalNamespace());
 
-        returnedType.setDisplayName(name);
-        returnedType.setId(name + "ID");
-        returnedType.setParentTypeId("cmis:item");
-        returnedType.setBaseTypeId("cmis:item");
-        returnedType.setDescription(name + " Description");
-        returnedType.setQueryName(name + "Query");
-        returnedType.setLocalName("Local" + name);
-        returnedType.setLocalNamespace("namecpace.com");
+        newDTO.setCreatable(currentDTO.isCreatable());
+        newDTO.setFileable(currentDTO.isFileable());
+        newDTO.setQueryable(currentDTO.isQueryable());
 
-        returnedType.setMutabilityCanCreate(true);
-        returnedType.setMutabilityCanDelete(true);
-        returnedType.setMutabilityCanDelete(true);
+        newDTO.setIncludedInSupertypeQuery(currentDTO.isIncludedInSupertypeQuery());
+        newDTO.setControllableAcl(currentDTO.isControllableAcl());
+        newDTO.setControllablePolicy(currentDTO.isControllablePolicy());
+        newDTO.setFulltextIndexed(currentDTO.isFulltextIndexed());
 
-        returnedType.setQueryable(true);
-        returnedType.setFileable(true);
-        returnedType.setCreatable(true);
-
-        returnedType.setControllablePolicy(true);
-        returnedType.setControllableAcl(true);
-        returnedType.setFulltextIndexed(true);
-        returnedType.setIncludedInSupertypeQuery(true);
-
-        returnedType.addPropertyRow(toTestMethodCreateType("Property1"));
-        returnedType.addPropertyRow(toTestMethodCreateType("Property2"));
-
-        return returnedType;
+        newDTO.setMutabilityCanCreate(currentDTO.isMutabilityCanCreate());
+        newDTO.setMutabilityCanDelete(currentDTO.isMutabilityCanDelete());
+        newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
     }
 
-    private PropertyRow toTestMethodCreateType(String propertyName) {
 
-        PropertyRow returnedRow = new PropertyRow();
-        returnedRow.setId(propertyName + "ID");
-        returnedRow.setDisplayName(propertyName);
-        returnedRow.setDescription(propertyName + "Description");
-        returnedRow.setLocalName(propertyName + "Local");
-        returnedRow.setQueryName(propertyName + "Query");
+    public void addType(){
+        CMISTypeManagerService.getInstance().createType(newDTO);
+        List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+        root = new DefaultTreeNode("Root", null);
+        render(list, root);
 
-        return returnedRow;
+
+
     }
 
 }  
