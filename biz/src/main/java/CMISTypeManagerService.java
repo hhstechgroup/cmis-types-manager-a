@@ -127,7 +127,6 @@ public class CMISTypeManagerService {
         return returnedTypeDTO;
     }
 
-
     private MutableTypeDefinition getTypeDefinition(ObjectType parent, TypeDTO newType) {
 
         MutableTypeDefinition typeDefinition = (MutableTypeDefinition) parent;
@@ -168,7 +167,9 @@ public class CMISTypeManagerService {
         //typeDefinition.addPropertyDefinition(propertyDefinition);
 
         List<PropertyRow> rowsList = newType.getPropertyRows();
-        typeDefinition.addPropertyDefinition(getPropertyDefinition(propertyDefinition, rowsList.get(0)));
+        if (rowsList.size() > 0) {
+            typeDefinition.addPropertyDefinition(getPropertyDefinition(propertyDefinition, rowsList.get(0)));
+        }
 
         return typeDefinition;
     }
