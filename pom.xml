@@ -14,6 +14,7 @@
         <module>common</module>
         <module>biz</module>
         <module>ear</module>
+        <module>acceptancetest</module>
 
     </modules>
 
@@ -41,7 +42,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>3.8.1</version>
+                <version>4.11</version>
                 <scope>test</scope>
             </dependency>
 
@@ -55,6 +56,16 @@
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>1.0.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.6.3.201306030806</version>
+            </dependency>
+            <dependency>
+                <groupId>net.thucydides.maven.plugins</groupId>
+                <artifactId>maven-thucydides-plugin</artifactId>
+                <version>0.9.222</version>
             </dependency>
 
         </dependencies>
