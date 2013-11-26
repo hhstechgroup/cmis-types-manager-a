@@ -119,9 +119,7 @@ public class TreeBean implements Serializable {
         List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
         root = new DefaultTreeNode("Root", null);
         render(list, root);
-
-
-
+        newDTO = new TypeDTO();
     }
 
 }  
