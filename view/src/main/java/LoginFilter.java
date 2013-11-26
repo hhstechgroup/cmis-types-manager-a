@@ -30,15 +30,11 @@ public class LoginFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
 
         HttpSession session = ((HttpServletRequest) request).getSession(false);
-        String s =session==null?null:(String) session.getAttribute("sessionID");
-        if (s!=null && !s.isEmpty())
-        {
+        String s = session == null ? null : (String) session.getAttribute("sessionID");
+        if (s != null && !s.isEmpty()) {
             chain.doFilter(request, response);
         } else {
-
-
             req.getRequestDispatcher("/login.xhtml").forward(request, response);
-
         }
 
     }

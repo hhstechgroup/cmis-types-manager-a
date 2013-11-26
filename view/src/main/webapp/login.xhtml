@@ -4,12 +4,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://java.sun.com/jsp/jstl/core"
-                template="template1.xhtml"
+                template="template.xhtml"
                 xmlns:uib="http://engagepoint.com/uib">
 
     <ui:define name="mainContent">
-
-            <h1>Login</h1>
+        <p:panel id="pnl" header="Login" style="margin-bottom:10px;width:400px">
             <h:form id="form">
                 <p:panelGrid columns="3" id="grid" cellpadding="5" title="Login">
 
@@ -27,7 +26,7 @@
                     <p:inputText value="#{login.url}"
                                  id="url" required="true" label="URL"/>
                     <p:inputText value="#{login.port}"
-                                 id="port" required="true" label="URL" maxlength="4" size="1"/>
+                                 id="port" required="true" label="URL" maxlength="4" size="5"/>
 
                     <p:commandButton id="loginButton" value="Login"
                                      action="#{login.doLogin}" update="grid"/>
@@ -35,6 +34,6 @@
                 </p:panelGrid>
 
             </h:form>
-
+        </p:panel>
     </ui:define>
 </ui:composition>
