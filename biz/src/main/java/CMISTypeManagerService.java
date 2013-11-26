@@ -1,10 +1,19 @@
-import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.SessionFactory;
+import org.apache.chemistry.opencmis.client.api.Tree;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.definitions.MutablePropertyDefinition;
+import org.apache.chemistry.opencmis.commons.definitions.MutableTypeDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
-import java.util.*;
 
-public final class CMISTypeManagerService {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class CMISTypeManagerService {
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
@@ -42,8 +51,7 @@ public final class CMISTypeManagerService {
         this.pass = pass;
     }
 
-    public void connect() throws NullPointerException{
-        String http = "http://";
+    public void connect() throws Exception{
         SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
@@ -51,31 +59,30 @@ public final class CMISTypeManagerService {
         parameter.put(SessionParameter.PASSWORD, pass);
 
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
-        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, http + url + ":" + port + repo + "/services/ACLService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, http + url + ":" + port + repo + "/services/DiscoveryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, http + url + ":" + port + repo + "/services/MultiFilingService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, http + url + ":" + port + repo + "/services/NavigationService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, http + url + ":" + port + repo+  "/services/ObjectService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, http + url + ":" + port + repo + "services/PolicyService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, http + url + ":" + port + repo + "/services/RelationshipService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,http + url + ":" + port + repo + "/services/RepositoryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, http + url + ":" + port + repo + "/services/VersioningService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, "http://"+ url + ":" + port + repo + "/services/ACLService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, "http://"+ url + ":" + port + repo + "/services/DiscoveryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, "http://"+ url + ":" + port + repo + "/services/MultiFilingService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, "http://"+ url + ":" + port + repo + "/services/NavigationService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, "http://"+ url + ":" + port + repo+  "/services/ObjectService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, "http://"+ url + ":" + port + repo + "services/PolicyService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, "http://"+ url + ":" + port + repo + "/services/RelationshipService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,"http://"+ url + ":" + port + repo + "/services/RepositoryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, "http://"+ url + ":" + port + repo + "/services/VersioningService?wsdl");
         parameter.put(SessionParameter.REPOSITORY_ID, repoID);
 
         session = factory.createSession(parameter);
 
         if(session==null){
-            throw new NullPointerException("no such session");
+            throw new Exception("no such session");
         }
 
     }
 
     public void disconnect(){
-        cmisTypeManagerService = null;
         session.getBinding().close();
 
         //???
-        session = null;
+        //  session = null;
     }
 
     public Session getSession() {
@@ -86,38 +93,108 @@ public final class CMISTypeManagerService {
         List<TypeDTO> typeList= new ArrayList<TypeDTO>();
 
         List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
-        for(int i = 0; i < list.size(); ++i) {
-            ObjectType objType = list.get(i).getItem();
-            typeList.add(getInf(objType));
+
+        for(Tree<ObjectType> tree : list) {
+            typeList.add(ObjectTypeReader.readTree(tree));
         }
         return typeList;
     }
 
-    private TypeDTO getInf(ObjectType objType) {
-        TypeDTO dto = new TypeDTO();
+    /**
+     * TODO
+     * This method should throw exceptions
+     * @param newType some TypeDTO instance, that not exist in CMIS repository
+     * @return new instance if created, null if not
+     * @throws Exception must throw exceptions
+     */
+    public TypeDTO createType(TypeDTO newType) {
+        TypeDTO returnedTypeDTO = new TypeDTO();
+        ObjectType createdType = null;
+        try {
+            ObjectType parentType = getTypeById(newType.getParentTypeId());
+            MutableTypeDefinition newTypeDefinition = getTypeDefinition(parentType, newType);
 
-        dto.setDisplayName(objType.getDisplayName());
-        dto.setDescription(objType.getDescription());
-        dto.setFileable(objType.isFileable());
-        dto.setQueryable(objType.isQueryable());
-        dto.setCreateble(objType.isCreatable());
-        dto.setFileable(objType.isFileable());
-        dto.setFulltextIndexed(objType.isFulltextIndexed());
-        dto.setMutabilityCanCreate(objType.getTypeMutability().canCreate());
-        dto.setMutabilityCanDelete(objType.getTypeMutability().canDelete());
-        dto.setMutabilityCanUpdate(objType.getTypeMutability().canUpdate());
-
-        Iterator i = objType.getChildren().iterator();
-        List<TypeDTO> childs = new ArrayList<TypeDTO>();
-        while(i.hasNext())
-        {
-            ObjectType child = (ObjectType)i.next();
-
-            childs.add(getInf(child));
+            createdType = session.createType(newTypeDefinition);
+        } catch (Exception ex) {
+            //TODO throw CannotCreateTypeException or IllegalArgumentException
         }
-        dto.setChilds(childs);
+        if(createdType == null) {
+            //TODO throw CannotCreateTypeException
+        } else {
+            returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
+        }
 
-        return dto;
+        return returnedTypeDTO;
     }
 
+
+    private MutableTypeDefinition getTypeDefinition(ObjectType parent, TypeDTO newType) {
+
+        MutableTypeDefinition typeDefinition = (MutableTypeDefinition) parent;
+        //TestTypeDefinition typeDefinition = (TestTypeDefinition) parent; // ??????
+
+        MutablePropertyDefinition propertyDefinition = (MutablePropertyDefinition)typeDefinition.getPropertyDefinitions().get("cmis:name");
+
+        typeDefinition.removeAllPropertyDefinitions();
+        //Do not change !
+        //typeDefinition.setBaseTypeId();
+        typeDefinition.setParentTypeId(typeDefinition.getId());
+        typeDefinition.setId(newType.getId());
+        typeDefinition.setDescription(newType.getDescription());
+        typeDefinition.setDisplayName(newType.getDisplayName());
+        typeDefinition.setLocalName(newType.getLocalName());
+        typeDefinition.setLocalNamespace(newType.getLocalNamespace());
+        typeDefinition.setQueryName(newType.getQueryName());
+
+        //typeDefinition.setBaseTypeId(BaseTypeId.fromValue(newType.getBaseTypeId()));
+
+        typeDefinition.setIsQueryable(newType.isQueryable());
+        typeDefinition.setIsFileable(newType.isFileable());
+        typeDefinition.setIsCreatable(newType.isCreatable());
+
+        typeDefinition.setIsControllableAcl(newType.isControllableAcl());
+        typeDefinition.setIsControllablePolicy(newType.isControllablePolicy());
+        typeDefinition.setIsFulltextIndexed(newType.isFulltextIndexed());
+        typeDefinition.setIsIncludedInSupertypeQuery(newType.isIncludedInSupertypeQuery());
+
+        TestTypeMutability testTypeMutability = new TestTypeMutability(newType);
+        typeDefinition.setTypeMutability(testTypeMutability);
+
+        //add a property row. Have some problems with enumerations.
+        //propertyDefinition.setId("New property");
+        //propertyDefinition.setDisplayName("New");
+        //propertyDefinition.setLocalName("NewLocName");
+        //propertyDefinition.setQueryName("NewQuery");
+        //typeDefinition.addPropertyDefinition(propertyDefinition);
+
+        List<PropertyRow> rowsList = newType.getPropertyRows();
+        typeDefinition.addPropertyDefinition(getPropertyDefinition(propertyDefinition, rowsList.get(0)));
+
+        return typeDefinition;
+    }
+
+    public ObjectType getTypeById(String id) {
+
+        ObjectType returnedType;
+
+        try {
+            returnedType = session.getTypeDefinition(id);
+        } catch (Exception ex) {
+            returnedType = null;
+            //TODO must throw SomeUnknownToMeException
+        }
+        return returnedType;
+    }
+
+    private MutablePropertyDefinition getPropertyDefinition(MutablePropertyDefinition property, PropertyRow row) {
+
+        property.setId(row.getId());
+        property.setDisplayName(row.getDisplayName());
+        property.setDescription(row.getDescription());
+        property.setLocalName(row.getLocalName());
+        property.setQueryName(row.getQueryName());
+        //TODO
+
+        return property;
+    }
 }
