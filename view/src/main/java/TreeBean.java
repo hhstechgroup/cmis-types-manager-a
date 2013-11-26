@@ -30,10 +30,10 @@ public class TreeBean implements Serializable {
         List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
 
         root = new DefaultTreeNode("Root", null);
-        TypeDTO testType = CMISTypeManagerService.getInstance().createType(testMethodCreateType("Test"));
-        TreeNode treeNode = new DefaultTreeNode(testType, root);
-        //render(list, root);
-        render(list, treeNode);
+        //TypeDTO testType = CMISTypeManagerService.getInstance().createType(testMethodCreateType("Test"));
+        //TreeNode treeNode = new DefaultTreeNode(testType, root);
+        render(list, root);
+        //render(list, treeNode);
 
     }
 
