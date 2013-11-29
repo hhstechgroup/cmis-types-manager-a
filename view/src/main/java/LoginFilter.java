@@ -34,7 +34,7 @@ public class LoginFilter implements Filter {
         if (s != null && !s.isEmpty()) {
             chain.doFilter(request, response);
         } else {
-            req.getRequestDispatcher("/pages/login.xhtml").forward(request, response);
+            req.getRequestDispatcher("/login.xhtml").forward(request, response);
         }
 
     }

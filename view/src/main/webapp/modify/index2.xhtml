@@ -4,7 +4,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://java.sun.com/jsp/jstl/core"
-                template="template.xhtml"
+                template="../template.xhtml"
                 xmlns:uib="http://engagepoint.com/uib">
     <h:head>
         <title>Index page</title>
@@ -32,8 +32,7 @@
                             dynamic="true"
                             selectionMode="single"
                             selection="#{treeBean.selected}">
-                        <p:ajax event="select" listener="#{treeBean.onNodeSelect}"
-                                update=":createBtn :atributesForm :Add :dataTable"/>
+
                         <p:treeNode id="treeNode">
                             <h:outputText value="#{node}" id="lblNode"/>
                         </p:treeNode>

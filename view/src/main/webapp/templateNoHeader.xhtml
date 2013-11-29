@@ -1,32 +1,26 @@
 <uib:page xmlns="http://www.w3.org/1999/xhtml"
-          xmlns:h="http://java.sun.com/jsf/html"
           xmlns:uib="http://engagepoint.com/uib"
           xmlns:ui="http://java.sun.com/jsf/facelets"
           markupType="html5"
           contentType="text/html"
-          pageTitle="UI Bootstrap Demo"
+          pageTitle="CMIS Type Manager"
           showFooter="false"
-          project="financials">
+          project="notify">
 
-    <uib:pageLayout showMenu="true" >
+    <uib:pageLayout showMenu="false" >
+
         <uib:pageHeaderFacet hideHelpMenu="true">
-            <ui:insert name="topMenu">
 
-            </ui:insert>
         </uib:pageHeaderFacet>
-        <uib:pageHeaderUtilityBarFacet>
+
+        <uib:pageHeaderUtilityBarFacet >
             <ui:insert name="utilityBar"/>
         </uib:pageHeaderUtilityBarFacet>
-        <uib:pageMenuFacet ajax = "true">
-            <ui:include src="leftMenu.xhtml"/>
-        </uib:pageMenuFacet>
+
         <uib:pageBodyFacet>
             <ui:insert name="mainContent"/>
         </uib:pageBodyFacet>
+
     </uib:pageLayout>
-
-    <uib:pageFooterFacet>
-
-    </uib:pageFooterFacet>
 
 </uib:page>

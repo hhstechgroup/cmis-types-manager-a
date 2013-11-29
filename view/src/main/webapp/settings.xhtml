@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template.xhtml">
+
+    <ui:define name="mainContent">
+        <p:panel id="setPanel" header="Settings" style="margin-bottom:10px;width:400px">
+            <h:form id="form">
+                <p:panelGrid columns="2" id="grid" cellpadding="5" title="Settings">
+
+                    <h:outputLabel for="username" value="Username:"/>
+                    <h:outputText value="#{login.username}" id="username" label="username"/>
+
+                    <h:outputLabel for="url" value="URL:"/>
+                    <h:outputText value="#{login.url}" id="url"/>
+
+                    <h:outputLabel for="port" value="Port:"/>
+                    <h:outputText value="#{login.port}" id="port"/>
+
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

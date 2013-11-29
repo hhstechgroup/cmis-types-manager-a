@@ -1,0 +1,9 @@
+<h:form xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        id="topMenuBarForm">
+    <p:menubar autoDisplay="false">
+        <p:menuitem value="Home" action="/show/index?faces-redirect=true" />
+        <p:menuitem value="Settings" action="/settings?faces-redirect=true" />
+        <p:menuitem value="Logout" action="#{login.doLogout}"/>
+    </p:menubar>
+</h:form>

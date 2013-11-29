@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class TreeBean implements Serializable {
 
     private static final long serialVersionUID = 2023524722101427935L;
     private TreeNode root;
     private TreeNode selected = null;
     private TypeDTO  currentDTO = null;
-    private TypeDTO newDTO = null;
+    private TypeDTO newDTO = new TypeDTO();
 
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;
@@ -30,15 +30,10 @@ public class TreeBean implements Serializable {
         metadataVisible = false;
     }
 
-
-
     public void setMetadataVisibleTrue(){
         metadataVisible = true;
         attributesVisible = false;
     }
-
-
-
 
     public boolean isAttributesVisible() {
         return attributesVisible;
@@ -107,10 +102,34 @@ public class TreeBean implements Serializable {
             else {
                 disableBtn = true;
             }
+        newDTO = new TypeDTO();
+        newDTO.setParentTypeId(currentDTO.getId());
+        newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
+        //newDTO.setChildren(null);
+        newDTO.setId(currentDTO.getParentTypeId());
+
+        //newDTO.setDisplayName();
+        //newDTO.setDescription();
+        //newDTO.setQueryName();
+        //newDTO.getLocalName();
+        //newDTO.setLocalNamespace(currentDTO.getLocalNamespace());
+
+        newDTO.setCreatable(currentDTO.isCreatable());
+        newDTO.setFileable(currentDTO.isFileable());
+        newDTO.setQueryable(currentDTO.isQueryable());
+
+        newDTO.setIncludedInSupertypeQuery(currentDTO.isIncludedInSupertypeQuery());
+        newDTO.setControllableAcl(currentDTO.isControllableAcl());
+        newDTO.setControllablePolicy(currentDTO.isControllablePolicy());
+        newDTO.setFulltextIndexed(currentDTO.isFulltextIndexed());
+
+        newDTO.setMutabilityCanCreate(currentDTO.isMutabilityCanCreate());
+        newDTO.setMutabilityCanDelete(currentDTO.isMutabilityCanDelete());
+        newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
     }
 
     public String create() {
-        return "/pages/error";
+        return "/error";
     }
 
     private void render(List<TypeDTO> tree, TreeNode parent) {
