@@ -8,7 +8,7 @@
           showFooter="false"
           project="financials">
 
-    <uib:pageLayout showMenu="false" >
+    <uib:pageLayout showMenu="true" >
         <uib:pageHeaderFacet hideHelpMenu="true">
             <ui:insert name="topMenu">
 
@@ -17,9 +17,9 @@
         <uib:pageHeaderUtilityBarFacet>
             <ui:insert name="utilityBar"/>
         </uib:pageHeaderUtilityBarFacet>
-        <!--<uib:pageMenuFacet>-->
-            <!--<ui:include src="leftMenu.xhtml"/>-->
-        <!--</uib:pageMenuFacet>-->
+        <uib:pageMenuFacet ajax = "true">
+            <ui:include src="leftMenu.xhtml"/>
+        </uib:pageMenuFacet>
         <uib:pageBodyFacet>
             <ui:insert name="mainContent"/>
         </uib:pageBodyFacet>

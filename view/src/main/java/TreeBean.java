@@ -4,11 +4,12 @@ import org.primefaces.model.TreeNode;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class TreeBean implements Serializable {
 
     private static final long serialVersionUID = 2023524722101427935L;
@@ -16,6 +17,44 @@ public class TreeBean implements Serializable {
     private TreeNode selected = null;
     private TypeDTO  currentDTO = null;
     private TypeDTO newDTO = null;
+
+    private boolean attributesVisible = false;
+    private boolean metadataVisible = false;
+
+    public void setTreeVisible(){
+        attributesVisible = false;
+        metadataVisible = false;
+    }
+    public void setAttributesVisibleTrue(){
+        attributesVisible = true;
+        metadataVisible = false;
+    }
+
+
+
+    public void setMetadataVisibleTrue(){
+        metadataVisible = true;
+        attributesVisible = false;
+    }
+
+
+
+
+    public boolean isAttributesVisible() {
+        return attributesVisible;
+    }
+
+    public void setAttributesVisible(boolean attributesVisible) {
+        this.attributesVisible = attributesVisible;
+    }
+
+    public boolean isMetadataVisible() {
+        return metadataVisible;
+    }
+
+    public void setMetadataVisible(boolean metadataVisible) {
+        this.metadataVisible = metadataVisible;
+    }
 
     public TypeDTO getNewDTO() {
         return newDTO;
@@ -71,7 +110,7 @@ public class TreeBean implements Serializable {
     }
 
     public String create() {
-        return "error";
+        return "/pages/error";
     }
 
     private void render(List<TypeDTO> tree, TreeNode parent) {
