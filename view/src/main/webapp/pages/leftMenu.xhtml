@@ -1,0 +1,49 @@
+<h:form xmlns:h="http://java.sun.com/jsf/html"
+        id="leftMenuForm"
+        xmlns:uib="http://engagepoint.com/uib"
+        xmlns:p="http://primefaces.org/ui">
+    <uib:menu id="menu" styleClass="sub-navigation">
+
+        <uib:menuSection id="showTypeSection" title="Show type:" url="/pages/index.xhtml"
+                         parentUrl="/pages/index.xhtml">
+            <uib:menuItem id="treeMenuItem" title="Show tree" url="#form"/>
+
+
+            <uib:menuItem id="treeAttributesItem" title="Attributes" url="#atributesForm"/>
+
+
+            <uib:menuItem id="treeMetadataItem" title="Metadata">
+
+            </uib:menuItem>
+
+        </uib:menuSection>
+
+        <uib:menuSection id="updateTypeSection" title="Change type:" parentUrl="/pages/index2.xhtml"
+                         url="/pages/index2.xhtml">
+            <uib:menuItem id="templatesItem" title="Create NEW" url="/pages/index2.xhtml"/>
+
+            <uib:menuItem id="historyItem" title="Update" url="/pages/index2.xhtml"/>
+            <uib:menuItem id="placeholdersItem" title="Delete" url="/pages/index2.xhtml"/>
+
+        </uib:menuSection>
+
+
+    </uib:menu>
+    <h:outputScript>
+        jQuery('#leftMenuForm\\:treeMetadataItem').click(function() {
+            jQuery('#allPropertiesModal').modal('show');return false;
+        })
+    </h:outputScript>
+</h:form>
+
+
+
+
+
+
+
+
+
+
+
+
