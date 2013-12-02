@@ -21,22 +21,31 @@ public class TreeBean implements Serializable {
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;
 
-    public void setTreeVisible(){
-        attributesVisible = false;
-        metadataVisible = false;
-    }
-    public void setAttributesVisibleTrue(){
-        attributesVisible = true;
-        metadataVisible = false;
+    private boolean creatable = false;
+    private boolean updateable = false;
+
+    public boolean isUpdateable() {
+        return updateable;
     }
 
-    public void setMetadataVisibleTrue(){
-        metadataVisible = true;
-        attributesVisible = false;
+    public String getErrorVisible(){
+        return String.valueOf(currentDTO==null);
+    }
+
+    public void setUpdateable(boolean updateable) {
+        this.updateable = updateable;
+    }
+
+    public boolean isCreatable() {
+        return creatable;
+    }
+
+    public void setCreatable(boolean creatable) {
+        this.creatable = creatable;
     }
 
     public boolean isAttributesVisible() {
-        return attributesVisible;
+        return currentDTO!=null;
     }
 
     public void setAttributesVisible(boolean attributesVisible) {
@@ -44,7 +53,7 @@ public class TreeBean implements Serializable {
     }
 
     public boolean isMetadataVisible() {
-        return metadataVisible;
+        return currentDTO!=null;
     }
 
     public void setMetadataVisible(boolean metadataVisible) {

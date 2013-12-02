@@ -36,7 +36,6 @@ public class LoginFilter implements Filter {
         } else {
             req.getRequestDispatcher("/login.xhtml").forward(request, response);
         }
-
     }
 
     @Override
