@@ -11,7 +11,7 @@
     </h:head>
 
 <ui:define name="mainContent">
-
+    <h2>Create new type</h2>
     <uib:gridContainer>
 
         <uib:gridRow>
@@ -21,10 +21,11 @@
                     <p:tabView effect="#{tabBean.effect}" id="tabView" effectDuration="normal">
 
                         <p:tab title="Step I">
+                            <h3>Chose tree node:</h3>
                             <h:panelGrid columns="2" cellpadding="10">
 
                                     <h:form id="treeForm"  styleClass="mar30">
-                                    <h:outputText value="Chose tree node:"/>
+
                                     <p:tree value="#{treeBean.root}"
                                             var="node"
                                             id="tree"
@@ -43,6 +44,7 @@
                         </p:tab>
 
                         <p:tab id="step2" title="Step II">
+                        <h3>Input attributes</h3>
                             <h:panelGrid id="grid" columns="2" cellpadding="10">
                             <h:form id="Add" prependId="false" styleClass="mar30">
 
@@ -285,6 +287,41 @@
                         </p:tab>
 
                         <p:tab title="Step III">
+                            <h3> Chose secondary type </h3>
+                            <uib:gridContainer>
+                                <uib:gridRow fluid="true">
+                                    <uib:gridColumn column="4">
+                                        <h:form id="form">
+
+                                            <p:tree value="#{secType.root}" var="node"
+                                                    selectionMode="multiple"
+                                                    selection="#{secType.selectedNodes}"
+                                                    id="treeMultiple" dynamic="true">
+                                                <p:ajax event="select" update=":tabView:table"/>
+                                                <p:treeNode>
+                                                    <h:outputText value="#{node}"/>
+                                                </p:treeNode>
+                                            </p:tree>
+                                        </h:form>
+                                    </uib:gridColumn>
+
+                                    <uib:gridColumn column="8">
+                                        <uib:dataTable id="table" var="secondaryTypes"
+                                                       rows="40"
+                                                       value="#{secType.secondaryTypes}">
+                                            <p:column headerText="Selected secondary types">
+                                                <h:outputText id="prop_id" value="#{secondaryTypes.displayName}" var="id"/>
+
+                                            </p:column>
+
+                                        </uib:dataTable>
+                                    </uib:gridColumn>
+                                </uib:gridRow>
+                            </uib:gridContainer>
+                        </p:tab>
+
+                        <p:tab title="Step IV">
+                            <h3>View parent metadata and add new one</h3>
                             <h:panelGrid columns="2" cellpadding="10">
 
                                 <h:form id="allPropertiesForm" prependId="false" rendered="true">
@@ -317,6 +354,8 @@
 
                             </h:panelGrid>
                         </p:tab>
+
+
 
                     </p:tabView>
 

@@ -198,4 +198,12 @@ public class CMISTypeManagerService {
 
         return property;
     }
+
+    public TypeDTO getSecondaryTypes() {
+
+        ObjectType baseSecondary = getTypeById("cmis:secondary");
+        TypeDTO returnedDTO = ObjectTypeReader.readTree(baseSecondary);
+
+        return returnedDTO;
+    }
 }

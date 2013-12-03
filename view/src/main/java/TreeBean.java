@@ -23,6 +23,12 @@ public class TreeBean implements Serializable {
     private  PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
 
+
+    public String getErrorVisible(){
+        return String.valueOf(currentDTO==null);
+    }
+
+
     public PropertyRow getNewProperty() {
         return newProperty;
     }
@@ -50,22 +56,11 @@ public class TreeBean implements Serializable {
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;
 
-    public void setTreeVisible(){
-        attributesVisible = false;
-        metadataVisible = false;
-    }
-    public void setAttributesVisibleTrue(){
-        attributesVisible = true;
-        metadataVisible = false;
-    }
 
-    public void setMetadataVisibleTrue(){
-        metadataVisible = true;
-        attributesVisible = false;
-    }
+
 
     public boolean isAttributesVisible() {
-        return attributesVisible;
+          return currentDTO!=null;
     }
 
     public void setAttributesVisible(boolean attributesVisible) {
