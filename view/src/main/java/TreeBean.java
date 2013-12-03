@@ -5,6 +5,7 @@ import org.primefaces.model.TreeNode;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,24 @@ public class TreeBean implements Serializable {
     private TypeDTO  currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
+    private  PropertyRow propertyRow1;
+    private PropertyRow newProperty = new PropertyRow();
+
+    public PropertyRow getNewProperty() {
+        return newProperty;
+    }
+
+    public void setNewProperty(PropertyRow newProperty) {
+        this.newProperty = newProperty;
+    }
+
+    public PropertyRow getPropertyRow1() {
+        return propertyRow1;
+    }
+
+    public void setPropertyRow1(PropertyRow propertyRow1) {
+        this.propertyRow1 = propertyRow1;
+    }
 
     public ArrayList<PropertyRow> getPropertyRows() {
         return propertyRows;
@@ -189,5 +208,14 @@ public class TreeBean implements Serializable {
         render(list, root);
         newDTO = new TypeDTO();
     }
+
+    public void passProperty(PropertyRow propertyRow){
+       this.propertyRow1 = propertyRow;
+    }
+
+    public void addMetadata(){
+        currentDTO.getPropertyRows().add(newProperty);
+    }
+
 
 }  
