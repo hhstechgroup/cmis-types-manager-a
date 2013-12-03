@@ -6,6 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
@@ -17,6 +18,15 @@ public class TreeBean implements Serializable {
     private TreeNode selected = null;
     private TypeDTO  currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
+    ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
+
+    public ArrayList<PropertyRow> getPropertyRows() {
+        return propertyRows;
+    }
+
+    public void setPropertyRows(ArrayList<PropertyRow> propertyRows) {
+        this.propertyRows = propertyRows;
+    }
 
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;

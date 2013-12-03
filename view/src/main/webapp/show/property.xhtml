@@ -9,7 +9,6 @@
     <ui:define name="mainContent">
 
         <h:form id="allPropertiesForm" prependId="false">
-            <!--<uib:modal id="allPropertiesModal" header="Type Property">-->
                 <uib:dataTable id="allProperties" var="property"
                                rows="5"
                                value="#{treeBean.currentDTO.propertyList}">
@@ -36,7 +35,6 @@
                                      oncomplete="jQuery('#allPropertiesModal').modal('hide');
                                          return false;"/>
                 </f:facet>
-            <!--</uib:modal>-->
         </h:form>
 
         <h:form id="fullPropertyForm" prependId="false">
