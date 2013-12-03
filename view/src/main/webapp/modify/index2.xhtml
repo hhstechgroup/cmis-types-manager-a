@@ -13,45 +13,384 @@
 <ui:define name="mainContent">
 
     <uib:gridContainer>
-        <uib:gridRow>
-            <uib:gridColumn column="12"  styleClass="mar30">
-
-                <p:commandButton id="createBtn" value="Create type" action="#{treeBean.createType}" styleClass="secondary small" icon="ui-icon-edit" oncomplete="jQuery('#AddModal').modal('show');return false;"
-                                 disabled="#{treeBean.disableBtn}"/>
-                <p:commandButton id="logoutButton" styleClass="secondary small" value="Logout" action="#{login.doLogout}"/>
-            </uib:gridColumn>
-        </uib:gridRow>
-        <uib:gridRow fluid="true">
-            <uib:gridColumn column="6">
-
-                <h:form id="form"  styleClass="mar30">
-
-                    <p:tree value="#{treeBean.root}"
-                            var="node"
-                            id="tree"
-                            dynamic="true"
-                            selectionMode="single"
-                            selection="#{treeBean.selected}">
-
-                        <p:treeNode id="treeNode">
-                            <h:outputText value="#{node}" id="lblNode"/>
-                        </p:treeNode>
-                    </p:tree>
-                </h:form>
-            </uib:gridColumn>
-
-            <uib:gridColumn column="6">
-
-
-            </uib:gridColumn>
-        </uib:gridRow>
 
         <uib:gridRow>
             <uib:gridColumn column="12">
 
+                    <h:form id = "mainForm">
+                    <p:tabView effect="#{tabBean.effect}" id="tabView" effectDuration="normal">
+
+                        <p:tab title="Step I">
+                            <h:panelGrid columns="2" cellpadding="10">
+
+                                    <h:form id="treeForm"  styleClass="mar30">
+                                    <h:outputText value="Chose tree node:"/>
+                                    <p:tree value="#{treeBean.root}"
+                                            var="node"
+                                            id="tree"
+                                            dynamic="true"
+                                            selectionMode="single"
+                                            selection="#{treeBean.selected}">
+                                        <p:ajax event="select" listener="#{treeBean.onNodeSelect}" update = ":mainForm"/>
+
+                                        <p:treeNode id="treeNode">
+                                            <h:outputText value="#{node}" id="lblNode"/>
+                                        </p:treeNode>
+                                    </p:tree>
+                                </h:form>
+                            </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab id="step2" title="Step II">
+                            <h:panelGrid id="grid" columns="2" cellpadding="10">
+                            <h:form xmlns:h="http://java.sun.com/jsf/html"
+                                    xmlns:p="http://primefaces.org/ui"
+                                    xmlns:uib="http://engagepoint.com/uib"
+                                    id="Add" prependId="false" styleClass="mar30">
+
+
+                            <uib:gridContainer>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Name"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="displayName" placeholder="Input value:"
+                                               value="#{treeBean.newDTO.displayName}" required="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="ID"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="id" placeholder="Input value:"
+                                               value="#{treeBean.newDTO.id}" required="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Description"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="description" placeholder="Input value:"
+                                               value="#{treeBean.newDTO.description}" required="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Query name"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="queryName" placeholder="Input value:"
+                                               value="#{treeBean.newDTO.queryName}" required="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Local name"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="localName" placeholder="Input value:"
+                                               value="#{treeBean.newDTO.localName}" required="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Parent"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="parentId" value="#{treeBean.currentDTO.id}" disabled="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Base type"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="baseTypeId" value="#{treeBean.currentDTO.baseTypeId}" disabled="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Local namespace"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <uib:input id="localNamespace" placeholder="Input value:"
+                                               value="#{treeBean.newDTO.localNamespace}" required="true"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Creatable"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <p:selectBooleanCheckbox id="creatable" value="#{treeBean.newDTO.creatable}"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Fileable"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <p:selectBooleanCheckbox id="fileable" value="#{treeBean.newDTO.fileable}"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Queryable"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <p:selectBooleanCheckbox id="queryable" value="#{treeBean.newDTO.queryable}"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Included in supertype query"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <p:selectBooleanCheckbox id="includedInSupertypeQuery" value="#{treeBean.newDTO.includedInSupertypeQuery}"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Full text indexed"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <p:selectBooleanCheckbox id="fulltextIndexed" value="#{treeBean.newDTO.fulltextIndexed}"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="ACL controllable"/>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="8">
+                                    <p:selectBooleanCheckbox id="controllableAcl" value="#{treeBean.newDTO.controllableAcl}"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="4" styleClass="tar">
+                                    <p:outputLabel value="Policy controllable"/>
+                                </uib:gridColumn>
+
+                                <uib:gridColumn column="8">
+                                    <p:selectBooleanCheckbox id="controllablePolicy" value="#{treeBean.newDTO.controllablePolicy}"/>
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+                            <uib:gridRow fluid="true">
+
+                                <uib:gridColumn column="12">
+
+                                    <uib:gridContainer>
+
+                                        <uib:gridRow>
+                                            <uib:gridColumn column="4" styleClass="tar">
+                                                <p:outputLabel value="Mutability"/>
+                                            </uib:gridColumn>
+                                            <uib:gridColumn column="8">
+                                            </uib:gridColumn>
+                                        </uib:gridRow>
+
+                                        <uib:gridRow fluid="true">
+                                            <uib:gridColumn column="4" styleClass="tar">
+                                                <p:outputLabel value="can create"/>
+                                            </uib:gridColumn>
+                                            <uib:gridColumn column="8">
+                                                <p:selectBooleanCheckbox id="mutabilityCanCreate" value="#{treeBean.newDTO.mutabilityCanCreate}"/>
+                                            </uib:gridColumn>
+                                        </uib:gridRow>
+
+                                        <uib:gridRow fluid="true">
+                                            <uib:gridColumn column="4" styleClass="tar">
+                                                <p:outputLabel value="can delete"/>
+                                            </uib:gridColumn>
+                                            <uib:gridColumn column="8">
+                                                <p:selectBooleanCheckbox id="mutabilityCanDelete" value="#{treeBean.newDTO.mutabilityCanDelete}"/>
+                                            </uib:gridColumn>
+                                        </uib:gridRow>
+
+                                        <uib:gridRow fluid="true">
+                                            <uib:gridColumn column="4" styleClass="tar">
+                                                <p:outputLabel value="can update"/>
+                                            </uib:gridColumn>
+                                            <uib:gridColumn column="8">
+                                                <p:selectBooleanCheckbox id="mutabilityCanUpdate" value="#{treeBean.newDTO.mutabilityCanUpdate}"/>
+                                            </uib:gridColumn>
+                                        </uib:gridRow>
+
+                                    </uib:gridContainer>
+
+                                </uib:gridColumn>
+
+                            </uib:gridRow>
+
+
+                            </uib:gridContainer>
+
+
+                            <f:facet name="footer">
+                                <p:commandButton title="Cancel" id="cancelButton" action="#{treeBean.cleanUpdateForm}" mode="client" value="Cancel"
+                                                 styleClass="secondary"
+                                                 oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
+                                <p:commandButton title="Add" id="AddButton" action="#{treeBean.addType}" mode="client" value="Add"
+                                                 oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
+                            </f:facet>
+
+                            </h:form>
+
+                            </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="Step III">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <h:form id="allPropertiesForm" prependId="false">
+                                    <uib:dataTable id="allProperties" var="property"
+                                                   rows="30"
+                                                   value="#{treeBean.currentDTO.propertyList}" selection="#{treeBean.propertyRows}" >
+
+                                        <p:column headerText="ID">
+                                            <h:outputText id="prop_id" value="#{property.id}" var="id"/>
+                                        </p:column>
+                                        <p:column headerText="Display Name">
+                                            <h:outputText value="#{property.displayName}"/>
+                                        </p:column>
+                                        <p:column headerText="Description">
+                                            <h:outputText value="#{property.description}"/>
+                                        </p:column>
+                                        <p:column headerText="Full Info">
+                                            <p:commandButton title="Full Info" id="fullInfo" value="Info"
+                                                             update=":mainForm:tabView:fullPropertyForm"
+                                                             oncomplete="jQuery('#fullPropertyModal').modal('show');return false;"/>
+                                        </p:column>
+                                    </uib:dataTable>
+
+                                </h:form>
+
+
+                                <h:form id="fullPropertyForm" prependId="false">
+                                    <uib:modal id="fullPropertyModal" header="Full Property Info">
+                                        <p:panelGrid columns="2" id="fullPropertyGrid">
+
+                                            <h:outputText value="ID: "/>
+                                            <h:outputText value="#{property.id}"/>
+
+                                            <h:outputText value="Local Name: "/>
+                                            <h:outputText value="#{property.localName}"/>
+
+                                            <h:outputText value="Local Namespace: "/>
+                                            <h:outputText value="#{property.localNamespace}"/>
+
+                                            <h:outputText value="Display Name: "/>
+                                            <h:outputText value="#{property.displayName}"/>
+
+                                            <h:outputText value="Query Name: "/>
+                                            <h:outputText value="#{property.queryName}"/>
+
+                                            <h:outputText value="Description: "/>
+                                            <h:outputText value="#{property.description}"/>
+
+                                            <h:outputText value="Inherited: "/>
+                                            <h:outputText value="#{property.inherited}"/>
+
+                                            <h:outputText value="Required: "/>
+                                            <h:outputText value="#{property.required}"/>
+
+                                            <h:outputText value="Queryable: "/>
+                                            <h:outputText value="#{property.queryable}"/>
+
+                                            <h:outputText value="Orderable: "/>
+                                            <h:outputText value="#{property.orderable}"/>
+
+                                            <h:outputText value="Open Choice: "/>
+                                            <h:outputText value="#{property.openChoice}"/>
+
+                                            <h:outputText value="Property Type: "/>
+                                            <h:outputText value="#{property.propertyType}"/>
+
+                                            <h:outputText value="Cardinality: "/>
+                                            <h:outputText value="#{property.cardinality}"/>
+
+                                            <h:outputText value="Updatability: "/>
+                                            <h:outputText value="#{property.updatability}"/>
+
+                                            <h:outputText value="Choise List: "/>
+                                            <h:outputText value="#{property.choiseList}"/>
+
+                                            <h:outputText value="Default Value: "/>
+                                            <h:outputText value="#{property.defaultValue}"/>
+
+                                            <h:outputText value="Extensions: "/>
+                                            <h:outputText value="#{property.extensions}"/>
+                                        </p:panelGrid>
+                                        <f:facet name="footer">
+                                            <p:commandButton title="Cancel" mode="client" value="Cancel"
+                                                             styleClass="secondary"
+                                                             oncomplete="jQuery('#fullPropertyModal').modal('hide');
+                                         return false;"/>
+                                        </f:facet>
+                                    </uib:modal>
+                                </h:form>
+
+                            </h:panelGrid>
+                        </p:tab>
+
+                    </p:tabView>
+
+                </h:form>
             </uib:gridColumn>
         </uib:gridRow>
+
     </uib:gridContainer>
+
+
+
+
 
 
     </ui:define>

@@ -52,6 +52,7 @@ public class TypeDTO implements Serializable {
 
     public Collection<PropertyRow> getPropertyList() {
         return propertyRows;
+
     }
     ////////////////
 
