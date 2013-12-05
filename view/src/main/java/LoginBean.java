@@ -11,19 +11,10 @@ public class LoginBean implements Serializable {
     private String username;
     private String password;
     private String sessionID;
-
     @NotNull(message = "Please enter url")
     private String url;
     @NotNull(message = "Please enter port")
     private String port;
-
-    public String getSessionID() {
-        return sessionID;
-    }
-
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
-    }
 
     public String getPort() {
         return port;
@@ -60,7 +51,7 @@ public class LoginBean implements Serializable {
 
     public String doLogin() {
 
-        String page = "";
+        String page;
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
 
         service.setName(username);

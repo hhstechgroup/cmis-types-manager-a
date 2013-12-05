@@ -3,7 +3,6 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="../template.xhtml"
                 xmlns:uib="http://engagepoint.com/uib">
     <h:head>
@@ -18,7 +17,7 @@
             <uib:gridColumn column="12">
 
 
-                    <p:tabView effect="#{tabBean.effect}" id="tabView" effectDuration="normal">
+                    <p:tabView id="tabView" effectDuration="normal">
 
                         <p:tab title="Step I">
                             <h3>Chose tree node:</h3>
@@ -28,7 +27,6 @@
 
                                     <p:tree value="#{treeBean.root}"
                                             var="node"
-                                            id="tree"
                                             dynamic="true"
                                             selectionMode="single"
                                             selection="#{treeBean.selected}">
@@ -273,13 +271,6 @@
                             </uib:gridContainer>
 
 
-                            <f:facet name="footer">
-                                <p:commandButton title="Cancel" id="cancelButton" action="#{treeBean.cleanUpdateForm}" mode="client" value="Cancel"
-                                                 styleClass="secondary"
-                                                 oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
-                                <p:commandButton title="Add" id="AddButton" action="#{treeBean.addType}" mode="client" value="Add"
-                                                 oncomplete="jQuery('#AddModal').modal('hide');return false;"/>
-                            </f:facet>
 
                             </h:form>
 
@@ -297,7 +288,10 @@
                                                     selectionMode="multiple"
                                                     selection="#{secType.selectedNodes}"
                                                     id="treeMultiple" dynamic="true">
+
                                                 <p:ajax event="select" update=":tabView:table"/>
+                                                <p:ajax event="unselect" update=":tabView:table"/>
+
                                                 <p:treeNode>
                                                     <h:outputText value="#{node}"/>
                                                 </p:treeNode>
@@ -309,9 +303,9 @@
                                         <uib:dataTable id="table" var="secondaryTypes"
                                                        rows="40"
                                                        value="#{secType.secondaryTypes}">
+
                                             <p:column headerText="Selected secondary types">
                                                 <h:outputText id="prop_id" value="#{secondaryTypes.displayName}" var="id"/>
-
                                             </p:column>
 
                                         </uib:dataTable>
