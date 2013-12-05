@@ -1,11 +1,13 @@
+package com.engagepoint.team_a.cmis_manager.wrappers;
+
+import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.definitions.TypeMutability;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
-public class TestTypeMutability implements Serializable, TypeMutability {
+public class TypeMutabilityWrapper implements Serializable, TypeMutability {
 
     private static final long serialVersionUID = 20235247221121235L;
 
@@ -13,7 +15,7 @@ public class TestTypeMutability implements Serializable, TypeMutability {
     private boolean update;
     private boolean delete;
 
-    public TestTypeMutability(TypeDTO typeDTO) {
+    public TypeMutabilityWrapper(TypeDTO typeDTO) {
         create = typeDTO.isMutabilityCanCreate();
         update = typeDTO.isMutabilityCanUpdate();
         delete = typeDTO.isMutabilityCanDelete();
@@ -36,7 +38,7 @@ public class TestTypeMutability implements Serializable, TypeMutability {
 
     @Override
     public List<CmisExtensionElement> getExtensions() {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override

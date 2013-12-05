@@ -1,11 +1,15 @@
+package com.engagepoint.team_a.cmis_manager;
+
+import com.engagepoint.team_a.cmis_manager.model.PropertyRow;
+import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
@@ -17,32 +21,45 @@ public class TreeBean implements Serializable {
     private TreeNode selected = null;
     private TypeDTO  currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
+    ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
+    private  PropertyRow propertyRow1;
+    private PropertyRow newProperty = new PropertyRow();
 
-    private boolean attributesVisible = false;
-    private boolean metadataVisible = false;
-
-    private boolean creatable = false;
-    private boolean updateable = false;
-
-    public boolean isUpdateable() {
-        return updateable;
-    }
 
     public String getErrorVisible(){
         return String.valueOf(currentDTO==null);
     }
 
-    public void setUpdateable(boolean updateable) {
-        this.updateable = updateable;
+
+    public PropertyRow getNewProperty() {
+        return newProperty;
     }
 
-    public boolean isCreatable() {
-        return creatable;
+    public void setNewProperty(PropertyRow newProperty) {
+        this.newProperty = newProperty;
     }
 
-    public void setCreatable(boolean creatable) {
-        this.creatable = creatable;
+    public PropertyRow getPropertyRow1() {
+        return propertyRow1;
     }
+
+    public void setPropertyRow1(PropertyRow propertyRow1) {
+        this.propertyRow1 = propertyRow1;
+    }
+
+    public ArrayList<PropertyRow> getPropertyRows() {
+        return propertyRows;
+    }
+
+    public void setPropertyRows(ArrayList<PropertyRow> propertyRows) {
+        this.propertyRows = propertyRows;
+    }
+
+    private boolean attributesVisible = false;
+    private boolean metadataVisible = false;
+
+
+
 
     public boolean isAttributesVisible() {
         return currentDTO!=null;
@@ -53,7 +70,7 @@ public class TreeBean implements Serializable {
     }
 
     public boolean isMetadataVisible() {
-        return currentDTO!=null;
+        return metadataVisible;
     }
 
     public void setMetadataVisible(boolean metadataVisible) {
@@ -99,29 +116,21 @@ public class TreeBean implements Serializable {
         this.selected = selectedNode;
     }
 
-     public Boolean getDisableBtn() {
+    public Boolean getDisableBtn() {
         return disableBtn;
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
         currentDTO = (TypeDTO) selected.getData();
-            if (selected != null && currentDTO.isMutabilityCanCreate()){
-                disableBtn = false;
-            }
-            else {
-                disableBtn = true;
-            }
-        newDTO = new TypeDTO();
+        if (selected != null && currentDTO.isMutabilityCanCreate()){
+            disableBtn = false;
+        }
+        else
+
+            newDTO = new TypeDTO();
         newDTO.setParentTypeId(currentDTO.getId());
         newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
         //newDTO.setChildren(null);
-        newDTO.setId(currentDTO.getParentTypeId());
-
-        //newDTO.setDisplayName();
-        //newDTO.setDescription();
-        //newDTO.setQueryName();
-        //newDTO.getLocalName();
-        //newDTO.setLocalNamespace(currentDTO.getLocalNamespace());
 
         newDTO.setCreatable(currentDTO.isCreatable());
         newDTO.setFileable(currentDTO.isFileable());
@@ -180,7 +189,6 @@ public class TreeBean implements Serializable {
         newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
     }
 
-
     public void addType(){
         CMISTypeManagerService.getInstance().createType(newDTO);
         List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
@@ -189,4 +197,13 @@ public class TreeBean implements Serializable {
         newDTO = new TypeDTO();
     }
 
-}  
+    public void passProperty(PropertyRow propertyRow){
+        this.propertyRow1 = propertyRow;
+    }
+
+    public void addMetadata(){
+        currentDTO.getPropertyRows().add(newProperty);
+    }
+
+
+}

@@ -1,3 +1,5 @@
+package com.engagepoint.team_a.cmis_manager;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -16,6 +18,24 @@ public class LoginBean implements Serializable {
     private String url;
     @NotNull(message = "Please enter port")
     private String port;
+
+    ////
+    private String repo;
+    private String[] repos;
+
+    public String getRepo() {
+        return repo;
+    }
+
+    public void setRepo(String repo) {
+        this.repo = repo;
+    }
+
+    public String[] getRepos() {
+        return repos;
+    }
+    ///
+
 
     public String getSessionID() {
         return sessionID;
@@ -68,7 +88,7 @@ public class LoginBean implements Serializable {
         service.setPort(port);
         service.setUrl(url);
         try{
-            service.connect();
+            service.connect(repo);
             sessionID = service.getSession().toString();
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("sessionID",sessionID);
@@ -81,6 +101,25 @@ public class LoginBean implements Serializable {
         return page;
     }
 
+    public String getRepoList() {
+
+        CMISTypeManagerService service = CMISTypeManagerService.getInstance();
+
+        service.setName(username);
+        service.setPass(password);
+        service.setPort(port);
+        service.setUrl(url);
+
+        try{
+            repos = service.getRepoList(url, port);
+        }catch (Exception e){
+            return "/error";
+        }
+
+        return null;
+    }
+
+
     public String doLogout() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         session.invalidate();
@@ -91,7 +130,11 @@ public class LoginBean implements Serializable {
         port = null;
         sessionID=null;
 
+        repos = null;
+        repo = null;
+
         CMISTypeManagerService.getInstance().disconnect();
         return "/login?faces-redirect=true";
     }
+
 }

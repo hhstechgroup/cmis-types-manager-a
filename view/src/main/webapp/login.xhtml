@@ -8,32 +8,113 @@
                 xmlns:uib="http://engagepoint.com/uib">
 
     <ui:define name="mainContent">
-        <p:panel id="pnl" header="Login" style="margin-bottom:10px;width:400px">
-            <h:form id="form">
-                <p:panelGrid columns="3" id="grid" cellpadding="5" title="Login">
+        <p:panel id="pnl" style="margin-bottom:10px;width:400px"> <!-- header="Login" style="margin-bottom:10px;width:400px" -->
+            <h:form id="loginForm">
 
-                    <h:outputLabel for="username" value="Username:"/>
-                    <p:inputText value="#{login.username}"
-                                 id="username" label="username"/>
-                    <h:outputLabel for="username" value=""/>
+                <uib:gridContainer>
 
-                    <h:outputLabel for="password" value="Password:"/>
-                    <p:password value="#{login.password}"
-                                id="password" label="password"/>
-                    <h:outputLabel for="username" value=""/>
+                    <uib:gridRow fluid="true">
 
-                    <h:outputLabel for="url" value="URL:"/>
-                    <p:inputText value="#{login.url}"
-                                 id="url" required="true" label="URL"/>
-                    <p:inputText value="#{login.port}"
-                                 id="port" required="true" label="URL" maxlength="4" size="5"/>
+                        <uib:gridColumn column="2">
+                            <p:outputLabel value="" />
+                        </uib:gridColumn>
 
-                    <p:commandButton id="loginButton" value="Login"
-                                     action="#{login.doLogin}" update="grid"/>
+                        <uib:gridColumn column="3">
+                            <p:outputLabel value="Login:"/>
+                        </uib:gridColumn>
 
-                </p:panelGrid>
+                        <uib:gridColumn column="4">
+                            <p:inputText value="#{login.username}" id="username" label="username"/>
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="3"></uib:gridColumn>
+
+                    </uib:gridRow>
+
+                    <uib:gridRow fluid="true">
+
+                        <uib:gridColumn column="2">
+                            <p:outputLabel value=""/>
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="3">
+                            <p:outputLabel value="Password:"/>
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="4">
+                            <p:inputText value="#{login.password}" id="password" label="password"/>
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="3"></uib:gridColumn>
+                    </uib:gridRow>
+
+                    <uib:gridRow fluid="true">
+
+                        <uib:gridColumn column="2">
+                            <p:outputLabel value="" />
+                        </uib:gridColumn>
+                        <uib:gridColumn column="3">
+                            <p:outputLabel value="URL:"/>
+                        </uib:gridColumn>
+                        <uib:gridColumn column="4">
+                            <p:inputText value="#{login.url}" id="url" label="URL" required="true"/>
+                        </uib:gridColumn>
+                        <uib:gridColumn column="2">
+                            <p:inputText value="#{login.port}" id="port" label="PORT" required="true"/>
+                        </uib:gridColumn>
+                        <uib:gridColumn column="1"></uib:gridColumn>
+
+                    </uib:gridRow>
+
+                    <uib:gridRow fluid="true">
+
+                        <uib:gridColumn column="4">
+                            <p:outputLabel value=""/>
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="4">
+                            <p:commandButton id="getRepoButton" value="Get repo" action="#{login.getRepoList}"
+                                             update="@form" />
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="4"/>
+                    </uib:gridRow>
+
+                    <uib:gridRow fluid="true">
+
+                        <uib:gridColumn column="2">
+                            <p:outputLabel value="" />
+                        </uib:gridColumn>
+                        <uib:gridColumn column="8">
+
+                            <p:selectOneMenu id="selectMenu" value="#{login.repo}" disabled="#{login.repos == null}">
+                                <f:selectItems value="#{login.repos}"/>
+                                <p:ajax update="loginForm:loginButton"/>
+                            </p:selectOneMenu>
+
+                        </uib:gridColumn>
+                        <uib:gridColumn column="3"/>
+                    </uib:gridRow>
+
+                    <uib:gridRow fluid="true">
+
+                        <uib:gridColumn column="4">
+                            <p:outputLabel value=""/>
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="4">
+                            <p:commandButton id="loginButton" value="Login"
+                                             action="#{login.doLogin}" disabled="#{login.repo == null}"/>
+                        </uib:gridColumn>
+
+                        <uib:gridColumn column="4"/>
+                    </uib:gridRow>
+
+                </uib:gridContainer>
 
             </h:form>
+
         </p:panel>
     </ui:define>
+
 </ui:composition>

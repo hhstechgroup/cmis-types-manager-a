@@ -1,3 +1,5 @@
+package com.engagepoint.team_a.cmis_manager.model;
+
 import java.util.List;
 
 public class PropertyRow {
@@ -163,6 +165,14 @@ public class PropertyRow {
 
     @Override
     public String toString() {
-        return displayName;
+        return "com.engagepoint.team_a.cmis_manager.model.PropertyRow{" +
+                "id='" + id + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", queryName='" + queryName + '\'' +
+                ", propertyType='" + propertyType + '\'' +
+                ", cardinality='" + cardinality + '\'' +
+                ", updatability='" + updatability + '\'' +
+                ", description='" + description +  '\'' +
+                '}';
     }
 }

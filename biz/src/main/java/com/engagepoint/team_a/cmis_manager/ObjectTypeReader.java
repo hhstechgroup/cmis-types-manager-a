@@ -1,3 +1,8 @@
+package com.engagepoint.team_a.cmis_manager;
+
+import com.engagepoint.team_a.cmis_manager.model.BaseTypeEnum;
+import com.engagepoint.team_a.cmis_manager.model.PropertyRow;
+import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Tree;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -7,17 +12,17 @@ import java.util.*;
 public class ObjectTypeReader {
 
     /**
-     * Use this method to create TypeDTO instace from ObjectType instace
+     * Use this method to create com.engagepoint.team_a.cmis_manager.model.TypeDTO instace from ObjectType instace
+     *
      * @param objType
-     * @return TypeDTO
+     * @return com.engagepoint.team_a.cmis_manager.model.TypeDTO
      */
 
     public static TypeDTO readIgnoreChildren(ObjectType objType) {
         TypeDTO dto = new TypeDTO();
 
-        //private BaseTypeId baseTypeId;
-        dto.setBaseTypeId(objType.getBaseTypeId().value()); //TODO change TypeDTO.class. This is shitcode.
-        dto.setParentTypeId(objType.getParentTypeId()); //TODO change TypeDTO.class. This is shitcode.
+        dto.setBaseTypeId(BaseTypeEnum.fromValue(objType.getBaseTypeId().value()));
+        dto.setParentTypeId(objType.getParentTypeId());
 
         dto.setMutabilityCanCreate(objType.getTypeMutability().canCreate());
         dto.setMutabilityCanDelete(objType.getTypeMutability().canDelete());
@@ -46,19 +51,13 @@ public class ObjectTypeReader {
     private static ArrayList<PropertyRow> readProperties(ObjectType objType) {
 
         ArrayList<PropertyRow> propertyList = new ArrayList<PropertyRow>();
-        Map<String, PropertyDefinition<?>> propertyDefinitionMap = objType.getPropertyDefinitions();
+        Map<String, PropertyDefinition<?>> propertyDefinitionMap = new HashMap<String, PropertyDefinition<?>>();
+        propertyDefinitionMap.putAll(objType.getPropertyDefinitions());
 
-        /*
-        * TODO tests this
-        */
         for(PropertyDefinition propertyDefinition : propertyDefinitionMap.values()) {
 
-            try{
-                PropertyRow propertyRow = ObjectTypeReader.readPropertyRow(propertyDefinition);
-                propertyList.add(propertyRow);
-            } catch (NullPointerException ex) {
-                //TODO
-            }
+            PropertyRow propertyRow = ObjectTypeReader.readPropertyRow(propertyDefinition);
+            propertyList.add(propertyRow);
         }
 
         return propertyList;
@@ -68,24 +67,27 @@ public class ObjectTypeReader {
 
         PropertyRow propertyRow = new PropertyRow();
 
-        try {
-            propertyRow.setDisplayName(definition.getDisplayName());
-            propertyRow.setId(definition.getId());
-            propertyRow.setDescription(definition.getDescription());
-            propertyRow.setLocalNamespace(definition.getLocalNamespace());
-            propertyRow.setLocalName(definition.getLocalName());
-            propertyRow.setQueryName(definition.getDisplayName());
+        propertyRow.setDisplayName(definition.getDisplayName());
+        propertyRow.setId(definition.getId());
+        propertyRow.setDescription(definition.getDescription());
+        propertyRow.setLocalNamespace(definition.getLocalNamespace());
+        propertyRow.setLocalName(definition.getLocalName());
+        propertyRow.setQueryName(definition.getDisplayName());
 
-            propertyRow.setCardinality(definition.getCardinality().value());
-            propertyRow.setUpdatability(definition.getUpdatability().value());
-            propertyRow.setQueryable(definition.isQueryable());
-            propertyRow.setOrderable(definition.isOrderable());
-            propertyRow.setRequired(definition.isRequired());
-            propertyRow.setInherited(definition.isInherited());
+        propertyRow.setCardinality(definition.getCardinality().value());
+        propertyRow.setUpdatability(definition.getUpdatability().value());
+        propertyRow.setPropertyType(definition.getPropertyType().value());
+
+        propertyRow.setQueryable(definition.isQueryable());
+        propertyRow.setOrderable(definition.isOrderable());
+        propertyRow.setRequired(definition.isRequired());
+        propertyRow.setInherited(definition.isInherited());
+
+        try {
+            // definition.isOpenChoice() for BaseTypes return null
             propertyRow.setOpenChoice(definition.isOpenChoice());
-            //TODO PropertyRow
-        } catch (NullPointerException ex) {
-            //propertyRow.setDisplayName("(PropertyDefinition)pair.getValue() is null");
+        } catch (NullPointerException e) {
+            propertyRow.setOpenChoice(false);
         }
 
         return propertyRow;
@@ -94,10 +96,10 @@ public class ObjectTypeReader {
     public static TypeDTO readTree(Tree<ObjectType> objectTypeTree) {
         ObjectType objectType = objectTypeTree.getItem();
 
-        return ObjectTypeReader.readTree(objectType);
+        return ObjectTypeReader.readWithChildren(objectType);
     }
 
-    public static TypeDTO readTree(ObjectType objectType) {
+    public static TypeDTO readWithChildren(ObjectType objectType) {
         TypeDTO root = ObjectTypeReader.readIgnoreChildren(objectType);
 
         Iterator i = objectType.getChildren().iterator();
@@ -105,7 +107,7 @@ public class ObjectTypeReader {
         while(i.hasNext())
         {
             ObjectType child = (ObjectType)i.next();
-            children.add(readTree(child));
+            children.add(readWithChildren(child));
         }
         root.setChildren(children);
 

@@ -1,3 +1,5 @@
+package com.engagepoint.team_a.cmis_manager.model;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,12 +9,10 @@ import java.util.List;
 public class TypeDTO implements Serializable {
 
 
-    //private BaseTypeId baseTypeId; TODO
-    private String baseTypeId;
+    private BaseTypeEnum baseTypeId;
     //private List<CmisExtensionElement> extensions; // wtf?
 
-    private String parentTypeId; //TODO change TypeDTO.class
-
+    private String parentTypeId;
     /**
      * This 3 fields contains TypeMutability interface from CMIS API
      */
@@ -25,8 +25,8 @@ public class TypeDTO implements Serializable {
     private String localNamespace;
     private String displayName;
     private String queryName;
-
     private String description;
+
     private boolean creatable;
     private boolean fileable;
     private boolean queryable;
@@ -67,13 +67,11 @@ public class TypeDTO implements Serializable {
         this.children = children;
     }
 
-    // TODO
-    public String getBaseTypeId() {
+    public BaseTypeEnum getBaseTypeId() {
         return baseTypeId;
     }
 
-    //TODO
-    public void setBaseTypeId(String baseTypeId) {
+    public void setBaseTypeId(BaseTypeEnum baseTypeId) {
         this.baseTypeId = baseTypeId;
     }
 
@@ -217,5 +215,4 @@ public class TypeDTO implements Serializable {
     public String toString() {
         return displayName;
     }
-
 }
