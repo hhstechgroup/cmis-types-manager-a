@@ -172,7 +172,7 @@ public class PropertyRow {
                 ", propertyType='" + propertyType + '\'' +
                 ", cardinality='" + cardinality + '\'' +
                 ", updatability='" + updatability + '\'' +
-                ", description='" + description +  '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

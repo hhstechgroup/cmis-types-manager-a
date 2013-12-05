@@ -58,7 +58,7 @@ public class TypeDefinitionWrapper implements Serializable, TypeDefinition {
 
         baseTypeId = BaseTypeId.fromValue(typeDTO.getBaseTypeId().toString());
 
-        for(PropertyRow row : typeDTO.getPropertyRows()) {
+        for (PropertyRow row : typeDTO.getPropertyRows()) {
             propertyDefinitionMap.put(row.getId(), new PropertyDefinitionWrapper(row));
         }
     }

@@ -1,5 +1,6 @@
 package com.engagepoint.team_a.cmis_manager;
 
+import com.engagepoint.team_a.cmis_manager.exceptions.TMBaseException;
 import com.engagepoint.team_a.cmis_manager.model.PropertyRow;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import org.primefaces.event.NodeSelectEvent;
@@ -24,12 +25,27 @@ public class TreeBean implements Serializable {
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
     private PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
+    private String errorMessage;
+    private String errorVisibility;
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorVisibility() {
+        return errorVisibility;
+    }
+
+    public void setErrorVisibility(String errorVisibility) {
+        this.errorVisibility = errorVisibility;
+    }
     public String getErrorVisible(){
         return String.valueOf(currentDTO==null);
     }
-
 
     public PropertyRow getNewProperty() {
         return newProperty;
@@ -96,15 +112,17 @@ public class TreeBean implements Serializable {
     }
 
     public TreeBean() {
-        List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
-
-        root = new DefaultTreeNode("Root", null);
-        render(list, root);
-
+        try {
+            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+        } catch (TMBaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
     }
 
     public TreeNode getRoot() {
-
         return root;
     }
 
@@ -148,10 +166,6 @@ public class TreeBean implements Serializable {
         newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
     }
 
-    public String create() {
-        return "/error";
-    }
-
     private void render(List<TypeDTO> tree, TreeNode parent) {
         for (TypeDTO data : tree) {
             TreeNode treeNode = new DefaultTreeNode(data, parent);
@@ -192,11 +206,17 @@ public class TreeBean implements Serializable {
     }
 
     public void addType(){
-        CMISTypeManagerService.getInstance().createType(newDTO);
-        List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
-        root = new DefaultTreeNode("Root", null);
-        render(list, root);
-        newDTO = new TypeDTO();
+        try {
+            CMISTypeManagerService.getInstance().createType(newDTO);
+            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+            newDTO = new TypeDTO();
+        } catch (TMBaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
+
     }
 
     public void passProperty(PropertyRow propertyRow){
@@ -205,5 +225,16 @@ public class TreeBean implements Serializable {
 
     public void addMetadata(){
         currentDTO.getPropertyRows().add(newProperty);
+    }
+    public void crea(){
+        throw new TMBaseException("asd");
+    }
+    public void creat(){
+        try {
+            crea();
+        } catch (TMBaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
     }
 }

@@ -54,7 +54,7 @@ public class ObjectTypeReader {
         Map<String, PropertyDefinition<?>> propertyDefinitionMap = new HashMap<String, PropertyDefinition<?>>();
         propertyDefinitionMap.putAll(objType.getPropertyDefinitions());
 
-        for(PropertyDefinition propertyDefinition : propertyDefinitionMap.values()) {
+        for (PropertyDefinition propertyDefinition : propertyDefinitionMap.values()) {
 
             PropertyRow propertyRow = ObjectTypeReader.readPropertyRow(propertyDefinition);
             propertyList.add(propertyRow);
@@ -104,9 +104,8 @@ public class ObjectTypeReader {
 
         Iterator i = objectType.getChildren().iterator();
         List<TypeDTO> children = new ArrayList<TypeDTO>();
-        while(i.hasNext())
-        {
-            ObjectType child = (ObjectType)i.next();
+        while (i.hasNext()) {
+            ObjectType child = (ObjectType) i.next();
             children.add(readWithChildren(child));
         }
         root.setChildren(children);

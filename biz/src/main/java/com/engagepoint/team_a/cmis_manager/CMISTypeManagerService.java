@@ -1,5 +1,6 @@
 package com.engagepoint.team_a.cmis_manager;
 
+import com.engagepoint.team_a.cmis_manager.exceptions.TMBaseException;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 
@@ -7,6 +8,8 @@ import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +56,7 @@ public class CMISTypeManagerService {
         this.pass = pass;
     }
 
-    public String[] getRepoList(String url, String port) throws Exception{
+    public String[] getRepoList(String url, String port) throws Exception {
         this.url = url;
         this.port = port;
 
@@ -63,20 +66,20 @@ public class CMISTypeManagerService {
         parameter.put(SessionParameter.USER, name);
         parameter.put(SessionParameter.PASSWORD, pass);
 
-       parameter.put(SessionParameter.ATOMPUB_URL, "http://"+ url + ":" + port + repo + "/atom11");
+        parameter.put(SessionParameter.ATOMPUB_URL, "http://" + url + ":" + port + repo + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         //parameter.put(SessionParameter.REPOSITORY_ID, "A1");
 
         List<Repository> list = factory.getRepositories(parameter);
 
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             throw new Exception("no such session");
         }
 
         map.clear();
         List<String> array = new ArrayList();
 
-        for(Repository repo : list) {
+        for (Repository repo : list) {
             map.put(repo.getName(), repo);
             array.add(repo.getName());
         }
@@ -86,12 +89,12 @@ public class CMISTypeManagerService {
 
     public void connect(String repoName) throws Exception {
         session = map.get(repoName).createSession();
-        if(session==null){
+        if (session == null) {
             throw new Exception("no such session");
         }
     }
 
-    public void disconnect(){
+    public void disconnect() {
         session.getBinding().close();
     }
 
@@ -100,104 +103,76 @@ public class CMISTypeManagerService {
     }
 
     public List<TypeDTO> getTypes() {
-        List<TypeDTO> typeList= new ArrayList<TypeDTO>();
-
-        List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
-
-        for(Tree<ObjectType> tree : list) {
-            typeList.add(ObjectTypeReader.readTree(tree));
+        try {
+            List<TypeDTO> typeList = new ArrayList<TypeDTO>();
+            List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
+            for (Tree<ObjectType> tree : list) {
+                typeList.add(ObjectTypeReader.readTree(tree));
+            }
+            return typeList;
+        } catch (CmisBaseException c) {
+            throw new TMBaseException(c.getMessage());
         }
-        return typeList;
     }
 
     /**
      * TODO
      * This method should throw exceptions
+     *
      * @param newType some com.engagepoint.team_a.cmis_manager.model.TypeDTO instance, that not exist in CMIS repository
      * @return new instance if created, null if not
      * @throws Exception must throw exceptions
      */
     public TypeDTO createType(TypeDTO newType) {
-        TypeDTO returnedTypeDTO = null;
         try {
-
+            TypeDTO returnedTypeDTO = null;
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
-
             ObjectType createdType = session.createType(typeDefinitionWrapper);
-            //LostConnectionException
-
-            if(createdType == null) {
-                //TODO throw CannotCreateTypeException
-            } else {
-                returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
-            }
-
-        } catch (Exception ex) {
-            //TODO throw CannotCreateTypeException or IllegalArgumentException
+            returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
+            return returnedTypeDTO;
+        } catch (CmisBaseException cbe) {
+            throw new TMBaseException(cbe.getMessage());
         }
-
-        return returnedTypeDTO;
     }
 
     public ObjectType getTypeById(String id) {
-
-        ObjectType returnedType = null;
-
         try {
+            ObjectType returnedType = null;
             returnedType = session.getTypeDefinition(id);
-
-            if (returnedType == null) {
-                //throw new NoSuchTypeException
-            }
-
-        } catch (Exception ex) {
-            returnedType = null;
-            //TODO throw LostConnectionException
+            return returnedType;
+        } catch (CmisBaseException cbe) {
+            throw new TMBaseException(cbe.getMessage());
         }
-        return returnedType;
     }
 
     public TypeDTO updateType(TypeDTO updatedType) {
-        TypeDTO returnedTypeDTO = null;
         try {
-
+            TypeDTO returnedTypeDTO = null;
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(updatedType);
-
             ObjectType newType = session.updateType(typeDefinitionWrapper);
-
-            if(newType == null) {
-                //TODO throw CannotUpdateTypeException
-            } else {
-                returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(newType);
-            }
-
-        } catch (Exception ex) {
-            String str = "as";
-            //TODO throw CannotUpdateTypeException or IllegalArgumentException
+            returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(newType);
+            return returnedTypeDTO;
+        } catch (CmisBaseException cbe) {
+            throw new TMBaseException(cbe.getMessage());
         }
-
-        return returnedTypeDTO;
     }
 
     public void deleteType(TypeDTO deletedType) {
-
-        if (deletedType != null) {
-            try {
-                session.deleteType(deletedType.getId());
-            } catch (Exception e) {
-                String str = "RuntimeEx";
-                //throw new CannotDeleteTypeException
-            }
-        } else {
-            //throw new IllegalArgumentException
+        try {
+            session.deleteType(deletedType.getId());
+        } catch (CmisBaseException c) {
+            throw new TMBaseException(c.getMessage());
         }
     }
 
     public TypeDTO getSecondaryTypes() {
-
-        ObjectType baseSecondary = getTypeById("cmis:secondary");
-        TypeDTO returnedDTO = ObjectTypeReader.readWithChildren(baseSecondary);
-
-        return returnedDTO;
+        try {
+            ObjectType baseSecondary = getTypeById("cmis:secondary");
+            TypeDTO returnedDTO = ObjectTypeReader.readWithChildren(baseSecondary);
+            return returnedDTO;
+        } catch (CmisBaseException c) {
+            throw new TMBaseException(c.getMessage());
+        }
     }
+
 }

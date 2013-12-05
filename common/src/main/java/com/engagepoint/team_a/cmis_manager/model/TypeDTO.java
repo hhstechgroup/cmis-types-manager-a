@@ -55,9 +55,10 @@ public class TypeDTO implements Serializable {
     }
     ////////////////
 
-    public TypeDTO() {}
+    public TypeDTO() {
+    }
 
-    private List<TypeDTO> children= new ArrayList<TypeDTO>();
+    private List<TypeDTO> children = new ArrayList<TypeDTO>();
 
     public List<TypeDTO> getChildren() {
         return children;
