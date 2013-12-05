@@ -73,7 +73,7 @@
                         </uib:gridColumn>
 
                         <uib:gridColumn column="4">
-                            <p:commandButton id="getRepoButton" value="Get repo" action="#{login.getRepoList}"
+                            <p:commandButton id="getRepoButton" value="Get chosenRepo" action="#{login.getRepoList}"
                                              update="@form" />
                         </uib:gridColumn>
 
@@ -87,8 +87,8 @@
                         </uib:gridColumn>
                         <uib:gridColumn column="8">
 
-                            <p:selectOneMenu id="selectMenu" value="#{login.repo}" disabled="#{login.repos == null}">
-                                <f:selectItems value="#{login.repos}"/>
+                            <p:selectOneMenu id="selectMenu" value="#{login.chosenRepo}" disabled="#{login.availabeReposList == null}">
+                                <f:selectItems value="#{login.availabeReposList}"/>
                                 <p:ajax update="loginForm:loginButton"/>
                             </p:selectOneMenu>
 
@@ -104,7 +104,7 @@
 
                         <uib:gridColumn column="4">
                             <p:commandButton id="loginButton" value="Login"
-                                             action="#{login.doLogin}" disabled="#{login.repo == null}"/>
+                                             action="#{login.doLogin}" disabled="#{login.chosenRepo == null}"/>
                         </uib:gridColumn>
 
                         <uib:gridColumn column="4"/>

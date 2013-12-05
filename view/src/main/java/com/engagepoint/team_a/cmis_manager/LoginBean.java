@@ -20,19 +20,19 @@ public class LoginBean implements Serializable {
     private String port;
 
     ////
-    private String repo;
-    private String[] repos;
+    private String chosenRepo;
+    private String[] availabeReposList;
 
-    public String getRepo() {
-        return repo;
+    public String getChosenRepo() {
+        return chosenRepo;
     }
 
-    public void setRepo(String repo) {
-        this.repo = repo;
+    public void setChosenRepo(String chosenRepo) {
+        this.chosenRepo = chosenRepo;
     }
 
-    public String[] getRepos() {
-        return repos;
+    public String[] getAvailabeReposList() {
+        return availabeReposList;
     }
     ///
 
@@ -83,12 +83,8 @@ public class LoginBean implements Serializable {
         String page = "";
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
 
-        service.setName(username);
-        service.setPass(password);
-        service.setPort(port);
-        service.setUrl(url);
         try{
-            service.connect(repo);
+            service.connect(chosenRepo);
             sessionID = service.getSession().toString();
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("sessionID",sessionID);
@@ -111,7 +107,7 @@ public class LoginBean implements Serializable {
         service.setUrl(url);
 
         try{
-            repos = service.getRepoList(url, port);
+            availabeReposList = service.getRepoList(url, port);
         }catch (Exception e){
             return "/error";
         }
@@ -130,8 +126,8 @@ public class LoginBean implements Serializable {
         port = null;
         sessionID=null;
 
-        repos = null;
-        repo = null;
+        availabeReposList = null;
+        chosenRepo = null;
 
         CMISTypeManagerService.getInstance().disconnect();
         return "/login?faces-redirect=true";

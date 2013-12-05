@@ -19,10 +19,10 @@ public class TreeBean implements Serializable {
     private static final long serialVersionUID = 2023524722101427935L;
     private TreeNode root;
     private TreeNode selected = null;
-    private TypeDTO  currentDTO = null;
+    private TypeDTO currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
-    private  PropertyRow propertyRow1;
+    private PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
 
 
@@ -125,9 +125,11 @@ public class TreeBean implements Serializable {
         if (selected != null && currentDTO.isMutabilityCanCreate()){
             disableBtn = false;
         }
-        else
+        else {
+            disableBtn = true;
+        }
 
-            newDTO = new TypeDTO();
+        newDTO = new TypeDTO();
         newDTO.setParentTypeId(currentDTO.getId());
         newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
         //newDTO.setChildren(null);
@@ -204,6 +206,4 @@ public class TreeBean implements Serializable {
     public void addMetadata(){
         currentDTO.getPropertyRows().add(newProperty);
     }
-
-
 }
