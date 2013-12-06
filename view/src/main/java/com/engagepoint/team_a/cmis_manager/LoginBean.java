@@ -108,6 +108,8 @@ public class LoginBean implements Serializable {
 
         try{
             availabeReposList = service.getRepoList(url, port);
+            chosenRepo = availabeReposList[0];
+
         }catch (Exception e){
             return "/error";
         }
