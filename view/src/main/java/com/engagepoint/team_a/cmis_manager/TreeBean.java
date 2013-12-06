@@ -1,13 +1,15 @@
 package com.engagepoint.team_a.cmis_manager;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.TMBaseException;
+import com.engagepoint.team_a.cmis_manager.exceptions.TMPermissionDeniedException;
 import com.engagepoint.team_a.cmis_manager.model.PropertyRow;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
+import org.apache.log4j.Logger;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
-
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,24 +27,16 @@ public class TreeBean implements Serializable {
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
     private PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
-    private String errorMessage;
-    private String errorVisibility;
+    @ManagedProperty("#{error}")
+    private ErrorBean errorBean;
+    public static final Logger LOG=Logger.getLogger(TreeBean.class);
+    private boolean attributesVisible = false;
+    private boolean metadataVisible = false;
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public void setErrorBean(ErrorBean errorBean) {
+        this.errorBean = errorBean;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public String getErrorVisibility() {
-        return errorVisibility;
-    }
-
-    public void setErrorVisibility(String errorVisibility) {
-        this.errorVisibility = errorVisibility;
-    }
     public String getErrorVisible(){
         return String.valueOf(currentDTO==null);
     }
@@ -70,12 +64,6 @@ public class TreeBean implements Serializable {
     public void setPropertyRows(ArrayList<PropertyRow> propertyRows) {
         this.propertyRows = propertyRows;
     }
-
-    private boolean attributesVisible = false;
-    private boolean metadataVisible = false;
-
-
-
 
     public boolean isAttributesVisible() {
         return currentDTO!=null;
@@ -116,9 +104,12 @@ public class TreeBean implements Serializable {
             List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
             root = new DefaultTreeNode("Root", null);
             render(list, root);
+        } catch (TMPermissionDeniedException tp) {
+            errorBean.setErrorMessage(tp.getMessage());
+            errorBean.setErrorVisibility("true");
         } catch (TMBaseException t) {
-            errorMessage = t.getMessage();
-            errorVisibility = "true";
+            errorBean.setErrorMessage(t.getMessage());
+            errorBean.setErrorVisibility("true");
         }
     }
 
@@ -212,9 +203,12 @@ public class TreeBean implements Serializable {
             root = new DefaultTreeNode("Root", null);
             render(list, root);
             newDTO = new TypeDTO();
+        } catch (TMPermissionDeniedException tp) {
+            errorBean.setErrorMessage(tp.getMessage());
+            errorBean.setErrorVisibility("true");
         } catch (TMBaseException t) {
-            errorMessage = t.getMessage();
-            errorVisibility = "true";
+            errorBean.setErrorMessage(t.getMessage());
+            errorBean.setErrorVisibility("true");;
         }
 
     }
@@ -225,16 +219,5 @@ public class TreeBean implements Serializable {
 
     public void addMetadata(){
         currentDTO.getPropertyRows().add(newProperty);
-    }
-    public void crea(){
-        throw new TMBaseException("asd");
-    }
-    public void creat(){
-        try {
-            crea();
-        } catch (TMBaseException t) {
-            errorMessage = t.getMessage();
-            errorVisibility = "true";
-        }
     }
 }

@@ -11,10 +11,7 @@
 </h:head>
 
 <ui:define name="mainContent">
-<p:commandButton id="createError" update="uib-norification-warn" action="#{treeBean.creat()}"/>
-<uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisibility}" type="notification" styleClass="ui-messages-warn">
-    <p>#{treeBean.errorMessage}</p>
-</uib:infoblock>
+
 <h2>Create new type</h2>
 <uib:gridContainer>
 
