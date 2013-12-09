@@ -39,7 +39,7 @@
                     selectionMode="single"
                     selection="#{treeBean.selected}">
                 <p:ajax event="select" listener="#{treeBean.onNodeSelect}"
-                        update=":fullPropertyForm, :tabView:allPropertiesForm, :tabView:Add"/>
+                        update=":fullPropertyForm, :tabView:allPropertiesForm, :tabView:Add" />
 
                 <p:treeNode id="treeNode">
                     <h:outputText value="#{node}" id="lblNode"/>
@@ -359,8 +359,11 @@
         </h:form>
 
 
+
+
     </h:panelGrid>
 </p:tab>
+
 
 
 </p:tabView>
@@ -370,6 +373,8 @@
 </uib:gridRow>
 
 </uib:gridContainer>
+
+
 
 
 <h:form id="fullPropertyForm" prependId="false">
@@ -502,9 +507,9 @@ return false;"
                     />
             <p:commandButton title="Add" mode="client" value="Add metadata"
                              styleClass="secondary"
-                             oncomplete="jQuery('index2').modal('hide');
+                             oncomplete="jQuery('#addMetadataModal').modal('hide');
 return false;" update=":tabView:allPropertiesForm"
-                             action="#{treeBean.addMetadata}"/>
+                             action="#{treeBean.addMetadata}" />
         </f:facet>
     </uib:modal>
 
@@ -515,7 +520,6 @@ return false;" update=":tabView:allPropertiesForm"
 
 
 </h:form>
-
 
 
 </ui:define>
