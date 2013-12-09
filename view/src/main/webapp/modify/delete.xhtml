@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:uib="http://engagepoint.com/uib"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="../template.xhtml">
+    <ui:define name="mainContent">
+        <uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisibility}" type="notification" styleClass="ui-messages-warn">
+            <p>#{treeBean.errorMessage}</p>
+        </uib:infoblock>
+        <h2>Delete Type</h2>
+        <uib:gridContainer>
+            <uib:gridRow fluid="true">
+                <uib:gridColumn column="12">
+                    <ui:include src="../show/tree.xhtml"/>
+                </uib:gridColumn>
+            </uib:gridRow>
+        </uib:gridContainer>
+
+    <uib:modal id="dialogDelete" prependId="false" header="Delete #{treeBean.currentDTO.displayName}">
+            <h:outputText value="#{treeBean.errorDialogMsg}"/>
+            <f:facet name="footer">
+                <p:commandButton title="Cancel" id="cancelButton" mode="client" value="Cancel"
+                                 styleClass="secondary"
+                                 oncomplete="jQuery('#dialogDelete').modal('hide');return false;"/>
+                <p:commandButton title="Delete" mode="client" value="Continue"
+                                 rendered="#{treeBean.disableDeleteBtn}"
+                                 oncomplete="jQuery('#dialogDelete').modal('hide');return false;"
+                                 actionListener="#{treeBean.deleteType}" update=":formTree"/>
+
+            </f:facet>
+        </uib:modal>
+        <p:commandButton id="deleteBtn" value="Delete1" actionListener="#{treeBean.deleteConditions}"
+                         oncomplete="jQuery('#dialogDelete').modal('show');
+                                                             return false;" update=":dialogDelete"/>
+    </ui:define>
+</ui:composition>

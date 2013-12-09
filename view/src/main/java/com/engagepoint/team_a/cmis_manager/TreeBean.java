@@ -22,11 +22,86 @@ public class TreeBean implements Serializable {
     private TreeNode selected = null;
     private TypeDTO currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
-    ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
+    private ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
     private PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
     private String errorMessage;
     private String errorVisibility;
+    private boolean disableDeleteBtn = true;
+    private String errorDialogMsg;
+    private boolean attributesVisible;
+    private boolean metadataVisible = false;
+
+    public TreeBean() {
+        try {
+            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+        } catch (TMBaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
+    }
+
+    public void deleteConditions() {
+        if (currentDTO != null) {
+            if (currentDTO.isMutabilityCanDelete()) {
+                if (!currentDTO.getChildren().isEmpty()) {
+                    errorDialogMsg = "Type has children, are you sure ?";
+                    disableDeleteBtn = true;
+                } else {
+                    errorDialogMsg = "Are you sure?";
+                    disableDeleteBtn = true;
+                }
+            } else {
+                errorDialogMsg = "Can't delete "+currentDTO.getDisplayName()+" type!!";
+                disableDeleteBtn = false;
+            }
+
+        } else {
+            errorDialogMsg = "You haven't chosen type";
+            disableDeleteBtn = false;
+        }
+
+    }
+
+    public void deleteType(){
+        try {
+            CMISTypeManagerService.getInstance().deleteType(currentDTO);
+            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+            newDTO = new TypeDTO();
+        } catch (TMBaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
+
+    }
+
+    public boolean isDisableDeleteBtn() {
+        return disableDeleteBtn;
+    }
+
+    public void setDisableDeleteBtn(boolean disableDeleteBtn) {
+        this.disableDeleteBtn = disableDeleteBtn;
+    }
+
+    public boolean isDisableBtn() {
+        return disableBtn;
+    }
+
+    public void setDisableBtn(boolean disableBtn) {
+        this.disableBtn = disableBtn;
+    }
+
+    public String getErrorDialogMsg() {
+        return errorDialogMsg;
+    }
+
+    public void setErrorDialogMsg(String errorDialogMsg) {
+        this.errorDialogMsg = errorDialogMsg;
+    }
 
     public String getErrorMessage() {
         return errorMessage;
@@ -43,8 +118,9 @@ public class TreeBean implements Serializable {
     public void setErrorVisibility(String errorVisibility) {
         this.errorVisibility = errorVisibility;
     }
-    public String getErrorVisible(){
-        return String.valueOf(currentDTO==null);
+
+    public String getErrorVisible() {
+        return String.valueOf(currentDTO == null);
     }
 
     public PropertyRow getNewProperty() {
@@ -71,26 +147,21 @@ public class TreeBean implements Serializable {
         this.propertyRows = propertyRows;
     }
 
-    private boolean attributesVisible = false;
-    private boolean metadataVisible = false;
-
-
-
 
     public boolean isAttributesVisible() {
-        return currentDTO!=null;
+        return attributesVisible;
+    }
+
+    public void AttributesVisibleTrue() {
+        attributesVisible = true;
     }
 
     public void setAttributesVisible(boolean attributesVisible) {
         this.attributesVisible = attributesVisible;
     }
 
-    public boolean isMetadataVisible() {
-        return metadataVisible;
-    }
-
-    public void setMetadataVisible(boolean metadataVisible) {
-        this.metadataVisible = metadataVisible;
+    public void setAttributesVisibleTest() {
+        attributesVisible = (currentDTO != null);
     }
 
     public TypeDTO getNewDTO() {
@@ -111,16 +182,6 @@ public class TreeBean implements Serializable {
         this.currentDTO = currentDTO;
     }
 
-    public TreeBean() {
-        try {
-            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
-            root = new DefaultTreeNode("Root", null);
-            render(list, root);
-        } catch (TMBaseException t) {
-            errorMessage = t.getMessage();
-            errorVisibility = "true";
-        }
-    }
 
     public TreeNode getRoot() {
         return root;
@@ -140,10 +201,9 @@ public class TreeBean implements Serializable {
 
     public void onNodeSelect(NodeSelectEvent event) {
         currentDTO = (TypeDTO) selected.getData();
-        if (selected != null && currentDTO.isMutabilityCanCreate()){
+        if (selected != null && currentDTO.isMutabilityCanCreate()) {
             disableBtn = false;
-        }
-        else {
+        } else {
             disableBtn = true;
         }
 
@@ -178,7 +238,7 @@ public class TreeBean implements Serializable {
         return;
     }
 
-    public void createType(){
+    public void createType() {
         newDTO = new TypeDTO();
         newDTO.setParentTypeId(currentDTO.getId());
         newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
@@ -205,7 +265,7 @@ public class TreeBean implements Serializable {
         newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
     }
 
-    public void addType(){
+    public void addType() {
         try {
             CMISTypeManagerService.getInstance().createType(newDTO);
             List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
@@ -219,17 +279,19 @@ public class TreeBean implements Serializable {
 
     }
 
-    public void passProperty(PropertyRow propertyRow){
+    public void passProperty(PropertyRow propertyRow) {
         this.propertyRow1 = propertyRow;
     }
 
-    public void addMetadata(){
+    public void addMetadata() {
         currentDTO.getPropertyRows().add(newProperty);
     }
-    public void crea(){
+
+    public void crea() {
         throw new TMBaseException("asd");
     }
-    public void creat(){
+
+    public void creat() {
         try {
             crea();
         } catch (TMBaseException t) {

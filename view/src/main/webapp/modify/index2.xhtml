@@ -12,9 +12,11 @@
 
 <ui:define name="mainContent">
 <p:commandButton id="createError" update="uib-norification-warn" action="#{treeBean.creat()}"/>
-<uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisibility}" type="notification" styleClass="ui-messages-warn">
+<uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisibility}" type="notification"
+               styleClass="ui-messages-warn">
     <p>#{treeBean.errorMessage}</p>
 </uib:infoblock>
+
 <h2>Create new type</h2>
 <uib:gridContainer>
 
@@ -37,7 +39,7 @@
                     selectionMode="single"
                     selection="#{treeBean.selected}">
                 <p:ajax event="select" listener="#{treeBean.onNodeSelect}"
-                        update=":fullPropertyForm, :tabView:allPropertiesForm, :tabView:Add" />
+                        update=":fullPropertyForm, :tabView:allPropertiesForm, :tabView:Add"/>
 
                 <p:treeNode id="treeNode">
                     <h:outputText value="#{node}" id="lblNode"/>
@@ -333,8 +335,8 @@
         <h:form id="allPropertiesForm" prependId="false" rendered="true">
             <uib:dataTable id="allProperties" var="property"
                            rows="30"
-                           value="#{treeBean.currentDTO.propertyList}" selection="#{treeBean.propertyRows}" >
-                <f:attribute name="propRow" value= "#{property}" />
+                           value="#{treeBean.currentDTO.propertyList}" selection="#{treeBean.propertyRows}">
+                <f:attribute name="propRow" value="#{property}"/>
                 <p:column headerText="ID">
                     <h:outputText id="prop_id" value="#{property.id}" var="id"/>
                 </p:column>
@@ -345,7 +347,8 @@
                     <h:outputText value="#{property.description}"/>
                 </p:column>
                 <p:column headerText="Full Info">
-                    <p:commandButton title="Full Info" id="fullInfo" value="Info" actionListener="#{treeBean.passProperty(property)}"
+                    <p:commandButton title="Full Info" id="fullInfo" value="Info"
+                                     actionListener="#{treeBean.passProperty(property)}"
                                      update=":fullPropertyForm"
                                      oncomplete="jQuery('#fullPropertyModal').modal('show');return false;"/>
                 </p:column>
@@ -356,11 +359,8 @@
         </h:form>
 
 
-
-
     </h:panelGrid>
 </p:tab>
-
 
 
 </p:tabView>
@@ -370,8 +370,6 @@
 </uib:gridRow>
 
 </uib:gridContainer>
-
-
 
 
 <h:form id="fullPropertyForm" prependId="false">
@@ -504,12 +502,20 @@ return false;"
                     />
             <p:commandButton title="Add" mode="client" value="Add metadata"
                              styleClass="secondary"
-                             oncomplete="jQuery('#addMetadataModal').modal('hide');
+                             oncomplete="jQuery('index2').modal('hide');
 return false;" update=":tabView:allPropertiesForm"
-                             action="#{treeBean.addMetadata}" />
+                             action="#{treeBean.addMetadata}"/>
         </f:facet>
     </uib:modal>
+
+    <uib:infoblock id="errorMessageDelete" type="notification"
+                   styleClass="ui-messages-warn">
+        <p>There is no node selected. Select any type to delete it. </p>
+    </uib:infoblock>
+
+
 </h:form>
+
 
 
 </ui:define>
