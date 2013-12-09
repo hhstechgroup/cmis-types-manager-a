@@ -170,7 +170,7 @@ public class TreeBean implements Serializable {
     }
 
     public void createType(){
-        newDTO = new TypeDTO();
+
         newDTO.setParentTypeId(currentDTO.getId());
         newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
         //newDTO.setChildren(null);
@@ -198,6 +198,9 @@ public class TreeBean implements Serializable {
 
     public void addType(){
         try {
+            //TODO temporary stub
+            newDTO.setPropertyRows(new ArrayList<PropertyRow>());
+
             CMISTypeManagerService.getInstance().createType(newDTO);
             List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
             root = new DefaultTreeNode("Root", null);
@@ -218,6 +221,7 @@ public class TreeBean implements Serializable {
     }
 
     public void addMetadata(){
-        currentDTO.getPropertyRows().add(newProperty);
+        newDTO.getPropertyRows().add(newProperty);
     }
+
 }

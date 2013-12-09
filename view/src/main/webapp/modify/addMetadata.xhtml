@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:uib="http://engagepoint.com/uib">
+
+
+        <uib:dataTable id="allProperties" var="property"
+                       rows="30"
+                       value="#{treeBean.currentDTO.propertyList}" selection="#{treeBean.propertyRows}" >
+            <f:attribute name="propRow" value= "#{property}" />
+            <p:column headerText="ID">
+                <h:outputText id="prop_id" value="#{property.id}" var="id"/>
+            </p:column>
+            <p:column headerText="Display Name">
+                <h:outputText value="#{property.displayName}"/>
+            </p:column>
+            <p:column headerText="Description">
+                <h:outputText value="#{property.description}"/>
+            </p:column>
+            <p:column headerText="Full Info">
+
+                                <p:commandButton title="Full Info" id="fullInfo" value="Info" actionListener="#{treeBean.passProperty(property)}"
+                                 update=":fullPropertyForm"
+                                 oncomplete="jQuery('#fullPropertyModal').modal('show');return false;" >
+                </p:commandButton>
+
+            </p:column>
+        </uib:dataTable>
+
+        <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
+                         update=":fullPropertyForm"
+                         oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/>
+        <p:commandButton title="Create type" id="addType" value="Create" action="/show/index?faces-redirect=true" actionListener="#{treeBean.addType}"/>
+
+</ui:composition>
