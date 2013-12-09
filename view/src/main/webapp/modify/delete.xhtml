@@ -6,7 +6,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="../template.xhtml">
     <ui:define name="mainContent">
-        <uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisibility}" type="notification" styleClass="ui-messages-warn">
+        <uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisible}" type="notification" styleClass="ui-messages-warn">
             <p>#{treeBean.errorMessage}</p>
         </uib:infoblock>
         <h2>Delete Type</h2>
