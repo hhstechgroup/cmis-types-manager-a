@@ -17,6 +17,16 @@
     <p>#{treeBean.errorMessage}</p>
 </uib:infoblock>
 
+<uib:infoblock id="ui-messages-error" visible="#{error.errorVisibility}" type="notification"
+               styleClass="ui-messages-error">
+    <p>#{error.errorMessage}</p>
+    <p:commandButton value="OK" styleClass="secondary small" icon="ui-icon-edit"
+            action="#{error.hideInfoBlock}"
+            update="ui-messages-error"/>
+</uib:infoblock>
+
+<p:commandButton value="exception" id="createError" update="ui-messages-error" action="#{treeBean.creat()}"/>
+
 <h2>Create new type</h2>
 <uib:gridContainer>
 
