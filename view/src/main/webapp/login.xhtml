@@ -3,7 +3,6 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="templateNoHeader.xhtml"
                 xmlns:uib="http://engagepoint.com/uib">
 
@@ -56,12 +55,10 @@
                         <uib:gridColumn column="3">
                             <p:outputLabel value="URL:"/>
                         </uib:gridColumn>
-                        <uib:gridColumn column="4">
+                        <uib:gridColumn column="6">
                             <p:inputText value="#{login.url}" id="url" label="URL" required="true"/>
                         </uib:gridColumn>
-                        <uib:gridColumn column="2">
-                            <p:inputText value="#{login.port}" id="port" label="PORT" required="true"/>
-                        </uib:gridColumn>
+
                         <uib:gridColumn column="1"></uib:gridColumn>
 
                     </uib:gridRow>
@@ -73,7 +70,7 @@
                         </uib:gridColumn>
 
                         <uib:gridColumn column="4">
-                            <p:commandButton id="getRepoButton" value="Get chosenRepo" action="#{login.getRepoList}"
+                            <p:commandButton id="getRepoButton" value="Get repo list" action="#{login.getRepoList}"
                                              update="@form" />
                         </uib:gridColumn>
 

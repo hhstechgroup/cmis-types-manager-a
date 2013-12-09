@@ -16,8 +16,8 @@ public class LoginBean implements Serializable {
 
     @NotNull(message = "Please enter url")
     private String url;
-    @NotNull(message = "Please enter port")
-    private String port;
+    //@NotNull(message = "Please enter port")
+   // private String port;
 
     ////
     private String chosenRepo;
@@ -43,13 +43,13 @@ public class LoginBean implements Serializable {
         this.sessionID = sessionID;
     }
 
-    public String getPort() {
-        return port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
-    }
+//    public String getPort() {
+//        return port;
+//    }
+//
+//    public void setPort(String port) {
+//        this.port = port;
+//    }
 
     public String getUsername() {
         return username;
@@ -76,7 +76,7 @@ public class LoginBean implements Serializable {
     }
 
     public String doLogin() {
-        String page = "";
+        String page;
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
         try{
             service.connect(chosenRepo);
@@ -95,10 +95,10 @@ public class LoginBean implements Serializable {
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
         service.setName(username);
         service.setPass(password);
-        service.setPort(port);
+//        service.setPort(port);
         service.setUrl(url);
         try{
-            availabeReposList = service.getRepoList(url, port);
+            availabeReposList = service.getRepoList(url);
             chosenRepo = availabeReposList[0];
 
         }catch (Exception e){
@@ -114,7 +114,7 @@ public class LoginBean implements Serializable {
         username = null;
         password = null;
         url = null;
-        port = null;
+//        port = null;
         sessionID=null;
 
         availabeReposList = null;

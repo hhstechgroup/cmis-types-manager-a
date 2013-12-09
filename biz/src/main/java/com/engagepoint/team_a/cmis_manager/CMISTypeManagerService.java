@@ -10,7 +10,6 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 
 import java.util.ArrayList;
@@ -22,15 +21,15 @@ public class CMISTypeManagerService {
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
-    private String url = "localhost";
-    private String port = "8080";
+    private String url;
+   // private String port = "8080";
     private String name = "";
     private String pass = "";
 
     private Map<String, Repository> map = new HashMap<String, Repository>();
 
-    private String repo = "/chemistry-opencmis-server-inmemory-0.10.0";     //if not inmemory - change to "/cmis"
-    private String repoID = "A1";                                           //may change to
+//    private String repo = "/chemistry-opencmis-server-inmemory-0.10.0";     //if not inmemory - change to "/cmis"
+//    private String repoID = "A1";                                           //may change to
 
     private CMISTypeManagerService() {
     }
@@ -50,17 +49,17 @@ public class CMISTypeManagerService {
         this.name = name;
     }
 
-    public void setPort(String port) {
-        this.port = port;
-    }
+//    public void setPort(String port) {
+//        this.port = port;
+//    }
 
     public void setPass(String pass) {
         this.pass = pass;
     }
 
-    public String[] getRepoList(String url, String port) throws Exception {
+    public String[] getRepoList(String url) throws Exception {
         this.url = url;
-        this.port = port;
+//        this.port = port;
 
         SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
@@ -68,7 +67,7 @@ public class CMISTypeManagerService {
         parameter.put(SessionParameter.USER, name);
         parameter.put(SessionParameter.PASSWORD, pass);
 
-        parameter.put(SessionParameter.ATOMPUB_URL, "http://" + url + ":" + port + repo + "/atom11");
+        parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         //parameter.put(SessionParameter.REPOSITORY_ID, "A1");
 
@@ -77,7 +76,7 @@ public class CMISTypeManagerService {
             throw new Exception("no such session");
         }
         map.clear();
-        List<String> array = new ArrayList();
+        List<String> array = new ArrayList<String>();
         for (Repository repo : list) {
             map.put(repo.getName(), repo);
             array.add(repo.getName());
@@ -125,7 +124,7 @@ public class CMISTypeManagerService {
      */
     public TypeDTO createType(TypeDTO newType) {
         try {
-            TypeDTO returnedTypeDTO = null;
+            TypeDTO returnedTypeDTO;
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
             ObjectType createdType = session.createType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
@@ -139,7 +138,7 @@ public class CMISTypeManagerService {
 
     public ObjectType getTypeById(String id) {
         try {
-            ObjectType returnedType = null;
+            ObjectType returnedType;
             returnedType = session.getTypeDefinition(id);
             return returnedType;
         } catch (CmisPermissionDeniedException cp) {
