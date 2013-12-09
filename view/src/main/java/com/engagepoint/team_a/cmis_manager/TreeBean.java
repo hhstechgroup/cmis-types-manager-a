@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -27,18 +28,109 @@ public class TreeBean implements Serializable {
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
     private PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
+    private String errorMessage;
+    private String errorVisibility;
+    private boolean disableDeleteBtn = true;
+    private String errorDialogMsg;
+
     @ManagedProperty("#{error}")
     private ErrorBean errorBean;
     public static final Logger LOG=Logger.getLogger(TreeBean.class);
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;
 
-    public void setErrorBean(ErrorBean errorBean) {
-        this.errorBean = errorBean;
+    public TreeBean() {
+        try {
+            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+        } catch (TMBaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
     }
 
-    public String getErrorVisible(){
-        return String.valueOf(currentDTO==null);
+    public void deleteConditions() {
+        if (currentDTO != null) {
+            if (currentDTO.isMutabilityCanDelete()) {
+                if (!currentDTO.getChildren().isEmpty()) {
+                    errorDialogMsg = "Type has children, are you sure ?";
+                    disableDeleteBtn = true;
+                } else {
+                    errorDialogMsg = "Are you sure?";
+                    disableDeleteBtn = true;
+                }
+            } else {
+                errorDialogMsg = "Can't delete "+currentDTO.getDisplayName()+" type!!";
+                disableDeleteBtn = false;
+            }
+
+        } else {
+            errorDialogMsg = "You haven't chosen type";
+            disableDeleteBtn = false;
+        }
+
+    }
+
+    public void deleteType(){
+        try {
+            CMISTypeManagerService.getInstance().deleteType(currentDTO);
+            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+            newDTO = new TypeDTO();
+        } catch (TMBaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
+
+    }
+
+    public boolean isDisableDeleteBtn() {
+        return disableDeleteBtn;
+    }
+
+    public void setDisableDeleteBtn(boolean disableDeleteBtn) {
+        this.disableDeleteBtn = disableDeleteBtn;
+    }
+
+    public boolean isDisableBtn() {
+        return disableBtn;
+    }
+
+    public void setDisableBtn(boolean disableBtn) {
+        this.disableBtn = disableBtn;
+    }
+
+    public String getErrorDialogMsg() {
+        return errorDialogMsg;
+    }
+
+    public void setErrorDialogMsg(String errorDialogMsg) {
+        this.errorDialogMsg = errorDialogMsg;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;}
+    
+    public void setErrorBean(ErrorBean errorBean) {
+        this.errorBean = errorBean;
+    }      
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorVisibility() {
+        return errorVisibility;
+    }
+
+    public void setErrorVisibility(String errorVisibility) {
+        this.errorVisibility = errorVisibility;
+    }
+
+    public String getErrorVisible() {
+        return String.valueOf(currentDTO == null);
     }
 
     public PropertyRow getNewProperty() {
@@ -99,19 +191,6 @@ public class TreeBean implements Serializable {
         this.currentDTO = currentDTO;
     }
 
-    public TreeBean() {
-        try {
-            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
-            root = new DefaultTreeNode("Root", null);
-            render(list, root);
-        } catch (TMPermissionDeniedException tp) {
-            errorBean.setErrorMessage(tp.getMessage());
-            errorBean.setErrorVisibility("true");
-        } catch (TMBaseException t) {
-            errorBean.setErrorMessage(t.getMessage());
-            errorBean.setErrorVisibility("true");
-        }
-    }
 
     public TreeNode getRoot() {
         return root;
@@ -221,7 +300,7 @@ public class TreeBean implements Serializable {
     }
 
     public void addMetadata(){
-        newDTO.getPropertyRows().add(newProperty);
+        currentDTO.getPropertyRows().add(newProperty);
     }
 
 }
