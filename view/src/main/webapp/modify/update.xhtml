@@ -1,0 +1,210 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="../template.xhtml"
+                xmlns:uib="http://engagepoint.com/uib">
+<h:head>
+    <title>Update page</title>
+</h:head>
+
+<ui:define name="mainContent">
+    <h2>Update type</h2>
+    <uib:gridContainer>
+
+        <uib:gridRow>
+            <uib:gridColumn column="12">
+                <h:form id="mainForm">
+                    <p:wizard id="tab" dynamic="true">
+
+                        <p:tab id="tab1" title="Step I" >
+
+                            <h3>Chose tree node:</h3>
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <ui:include src="/modify/showTreeUpdate.xhtml"/>
+                            </h:panelGrid>
+
+
+                        </p:tab>
+                        <p:tab id="tab2" title="Step II" >
+
+                            <h3>Update attributes</h3>
+                            <h:panelGrid id="grid" columns="2" cellpadding="10">
+                                <ui:include src="/modify/updateAttributes.xhtml"/>
+
+                            </h:panelGrid>
+
+                        </p:tab>
+
+
+                        <p:tab id="tab3" title="Step III" >
+
+                            <h3> Chose secondary type </h3>
+                            <ui:include src="/modify/addSecondaryType.xhtml"/>
+
+                        </p:tab>
+
+                        <p:tab id="tab4" title="Step IV">
+                            <h3>Edit type metadata and add new one</h3>
+                            <h:panelGrid columns="1" cellpadding="10">
+                                <ui:include src="/modify/updateMetadata.xhtml"/>
+                            </h:panelGrid>
+
+                        </p:tab>
+
+
+
+                    </p:wizard>
+                </h:form>
+
+
+            </uib:gridColumn>
+        </uib:gridRow>
+
+    </uib:gridContainer>
+
+
+    <h:form  id="fullPropertyForm" prependId="false">
+        <uib:modal id="fullPropertyModal" header="Property update">
+            <p:panelGrid columns="2" id="fullPropertyGrid">
+
+                <h:outputText value="ID: "/>
+                <h:outputText value="#{treeBean.propertyRow1.id}"/>
+
+                <h:outputText value="Local Name: "/>
+                <h:outputText value="#{treeBean.propertyRow1.localName}"/>
+
+                <h:outputText value="Local Namespace: "/>
+                <h:outputText value="#{treeBean.propertyRow1.localNamespace}"/>
+
+                <h:outputText value="Display Name: "/>
+                <h:outputText value="#{treeBean.propertyRow1.displayName}"/>
+
+                <h:outputText value="Query Name: "/>
+                <h:outputText value="#{treeBean.propertyRow1.queryName}"/>
+
+                <h:outputText value="Description: "/>
+                <h:outputText value="#{treeBean.propertyRow1.description}"/>
+
+                <h:outputText value="Inherited: "/>
+                <h:outputText value="#{treeBean.propertyRow1.inherited}"/>
+
+                <h:outputText value="Required: "/>
+                <h:outputText value="#{treeBean.propertyRow1.required}"/>
+
+                <h:outputText value="Queryable: "/>
+                <h:outputText value="#{treeBean.propertyRow1.queryable}"/>
+
+                <h:outputText value="Orderable: "/>
+                <h:outputText value="#{treeBean.propertyRow1.orderable}"/>
+
+                <h:outputText value="Open Choice: "/>
+                <h:outputText value="#{treeBean.propertyRow1.openChoice}"/>
+
+                <h:outputText value="Property Type: "/>
+                <h:outputText value="#{treeBean.propertyRow1.propertyType}"/>
+
+                <h:outputText value="Cardinality: "/>
+                <h:outputText value="#{treeBean.propertyRow1.cardinality}"/>
+
+                <h:outputText value="Updatability: "/>
+                <h:outputText value="#{treeBean.propertyRow1.updatability}"/>
+
+                <h:outputText value="Choise List: "/>
+                <h:outputText value="#{treeBean.propertyRow1.choiseList}"/>
+
+                <h:outputText value="Default Value: "/>
+                <h:outputText value="#{treeBean.propertyRow1.defaultValue}"/>
+
+                <h:outputText value="Extensions: "/>
+                <h:outputText value="#{treeBean.propertyRow1.extensions}"/>
+            </p:panelGrid>
+            <f:facet name="footer">
+
+                <p:commandButton title="Cancel" mode="client" value="Cancel"
+                                 styleClass="secondary"
+                                 oncomplete="jQuery('#fullPropertyModal').modal('hide');
+                                         return false;"/>
+            </f:facet>
+        </uib:modal>
+    </h:form>
+
+
+    <h:form id="addMetadata" prependId="false">
+        <uib:modal id="addMetadataModal" header="Add metadata">
+            <p:panelGrid columns="2" id="metadataGrid">
+
+                <h:outputText value="ID: "/>
+                <p:inputText value="#{treeBean.newProperty.id}"/>
+
+                <h:outputText value="Local Name: "/>
+                <p:inputText value="#{treeBean.newProperty.localName}"/>
+
+                <h:outputText value="Local Namespace: "/>
+                <p:inputText value="#{treeBean.newProperty.localNamespace}"/>
+
+                <h:outputText value="Display Name: "/>
+                <p:inputText value="#{treeBean.newProperty.displayName}"/>
+
+                <h:outputText value="Query Name: "/>
+                <p:inputText value="#{treeBean.newProperty.queryName}"/>
+
+                <h:outputText value="Description: "/>
+                <p:inputText value="#{treeBean.newProperty.description}"/>
+
+                <h:outputText value="Inherited: "/>
+                <p:inputText value="#{treeBean.newProperty.inherited}"/>
+
+                <h:outputText value="Required: "/>
+                <p:inputText value="#{treeBean.newProperty.required}"/>
+
+                <h:outputText value="Queryable: "/>
+                <p:inputText value="#{treeBean.newProperty.queryable}"/>
+
+                <h:outputText value="Orderable: "/>
+                <p:inputText value="#{treeBean.newProperty.orderable}"/>
+
+                <h:outputText value="Open Choice: "/>
+                <p:inputText value="#{treeBean.newProperty.openChoice}"/>
+
+                <h:outputText value="Property Type: "/>
+                <p:inputText value="#{treeBean.newProperty.propertyType}"/>
+
+                <h:outputText value="Cardinality: "/>
+                <p:inputText value="#{treeBean.newProperty.cardinality}"/>
+
+                <h:outputText value="Updatability: "/>
+                <p:inputText value="#{treeBean.newProperty.updatability}"/>
+
+                <h:outputText value="Choise List: "/>
+                <p:inputText value="#{treeBean.newProperty.choiseList}"/>
+
+                <h:outputText value="Default Value: "/>
+                <p:inputText value="#{treeBean.newProperty.defaultValue}"/>
+
+                <h:outputText value="Extensions: "/>
+                <p:inputText value="#{treeBean.newProperty.extensions}"/>
+            </p:panelGrid>
+            <f:facet name="footer">
+
+                <p:commandButton title="Cancel" mode="client" value="Cancel"
+                                 styleClass="secondary"
+                                 oncomplete="jQuery('#addMetadataModal').modal('hide');
+                                         return false;"
+                        />
+                <p:commandButton title="Add" mode="client" value="Add metadata"
+                                 styleClass="secondary"
+                                 oncomplete="jQuery('#addMetadataModal').modal('hide');
+                                 return false;" update=":mainForm"
+                                 action="#{treeBean.addMetadataUpdate}" />
+            </f:facet>
+        </uib:modal>
+    </h:form>
+
+
+
+
+</ui:define>
+</ui:composition>

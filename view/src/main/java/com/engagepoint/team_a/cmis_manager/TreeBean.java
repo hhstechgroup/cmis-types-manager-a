@@ -25,7 +25,14 @@ public class TreeBean implements Serializable {
     private TreeNode selected = null;
     private TypeDTO currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
+
+    private TreeNode rootUpdate;
+
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
+
+    //
+    private String mutability = null;
+
     private PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
     private String errorMessage;
@@ -190,6 +197,9 @@ public class TreeBean implements Serializable {
             List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
             root = new DefaultTreeNode("Root", null);
             render(list, root);
+
+            rootUpdate = new DefaultTreeNode("Root", null);
+            render(list, rootUpdate);
         } catch (ModificationException m) {
             errorBean.setErrorMessage(m.getMessage());
             errorBean.setErrorVisibility("true");
@@ -204,6 +214,10 @@ public class TreeBean implements Serializable {
 
     public TreeNode getRoot() {
         return root;
+    }
+
+    public TreeNode getRootUpdate() {
+        return rootUpdate;
     }
 
     public TreeNode getSelected() {
@@ -298,4 +312,86 @@ public class TreeBean implements Serializable {
         currentDTO.getPropertyRows().add(newProperty);
     }
 
+    //update methods
+
+    public void addMetadataUpdate(){
+        newDTO.getPropertyRows().add(newProperty);
+    }
+
+    public void onNodeSelectUpdate(NodeSelectEvent event) {
+        currentDTO = (TypeDTO) selected.getData();
+
+        if(currentDTO.isMutabilityCanUpdate()) {
+            mutability = "allowed";
+
+            newDTO = new TypeDTO();
+            newDTO.setParentTypeId(currentDTO.getParentTypeId());
+            newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
+
+            newDTO.setId(currentDTO.getId());
+            newDTO.setDisplayName(currentDTO.getDisplayName());
+            newDTO.setDescription(currentDTO.getDescription());
+            newDTO.setQueryName(currentDTO.getQueryName());
+            newDTO.setLocalName(currentDTO.getLocalName());
+            newDTO.setLocalNamespace(currentDTO.getLocalNamespace());
+
+            newDTO.setCreatable(currentDTO.isCreatable());
+            newDTO.setFileable(currentDTO.isFileable());
+            newDTO.setQueryable(currentDTO.isQueryable());
+
+            newDTO.setIncludedInSupertypeQuery(currentDTO.isIncludedInSupertypeQuery());
+            newDTO.setControllableAcl(currentDTO.isControllableAcl());
+            newDTO.setControllablePolicy(currentDTO.isControllablePolicy());
+            newDTO.setFulltextIndexed(currentDTO.isFulltextIndexed());
+
+            newDTO.setMutabilityCanCreate(currentDTO.isMutabilityCanCreate());
+            newDTO.setMutabilityCanDelete(currentDTO.isMutabilityCanDelete());
+            newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
+
+            newDTO.setPropertyRows((ArrayList)currentDTO.getPropertyRows());
+        } else {
+            mutability = null;
+        }
+    }
+
+    public void updateType() {
+
+        currentDTO.setDescription(newDTO.getDescription());
+
+        //this fields are constant
+        //currentDTO.setParentTypeId(newDTO.getParentTypeId());
+        //currentDTO.setBaseTypeId(newDTO.getBaseTypeId());
+        //currentDTO.setId(currentDTO.getId());
+        currentDTO.setDisplayName(newDTO.getDisplayName());
+        currentDTO.setDescription(newDTO.getDescription());
+        currentDTO.setQueryName(newDTO.getQueryName());
+        currentDTO.setLocalName(newDTO.getLocalName());
+        currentDTO.setLocalNamespace(newDTO.getLocalNamespace());
+
+        currentDTO.setCreatable(newDTO.isCreatable());
+        currentDTO.setFileable(newDTO.isFileable());
+        currentDTO.setQueryable(newDTO.isQueryable());
+
+        currentDTO.setIncludedInSupertypeQuery(newDTO.isIncludedInSupertypeQuery());
+        currentDTO.setControllableAcl(newDTO.isControllableAcl());
+        currentDTO.setControllablePolicy(newDTO.isControllablePolicy());
+        currentDTO.setFulltextIndexed(newDTO.isFulltextIndexed());
+
+        currentDTO.setMutabilityCanCreate(newDTO.isMutabilityCanCreate());
+        currentDTO.setMutabilityCanDelete(newDTO.isMutabilityCanDelete());
+        currentDTO.setMutabilityCanUpdate(newDTO.isMutabilityCanUpdate());
+
+
+        currentDTO = null;
+        selected = null;
+        mutability = null;
+    }
+
+    public String getMutability() {
+        return mutability;
+    }
+
+    public void setMutability(String mutability) {
+        this.mutability = mutability;
+    }
 }

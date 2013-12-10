@@ -5,8 +5,8 @@
     <uib:menu id="menu" styleClass="sub-navigation">
 
         <uib:menuSection id="showTypeSection" title="Show type:" url="/show/index.xhtml"
-                         parentUrl="/show/" update="ui-messages-error">
-            <uib:menuItem id="treeMenuItem" title="Show tree" url="/show/index.xhtml" />
+                         parentUrl="/show/">
+            <uib:menuItem id="treeMenuItem" title="Show tree" url="/show/index.xhtml"/>
             <uib:menuItem id="treeAttributesItem" title="Attributes" url="/show/add.xhtml"/>
             <uib:menuItem id="treeMetadataItem" title="Metadata" url="/show/property.xhtml">
             </uib:menuItem>
@@ -14,11 +14,12 @@
         </uib:menuSection>
 
         <uib:menuSection id="updateTypeSection" title="Change type:" parentUrl="/modify/"
-                         url="/modify/index2.xhtml">
+                         url="/modify/create.xhtml">
             <uib:menuItem id="templatesItem" title="Create NEW" url="/modify/create.xhtml"/>
 
-            <uib:menuItem id="historyItem" title="Update" url="/modify/index2.xhtml"/>
-            <uib:menuItem id="delete" title="Delete" url="/modify/delete.xhtml"/>
+            <uib:menuItem id="historyItem" title="Update" url="/modify/update.xhtml"/>
+            <uib:menuItem id="placeholdersItem" title="Delete" url="/modify/delete.xhtml"/>
+
         </uib:menuSection>
 
 

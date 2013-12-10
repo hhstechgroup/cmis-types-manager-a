@@ -1,0 +1,231 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:uib="http://engagepoint.com/uib">
+
+
+
+<uib:gridContainer>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Name"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="displayName" value="#{treeBean.newDTO.displayName}" required="true" />
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="ID"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="id" value="#{treeBean.newDTO.id}" disabled="true" />
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Description"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="description" value="#{treeBean.newDTO.description}" required="true" />
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Query name"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="queryName" value="#{treeBean.newDTO.queryName}" required="true"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Local name"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="localName" value="#{treeBean.newDTO.localName}" required="true" />
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Parent"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="parentId" value="#{treeBean.newDTO.id}" disabled="true"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Base type"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="baseTypeId" value="#{treeBean.newDTO.baseTypeId}" disabled="true"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Local namespace"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <uib:input id="localNamespace" value="#{treeBean.newDTO.localNamespace}" required="true"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Creatable"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <p:selectBooleanCheckbox id="creatable" value="#{treeBean.newDTO.creatable}"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Fileable"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <p:selectBooleanCheckbox id="fileable" value="#{treeBean.newDTO.fileable}"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Queryable"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <p:selectBooleanCheckbox id="queryable" value="#{treeBean.newDTO.queryable}"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Included in supertype query"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <p:selectBooleanCheckbox id="includedInSupertypeQuery" value="#{treeBean.newDTO.includedInSupertypeQuery}"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Full text indexed"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <p:selectBooleanCheckbox id="fulltextIndexed" value="#{treeBean.newDTO.fulltextIndexed}"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="ACL controllable"/>
+    </uib:gridColumn>
+    <uib:gridColumn column="8">
+        <p:selectBooleanCheckbox id="controllableAcl" value="#{treeBean.newDTO.controllableAcl}"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="4" styleClass="tar">
+        <p:outputLabel value="Policy controllable"/>
+    </uib:gridColumn>
+
+    <uib:gridColumn column="8">
+        <p:selectBooleanCheckbox id="controllablePolicy" value="#{treeBean.newDTO.controllablePolicy}"/>
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+<uib:gridRow fluid="true">
+
+    <uib:gridColumn column="12">
+
+        <uib:gridContainer>
+
+            <uib:gridRow>
+                <uib:gridColumn column="4" styleClass="tar">
+                    <p:outputLabel value="Mutability"/>
+                </uib:gridColumn>
+                <uib:gridColumn column="8">
+                </uib:gridColumn>
+            </uib:gridRow>
+
+            <uib:gridRow fluid="true">
+                <uib:gridColumn column="4" styleClass="tar">
+                    <p:outputLabel value="can create"/>
+                </uib:gridColumn>
+                <uib:gridColumn column="8">
+                    <p:selectBooleanCheckbox id="mutabilityCanCreate" value="#{treeBean.newDTO.mutabilityCanCreate}"/>
+                </uib:gridColumn>
+            </uib:gridRow>
+
+            <uib:gridRow fluid="true">
+                <uib:gridColumn column="4" styleClass="tar">
+                    <p:outputLabel value="can delete"/>
+                </uib:gridColumn>
+                <uib:gridColumn column="8">
+                    <p:selectBooleanCheckbox id="mutabilityCanDelete" value="#{treeBean.newDTO.mutabilityCanDelete}"/>
+                </uib:gridColumn>
+            </uib:gridRow>
+
+            <uib:gridRow fluid="true">
+                <uib:gridColumn column="4" styleClass="tar">
+                    <p:outputLabel value="can update"/>
+                </uib:gridColumn>
+                <uib:gridColumn column="8">
+                    <p:selectBooleanCheckbox id="mutabilityCanUpdate" value="#{treeBean.newDTO.mutabilityCanUpdate}"/>
+                </uib:gridColumn>
+            </uib:gridRow>
+
+        </uib:gridContainer>
+
+    </uib:gridColumn>
+
+</uib:gridRow>
+
+
+</uib:gridContainer>
+
+
+
+
+</ui:composition>

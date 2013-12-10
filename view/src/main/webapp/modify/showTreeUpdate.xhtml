@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+        >
+
+
+
+    <p:tree value="#{treeBean.rootUpdate}"
+            var="node"
+            id="tree"
+            dynamic="true"
+            selectionMode="single"
+            selection="#{treeBean.selected}">
+        <p:ajax event="select" listener="#{treeBean.onNodeSelectUpdate}"
+                update=":fullPropertyForm, :mainForm"  />
+
+        <p:treeNode id="treeNode">
+            <h:outputText value="#{node}" id="lblNode"/>
+        </p:treeNode>
+    </p:tree>
+    <h:inputHidden value="#{treeBean.mutability}" required="true"/>
+
+</ui:composition>
