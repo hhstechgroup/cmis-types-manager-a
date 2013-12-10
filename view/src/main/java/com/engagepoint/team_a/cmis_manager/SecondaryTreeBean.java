@@ -14,6 +14,7 @@ import java.util.List;
 @ManagedBean(name = "secType")
 @ViewScoped
 public class SecondaryTreeBean implements Serializable {
+
     private static final long serialVersionUID = 2023524722101427935L;
     private String errorMessage;
     private String errorVisibility;
@@ -54,7 +55,7 @@ public class SecondaryTreeBean implements Serializable {
     }
 
     public void setSelectedNodes(TreeNode[] selectedNodes) {
-        this.selectedNodes = selectedNodes;
+        this.selectedNodes = selectedNodes.clone();
     }
 
     public List<TypeDTO> getSecondaryTypes() {
