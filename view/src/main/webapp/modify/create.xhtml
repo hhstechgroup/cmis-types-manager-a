@@ -11,20 +11,23 @@
     </h:head>
 
     <ui:define name="mainContent">
-        <h2>Create new type</h2>
-        <uib:gridContainer>
+    <!--<h2>Create new type</h2>-->
+    <uib:gridContainer>
 
-            <uib:gridRow>
-                <uib:gridColumn column="12">
-                    <h:form id="mainForm">
-                        <p:wizard id="tab" dynamic="true">
+    <uib:gridRow>
+    <uib:gridColumn column="12">
+    <h:form id="mainForm">
+    <p:wizard id="tab" dynamic="true">
 
-                            <p:tab id="tab1" title="Select parent">
+        <p:tab id="tab1" title="Step I" >
 
-                                <!--<h3>Chose tree node:</h3>-->
-                                <h:panelGrid columns="2" cellpadding="10">
-                                    <ui:include src="/modify/showTree.xhtml"/>
-                                </h:panelGrid>
+        <!--<h3>Chose tree node:</h3>-->
+        <h:panelGrid columns="2" cellpadding="10">
+           <ui:include src="/modify/showTree.xhtml"/>
+            <h:inputHidden id="nodeSelected" value="#{treeBean.selected.type}" required="true"/>
+            <h:inputHidden id="typeCreateAbility" value="#{treeBean.typeCreateable}" required="true" />
+
+           </h:panelGrid>
 
 
                             </p:tab>
@@ -185,12 +188,12 @@
                                      styleClass="secondary"
                                      oncomplete="jQuery('#addMetadataModal').modal('hide');
                                          return false;"
-                            />
+                                     />
                     <p:commandButton title="Add" mode="client" value="Add metadata"
                                      styleClass="secondary"
                                      oncomplete="jQuery('#addMetadataModal').modal('hide');
                                  return false;" update=":mainForm"
-                                     action="#{treeBean.addMetadata}"/>
+                                     action="#{treeBean.addMetadata}" />
                 </f:facet>
             </uib:modal>
         </h:form>

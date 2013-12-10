@@ -33,6 +33,16 @@ public class TreeBean implements Serializable {
     private boolean disableDeleteBtn = true;
     private String errorDialogMsg;
 
+    public String getTypeCreateable() {
+        return typeCreateable;
+    }
+
+    public void setTypeCreateable(String typeCreateable) {
+        this.typeCreateable = typeCreateable;
+    }
+
+    private String typeCreateable = null;
+
     @ManagedProperty("#{error}")
     private ErrorBean errorBean;
     public static final Logger LOG=Logger.getLogger(TreeBean.class);
@@ -234,6 +244,13 @@ public class TreeBean implements Serializable {
         newDTO.setMutabilityCanCreate(currentDTO.isMutabilityCanCreate());
         newDTO.setMutabilityCanDelete(currentDTO.isMutabilityCanDelete());
         newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
+
+        if(currentDTO.isMutabilityCanCreate() == true){
+            typeCreateable = "true";
+        }
+        else {
+            typeCreateable = null;
+        }
     }
 
     private void render(List<TypeDTO> tree, TreeNode parent) {
@@ -280,4 +297,5 @@ public class TreeBean implements Serializable {
     public void addMetadata(){
         currentDTO.getPropertyRows().add(newProperty);
     }
+
 }
