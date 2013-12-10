@@ -5,7 +5,6 @@ import com.engagepoint.team_a.cmis_manager.exceptions.ConnectionException;
 import com.engagepoint.team_a.cmis_manager.exceptions.ModificationException;
 import com.engagepoint.team_a.cmis_manager.model.PropertyRow;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
-import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 import org.apache.log4j.Logger;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -29,6 +28,11 @@ public class TreeBean implements Serializable {
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
     private PropertyRow propertyRow1;
     private PropertyRow newProperty = new PropertyRow();
+    private String errorMessage;
+    private String errorVisible;
+    private boolean disableDeleteBtn = true;
+    private String errorDialogMsg;
+
     @ManagedProperty("#{error}")
     private ErrorBean errorBean;
     public static final Logger LOG=Logger.getLogger(TreeBean.class);
@@ -39,9 +43,79 @@ public class TreeBean implements Serializable {
         this.errorBean = errorBean;
     }
 
-    public String getErrorVisible(){
-        return String.valueOf(currentDTO==null);
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
+
+    public String getErrorVisible() {
+        return String.valueOf(currentDTO == null);
+    }
+    public void deleteConditions() {
+        if (currentDTO != null) {
+            if (currentDTO.isMutabilityCanDelete()) {
+                if (!currentDTO.getChildren().isEmpty()) {
+                    errorDialogMsg = "Type has children, are you sure ?";
+                    disableDeleteBtn = true;
+                } else {
+                    errorDialogMsg = "Are you sure?";
+                    disableDeleteBtn = true;
+                }
+            } else {
+                errorDialogMsg = "Can't delete "+currentDTO.getDisplayName()+" type!!";
+                disableDeleteBtn = false;
+            }
+
+        } else {
+            errorDialogMsg = "You haven't chosen type";
+            disableDeleteBtn = false;
+        }
+
+    }
+
+    public void deleteType(){
+        try {
+            CMISTypeManagerService.getInstance().deleteType(currentDTO);
+            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+            newDTO = new TypeDTO();
+        } catch (BaseException t) {
+            errorBean.setErrorMessage(t.getMessage());
+            errorBean.setErrorVisibility("true");
+        }
+    }
+
+    public boolean isDisableDeleteBtn() {
+        return disableDeleteBtn;
+    }
+
+    public void setDisableDeleteBtn(boolean disableDeleteBtn) {
+        this.disableDeleteBtn = disableDeleteBtn;
+    }
+
+    public boolean isDisableBtn() {
+        return disableBtn;
+    }
+
+    public void setDisableBtn(boolean disableBtn) {
+        this.disableBtn = disableBtn;
+    }
+
+    public String getErrorDialogMsg() {
+        return errorDialogMsg;
+    }
+
+    public void setErrorDialogMsg(String errorDialogMsg) {
+        this.errorDialogMsg = errorDialogMsg;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;}
+
+    public void setErrorVisible(String errorVisible) {
+        this.errorVisible = errorVisible;
+    }
+
 
     public PropertyRow getNewProperty() {
         return newProperty;
@@ -174,35 +248,11 @@ public class TreeBean implements Serializable {
         return;
     }
 
-    public void createType(){
-        newDTO = new TypeDTO();
-        newDTO.setParentTypeId(currentDTO.getId());
-        newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
-        //newDTO.setChildren(null);
-        newDTO.setId(currentDTO.getParentTypeId());
-
-        //newDTO.setDisplayName();
-        //newDTO.setDescription();
-        //newDTO.setQueryName();
-        //newDTO.getLocalName();
-        //newDTO.setLocalNamespace(currentDTO.getLocalNamespace());
-
-        newDTO.setCreatable(currentDTO.isCreatable());
-        newDTO.setFileable(currentDTO.isFileable());
-        newDTO.setQueryable(currentDTO.isQueryable());
-
-        newDTO.setIncludedInSupertypeQuery(currentDTO.isIncludedInSupertypeQuery());
-        newDTO.setControllableAcl(currentDTO.isControllableAcl());
-        newDTO.setControllablePolicy(currentDTO.isControllablePolicy());
-        newDTO.setFulltextIndexed(currentDTO.isFulltextIndexed());
-
-        newDTO.setMutabilityCanCreate(currentDTO.isMutabilityCanCreate());
-        newDTO.setMutabilityCanDelete(currentDTO.isMutabilityCanDelete());
-        newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
-    }
-
     public String addType(){
         try {
+            //TODO temporary stub
+            newDTO.setPropertyRows(new ArrayList<PropertyRow>());
+
             CMISTypeManagerService.getInstance().createType(newDTO);
             List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
             root = new DefaultTreeNode("Root", null);
@@ -229,28 +279,5 @@ public class TreeBean implements Serializable {
 
     public void addMetadata(){
         currentDTO.getPropertyRows().add(newProperty);
-    }
-    public void crea() throws BaseException {
-        throw new BaseException("asd");
-    }
-    public String creat(){
-        String page = null;
-        try {
-            crea();
-        } catch (ModificationException me) {
-            errorBean.setErrorMessage(me.getMessage());
-            errorBean.setErrorVisibility("true");
-            page = "/error?faces-redirect=true";
-        } catch (BaseException t) {
-            LOG.error("BaseException catched");
-            LOG.info(errorBean.getErrorMessage());
-            errorBean.setErrorMessage(t.getMessage());
-            LOG.info(errorBean.getErrorMessage());
-            LOG.info(errorBean.getErrorVisibility());
-//            errorBean.setErrorVisibility("true");
-            LOG.info(errorBean.getErrorVisibility());
-            page = "/error?faces-redirect=true";
-        }
-        return page;
     }
 }

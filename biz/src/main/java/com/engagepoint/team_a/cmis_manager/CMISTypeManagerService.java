@@ -60,9 +60,9 @@ public class CMISTypeManagerService {
         this.pass = pass;
     }
 
-    public String[] getRepoList(String url, String port) throws ConnectionException {
+    public String[] getRepoList(String url) throws ConnectionException {
         this.url = url;
-        this.port = port;
+//        this.port = port;
 
         SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
@@ -70,7 +70,7 @@ public class CMISTypeManagerService {
         parameter.put(SessionParameter.USER, name);
         parameter.put(SessionParameter.PASSWORD, pass);
 
-        parameter.put(SessionParameter.ATOMPUB_URL, "http://" + url + ":" + port + repo + "/atom11");
+        parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         //parameter.put(SessionParameter.REPOSITORY_ID, "A1");
         List<Repository> list;
@@ -86,7 +86,7 @@ public class CMISTypeManagerService {
         }
 
         map.clear();
-        List<String> array = new ArrayList();
+        List<String> array = new ArrayList<String>();
         for (Repository repo : list) {
             map.put(repo.getName(), repo);
             array.add(repo.getName());
