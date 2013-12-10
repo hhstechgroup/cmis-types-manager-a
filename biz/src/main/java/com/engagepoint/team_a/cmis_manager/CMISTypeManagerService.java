@@ -77,7 +77,7 @@ public class CMISTypeManagerService {
         try {
             list = factory.getRepositories(parameter);
         } catch (CmisBaseException e) {
-            throw new ConnectionException(e.getMessage());
+            throw new ConnectionException(e.getMessage(), e);
         }
 
 
@@ -118,9 +118,9 @@ public class CMISTypeManagerService {
             }
             return typeList;
         } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage(), cp);
         } catch (CmisBaseException c) {
-            throw new BaseException(c.getMessage());
+            throw new BaseException(c.getMessage(), c);
         }
     }
     /**
@@ -132,60 +132,68 @@ public class CMISTypeManagerService {
      * @throws Exception must throw exceptions
      */
     public TypeDTO createType(TypeDTO newType) throws BaseException {
+
+        TypeDTO returnedTypeDTO;
+
         try {
-            TypeDTO returnedTypeDTO = null;
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
             ObjectType createdType = session.createType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
-            return returnedTypeDTO;
-        } catch (CmisObjectNotFoundException cp) {
-            throw new ModificationException(cp.getMessage());
-        } catch (CmisInvalidArgumentException cp) {
-            throw new ModificationException(cp.getMessage());
-        } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage());
+        } catch (CmisObjectNotFoundException ex) {
+            throw new ModificationException(ex.getMessage(),ex);
+        } catch (CmisInvalidArgumentException ex) {
+            throw new ModificationException(ex.getMessage(), ex);
+        } catch (CmisPermissionDeniedException ex) {
+            throw new ConnectionException(ex.getMessage(),ex);
         } catch (CmisBaseException cbe) {
-            throw new BaseException(cbe.getMessage());
+            throw new BaseException(cbe.getMessage(), cbe);
         }
+
+        return returnedTypeDTO;
     }
 
     public ObjectType getTypeById(String id) throws BaseException {
+
+        ObjectType returnedType;
+
         try {
-            ObjectType returnedType = null;
             returnedType = session.getTypeDefinition(id);
-            return returnedType;
         } catch (CmisObjectNotFoundException cp) {
-            throw new ModificationException(cp.getMessage());
+            throw new ModificationException(cp.getMessage(), cp);
         } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage(), cp);
         } catch (CmisBaseException cbe) {
-            throw new BaseException(cbe.getMessage());
+            throw new BaseException(cbe.getMessage(), cbe);
         }
+
+        return returnedType;
     }
 
     public TypeDTO updateType(TypeDTO updatedType) throws BaseException {
+        TypeDTO returnedTypeDTO;
+
         try {
-            TypeDTO returnedTypeDTO = null;
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(updatedType);
             ObjectType newType = session.updateType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(newType);
-            return returnedTypeDTO;
         } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage(), cp);
         } catch (CmisBaseException cbe) {
-            throw new BaseException(cbe.getMessage());
+            throw new BaseException(cbe.getMessage(), cbe);
         }
+
+        return returnedTypeDTO;
     }
 
     public void deleteType(TypeDTO deletedType) throws BaseException {
         try {
             session.deleteType(deletedType.getId());
         } catch (CmisInvalidArgumentException cp) {
-            throw new ModificationException(cp.getMessage());
+            throw new ModificationException(cp.getMessage(), cp);
         } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage(), cp);
         } catch (CmisBaseException c) {
-            throw new BaseException(c.getMessage());
+            throw new BaseException(c.getMessage(), c);
         }
     }
 
