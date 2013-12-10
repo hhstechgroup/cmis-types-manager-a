@@ -11,62 +11,54 @@
     </h:head>
 
     <ui:define name="mainContent">
-    <h2>Create new type</h2>
-    <uib:gridContainer>
+        <h2>Create new type</h2>
+        <uib:gridContainer>
 
-    <uib:gridRow>
-    <uib:gridColumn column="12">
-    <h:form id="mainForm">
-    <p:wizard id="tab" dynamic="true">
+            <uib:gridRow>
+                <uib:gridColumn column="12">
+                    <h:form id="mainForm">
+                        <p:wizard id="tab" dynamic="true">
 
-        <p:tab id="tab1" title="Step I" >
+                            <p:tab id="tab1" title="Select parent">
 
-        <h3>Chose tree node:</h3>
-        <h:panelGrid columns="2" cellpadding="10">
-           <ui:include src="/modify/showTree.xhtml"/>
-           </h:panelGrid>
-
-
-    </p:tab>
-        <p:tab id="tab2" title="Step II" >
-
-    <h3>Input attributes</h3>
-    <h:panelGrid id="grid" columns="2" cellpadding="10">
-        <ui:include src="/modify/addAttributes.xhtml"/>
-
-    </h:panelGrid>
-
-    </p:tab>
+                                <!--<h3>Chose tree node:</h3>-->
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <ui:include src="/modify/showTree.xhtml"/>
+                                </h:panelGrid>
 
 
-    <p:tab id="tab3" title="Step III" >
+                            </p:tab>
+                            <p:tab id="tab2" title="Add attributes">
 
-        <h3> Chose secondary type </h3>
-            <ui:include src="/modify/addSecondaryType.xhtml"/>
+                                <!--<h3>Input attributes</h3>-->
+                                <h:panelGrid id="grid" columns="2" cellpadding="10">
+                                    <ui:include src="/modify/addAttributes.xhtml"/>
 
-    </p:tab>
+                                </h:panelGrid>
 
-    <p:tab id="tab4" title="Step IV">
-        <h3>View parent metadata and add new one</h3>
-        <h:panelGrid columns="1" cellpadding="10">
-            <ui:include src="/modify/addMetadata.xhtml"/>
-        </h:panelGrid>
-
-    </p:tab>
+                            </p:tab>
 
 
+                            <p:tab id="tab3" title="Secondary type">
 
-    </p:wizard>
-    </h:form>
+                                <!--<h3> Chose secondary type </h3>-->
+                                <ui:include src="/modify/addSecondaryType.xhtml"/>
 
+                            </p:tab>
 
-    </uib:gridColumn>
-    </uib:gridRow>
+                            <p:tab id="tab4" title="Add metadata">
+                                <!--<h3>View parent metadata and add new one</h3>-->
+                                <h:panelGrid columns="1" cellpadding="10">
+                                    <ui:include src="/modify/addMetadata.xhtml"/>
+                                </h:panelGrid>
 
-    </uib:gridContainer>
-
-
-        <h:form  id="fullPropertyForm" prependId="false">
+                            </p:tab>
+                        </p:wizard>
+                    </h:form>
+                </uib:gridColumn>
+            </uib:gridRow>
+        </uib:gridContainer>
+        <h:form id="fullPropertyForm" prependId="false">
             <uib:modal id="fullPropertyModal" header="Full Property Info">
                 <p:panelGrid columns="2" id="fullPropertyGrid">
 
@@ -193,18 +185,14 @@
                                      styleClass="secondary"
                                      oncomplete="jQuery('#addMetadataModal').modal('hide');
                                          return false;"
-                                     />
+                            />
                     <p:commandButton title="Add" mode="client" value="Add metadata"
                                      styleClass="secondary"
                                      oncomplete="jQuery('#addMetadataModal').modal('hide');
                                  return false;" update=":mainForm"
-                                     action="#{treeBean.addMetadata}" />
+                                     action="#{treeBean.addMetadata}"/>
                 </f:facet>
             </uib:modal>
         </h:form>
-
-
-
-
     </ui:define>
 </ui:composition>

@@ -28,10 +28,13 @@
 
             </p:column>
         </uib:dataTable>
-
-        <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
-                         update=":fullPropertyForm"
-                         oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/>
-        <p:commandButton title="Create type" id="addType" value="Create" action="/show/index?faces-redirect=true" actionListener="#{treeBean.addType}"/>
+    <uib:gridContainer>
+    <uib:gridRow fluid="true">
+    <uib:gridColumn column="4"><p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
+                                                update=":fullPropertyForm"
+                                                oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/></uib:gridColumn>
+    <uib:gridColumn column="4">  <p:commandButton title="Create type" id="addType" value="Create" action="/show/index?faces-redirect=true" actionListener="#{treeBean.addType}"/></uib:gridColumn>
+    </uib:gridRow>
+    </uib:gridContainer>
 
 </ui:composition>

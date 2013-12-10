@@ -4,6 +4,7 @@
                 xmlns:uib="http://engagepoint.com/uib"
                 template="../template.xhtml">
     <ui:define name="mainContent">
+       
         <uib:infoblock id="ui-messages-error" visible="#{error.errorVisibility}" type="notification"
                        styleClass="ui-messages-error">
             <p>#{error.errorMessage}</p>
@@ -11,6 +12,7 @@
                              action="#{error.hideInfoBlock}"
                              update="ui-messages-error"/>
         </uib:infoblock>
+        <h2>Tree Type</h2>
         <uib:gridContainer>
             <uib:gridRow fluid="true">
                 <uib:gridColumn column="12">

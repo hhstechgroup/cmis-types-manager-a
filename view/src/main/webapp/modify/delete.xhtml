@@ -6,9 +6,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="../template.xhtml">
     <ui:define name="mainContent">
-        <uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisible}" type="notification" styleClass="ui-messages-warn">
+        <uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisible}" type="notification"
+                       styleClass="ui-messages-warn">
             <p>#{treeBean.errorMessage}</p>
         </uib:infoblock>
+
         <h2>Delete Type</h2>
         <uib:gridContainer>
             <uib:gridRow fluid="true">
@@ -18,7 +20,7 @@
             </uib:gridRow>
         </uib:gridContainer>
 
-    <uib:modal id="dialogDelete" prependId="false" header="Delete #{treeBean.currentDTO.displayName}">
+        <uib:modal id="dialogDelete" prependId="false" header="Delete #{treeBean.currentDTO.displayName}">
             <h:outputText value="#{treeBean.errorDialogMsg}"/>
             <f:facet name="footer">
                 <p:commandButton title="Cancel" id="cancelButton" mode="client" value="Cancel"
@@ -27,11 +29,10 @@
                 <p:commandButton title="Delete" mode="client" value="Continue"
                                  rendered="#{treeBean.disableDeleteBtn}"
                                  oncomplete="jQuery('#dialogDelete').modal('hide');return false;"
-                                 actionListener="#{treeBean.deleteType}" update=":formTree"/>
-
+                                 actionListener="#{treeBean.deleteType}" update=":treeForm"/>
             </f:facet>
         </uib:modal>
-        <p:commandButton id="deleteBtn" value="Delete1" actionListener="#{treeBean.deleteConditions}"
+        <p:commandButton id="deleteBtn" value="Delete" actionListener="#{treeBean.deleteConditions}"
                          oncomplete="jQuery('#dialogDelete').modal('show');
                                                              return false;" update=":dialogDelete"/>
     </ui:define>
