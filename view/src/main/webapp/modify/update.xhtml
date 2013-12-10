@@ -19,18 +19,18 @@
                 <h:form id="mainForm">
                     <p:wizard id="tab" dynamic="true">
 
-                        <p:tab id="tab1" title="Step I" >
+                        <p:tab id="tab1" title="Chose node" >
 
-                            <h3>Chose tree node:</h3>
+                            <!--h3>Chose tree node:</h3-->
                             <h:panelGrid columns="2" cellpadding="10">
                                 <ui:include src="/modify/showTreeUpdate.xhtml"/>
                             </h:panelGrid>
 
 
                         </p:tab>
-                        <p:tab id="tab2" title="Step II" >
+                        <p:tab id="tab2" title="Attributes" >
 
-                            <h3>Update attributes</h3>
+                            <!--h3>Update attributes</h3-->
                             <h:panelGrid id="grid" columns="2" cellpadding="10">
                                 <ui:include src="/modify/updateAttributes.xhtml"/>
 
@@ -39,22 +39,20 @@
                         </p:tab>
 
 
-                        <p:tab id="tab3" title="Step III" >
+                        <p:tab id="tab3" title="Secondary type" >
 
-                            <h3> Chose secondary type </h3>
+                            <!--h3> Chose secondary type </h3-->
                             <ui:include src="/modify/addSecondaryType.xhtml"/>
 
                         </p:tab>
 
-                        <p:tab id="tab4" title="Step IV">
-                            <h3>Edit type metadata and add new one</h3>
+                        <p:tab id="tab4" title="Metadata">
+                            <!--h3>Edit type metadata and add new one</h3-->
                             <h:panelGrid columns="1" cellpadding="10">
                                 <ui:include src="/modify/updateMetadata.xhtml"/>
                             </h:panelGrid>
 
                         </p:tab>
-
-
 
                     </p:wizard>
                 </h:form>
@@ -68,58 +66,58 @@
 
     <h:form  id="fullPropertyForm" prependId="false">
         <uib:modal id="fullPropertyModal" header="Property update">
-            <p:panelGrid columns="2" id="fullPropertyGrid">
+            <p:panelGrid columns="2" id="fullPropertyGrid" cellpadding="10">
 
                 <h:outputText value="ID: "/>
-                <h:outputText value="#{treeBean.propertyRow1.id}"/>
+                <p:inputText value="#{treeBean.propertyRow1.id}"/>
 
                 <h:outputText value="Local Name: "/>
-                <h:outputText value="#{treeBean.propertyRow1.localName}"/>
+                <h:inputText value="#{treeBean.propertyRow1.localName}"/>
 
                 <h:outputText value="Local Namespace: "/>
-                <h:outputText value="#{treeBean.propertyRow1.localNamespace}"/>
+                <h:inputText value="#{treeBean.propertyRow1.localNamespace}"/>
 
                 <h:outputText value="Display Name: "/>
-                <h:outputText value="#{treeBean.propertyRow1.displayName}"/>
+                <h:inputText value="#{treeBean.propertyRow1.displayName}"/>
 
                 <h:outputText value="Query Name: "/>
-                <h:outputText value="#{treeBean.propertyRow1.queryName}"/>
+                <h:inputText value="#{treeBean.propertyRow1.queryName}"/>
 
                 <h:outputText value="Description: "/>
-                <h:outputText value="#{treeBean.propertyRow1.description}"/>
+                <h:inputText value="#{treeBean.propertyRow1.description}"/>
 
                 <h:outputText value="Inherited: "/>
-                <h:outputText value="#{treeBean.propertyRow1.inherited}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.inherited}"/>
 
                 <h:outputText value="Required: "/>
-                <h:outputText value="#{treeBean.propertyRow1.required}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.required}"/>
 
                 <h:outputText value="Queryable: "/>
-                <h:outputText value="#{treeBean.propertyRow1.queryable}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.queryable}"/>
 
                 <h:outputText value="Orderable: "/>
-                <h:outputText value="#{treeBean.propertyRow1.orderable}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.orderable}"/>
 
                 <h:outputText value="Open Choice: "/>
-                <h:outputText value="#{treeBean.propertyRow1.openChoice}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.openChoice}"/>
 
                 <h:outputText value="Property Type: "/>
-                <h:outputText value="#{treeBean.propertyRow1.propertyType}"/>
+                <h:inputText value="#{treeBean.propertyRow1.propertyType}"/>
 
                 <h:outputText value="Cardinality: "/>
-                <h:outputText value="#{treeBean.propertyRow1.cardinality}"/>
+                <h:inputText value="#{treeBean.propertyRow1.cardinality}"/>
 
                 <h:outputText value="Updatability: "/>
-                <h:outputText value="#{treeBean.propertyRow1.updatability}"/>
+                <h:inputText value="#{treeBean.propertyRow1.updatability}"/>
 
                 <h:outputText value="Choise List: "/>
-                <h:outputText value="#{treeBean.propertyRow1.choiseList}"/>
+                <h:inputText value="#{treeBean.propertyRow1.choiseList}"/>
 
                 <h:outputText value="Default Value: "/>
-                <h:outputText value="#{treeBean.propertyRow1.defaultValue}"/>
+                <h:inputText value="#{treeBean.propertyRow1.defaultValue}"/>
 
                 <h:outputText value="Extensions: "/>
-                <h:outputText value="#{treeBean.propertyRow1.extensions}"/>
+                <h:inputText value="#{treeBean.propertyRow1.extensions}"/>
             </p:panelGrid>
             <f:facet name="footer">
 
@@ -134,7 +132,7 @@
 
     <h:form id="addMetadata" prependId="false">
         <uib:modal id="addMetadataModal" header="Add metadata">
-            <p:panelGrid columns="2" id="metadataGrid">
+            <p:panelGrid columns="2" id="metadataGrid" cellpadding="10">
 
                 <h:outputText value="ID: "/>
                 <p:inputText value="#{treeBean.newProperty.id}"/>
@@ -155,19 +153,19 @@
                 <p:inputText value="#{treeBean.newProperty.description}"/>
 
                 <h:outputText value="Inherited: "/>
-                <p:inputText value="#{treeBean.newProperty.inherited}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.newProperty.inherited}"/>
 
                 <h:outputText value="Required: "/>
-                <p:inputText value="#{treeBean.newProperty.required}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.newProperty.required}"/>
 
                 <h:outputText value="Queryable: "/>
-                <p:inputText value="#{treeBean.newProperty.queryable}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.newProperty.queryable}"/>
 
                 <h:outputText value="Orderable: "/>
-                <p:inputText value="#{treeBean.newProperty.orderable}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.newProperty.orderable}"/>
 
                 <h:outputText value="Open Choice: "/>
-                <p:inputText value="#{treeBean.newProperty.openChoice}"/>
+                <h:selectBooleanCheckbox value="#{treeBean.newProperty.openChoice}"/>
 
                 <h:outputText value="Property Type: "/>
                 <p:inputText value="#{treeBean.newProperty.propertyType}"/>
@@ -202,9 +200,6 @@
             </f:facet>
         </uib:modal>
     </h:form>
-
-
-
 
 </ui:define>
 </ui:composition>

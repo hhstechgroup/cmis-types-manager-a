@@ -33,7 +33,7 @@ public class TreeBean implements Serializable {
     //
     private String mutability = null;
 
-    private PropertyRow propertyRow1;
+    private PropertyRow propertyRow1 = new PropertyRow();
     private PropertyRow newProperty = new PropertyRow();
     private String errorMessage;
     private String errorVisible;

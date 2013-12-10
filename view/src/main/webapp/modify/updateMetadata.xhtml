@@ -20,7 +20,7 @@
         </p:column>
         <p:column headerText="Edit">
 
-            <p:commandButton title="Update property" id="fullInfo" value="Update property" actionListener="#{treeBean.passProperty(property)}"
+            <p:commandButton title="Update property" id="fullInfo" value="Update" actionListener="#{treeBean.passProperty(property)}"
                              update=":fullPropertyForm"
                              oncomplete="jQuery('#fullPropertyModal').modal('show');return false;" >
             </p:commandButton>
@@ -28,7 +28,7 @@
         </p:column>
     </uib:dataTable>
 
-    <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
+    <p:commandButton title="Add metadata" id="addMetadata" value="Add"
                      update=":fullPropertyForm"
                      oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/>
     <p:commandButton title="Update type" id="addType" value="Update" action="/modify/update?faces-redirect=true" actionListener="#{treeBean.updateType}"/>
