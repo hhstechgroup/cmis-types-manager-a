@@ -1,7 +1,8 @@
 package com.engagepoint.team_a.cmis_manager;
 
-import com.engagepoint.team_a.cmis_manager.exceptions.TMBaseException;
-import com.engagepoint.team_a.cmis_manager.exceptions.TMPermissionDeniedException;
+import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
+import com.engagepoint.team_a.cmis_manager.exceptions.ConnectionException;
+import com.engagepoint.team_a.cmis_manager.exceptions.ModificationException;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 
@@ -10,6 +11,8 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 
 import java.util.ArrayList;
@@ -21,15 +24,15 @@ public class CMISTypeManagerService {
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
-    private String url;
-   // private String port = "8080";
+    private String url = "localhost";
+    private String port = "8080";
     private String name = "";
     private String pass = "";
 
     private Map<String, Repository> map = new HashMap<String, Repository>();
 
-//    private String repo = "/chemistry-opencmis-server-inmemory-0.10.0";     //if not inmemory - change to "/cmis"
-//    private String repoID = "A1";                                           //may change to
+    private String repo = "/chemistry-opencmis-server-inmemory-0.10.0";     //if not inmemory - change to "/cmis"
+    private String repoID = "A1";                                           //may change to
 
     private CMISTypeManagerService() {
     }
@@ -49,15 +52,15 @@ public class CMISTypeManagerService {
         this.name = name;
     }
 
-//    public void setPort(String port) {
-//        this.port = port;
-//    }
+    public void setPort(String port) {
+        this.port = port;
+    }
 
     public void setPass(String pass) {
         this.pass = pass;
     }
 
-    public String[] getRepoList(String url) throws Exception {
+    public String[] getRepoList(String url) throws ConnectionException {
         this.url = url;
 //        this.port = port;
 
@@ -70,11 +73,18 @@ public class CMISTypeManagerService {
         parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         //parameter.put(SessionParameter.REPOSITORY_ID, "A1");
-
-        List<Repository> list = factory.getRepositories(parameter);
-        if (list.isEmpty()) {
-            throw new Exception("no such session");
+        List<Repository> list;
+        try {
+            list = factory.getRepositories(parameter);
+        } catch (CmisBaseException e) {
+            throw new ConnectionException(e.getMessage());
         }
+
+
+        if (list.isEmpty()) {
+            throw new ConnectionException("no such session");
+        }
+
         map.clear();
         List<String> array = new ArrayList<String>();
         for (Repository repo : list) {
@@ -84,10 +94,10 @@ public class CMISTypeManagerService {
         return array.toArray(new String[0]);
     }
 
-    public void connect(String repoName) throws Exception {
+    public void connect(String repoName) throws ConnectionException {
         session = map.get(repoName).createSession();
         if (session == null) {
-            throw new Exception("no such session");
+            throw new ConnectionException("no such session");
         }
     }
 
@@ -99,7 +109,7 @@ public class CMISTypeManagerService {
         return session;
     }
 
-    public List<TypeDTO> getTypes() {
+    public List<TypeDTO> getTypes() throws BaseException {
         try {
             List<TypeDTO> typeList = new ArrayList<TypeDTO>();
             List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
@@ -108,12 +118,11 @@ public class CMISTypeManagerService {
             }
             return typeList;
         } catch (CmisPermissionDeniedException cp) {
-            throw new TMPermissionDeniedException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage());
         } catch (CmisBaseException c) {
-            throw new TMBaseException(c.getMessage());
+            throw new BaseException(c.getMessage());
         }
     }
-
     /**
      * TODO
      * This method should throw exceptions
@@ -122,33 +131,39 @@ public class CMISTypeManagerService {
      * @return new instance if created, null if not
      * @throws Exception must throw exceptions
      */
-    public TypeDTO createType(TypeDTO newType) {
+    public TypeDTO createType(TypeDTO newType) throws BaseException {
         try {
-            TypeDTO returnedTypeDTO;
+            TypeDTO returnedTypeDTO = null;
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
             ObjectType createdType = session.createType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
             return returnedTypeDTO;
+        } catch (CmisObjectNotFoundException cp) {
+            throw new ModificationException(cp.getMessage());
+        } catch (CmisInvalidArgumentException cp) {
+            throw new ModificationException(cp.getMessage());
         } catch (CmisPermissionDeniedException cp) {
-            throw new TMPermissionDeniedException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage());
         } catch (CmisBaseException cbe) {
-            throw new TMBaseException(cbe.getMessage());
+            throw new BaseException(cbe.getMessage());
         }
     }
 
-    public ObjectType getTypeById(String id) {
+    public ObjectType getTypeById(String id) throws BaseException {
         try {
-            ObjectType returnedType;
+            ObjectType returnedType = null;
             returnedType = session.getTypeDefinition(id);
             return returnedType;
+        } catch (CmisObjectNotFoundException cp) {
+            throw new ModificationException(cp.getMessage());
         } catch (CmisPermissionDeniedException cp) {
-            throw new TMPermissionDeniedException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage());
         } catch (CmisBaseException cbe) {
-            throw new TMBaseException(cbe.getMessage());
+            throw new BaseException(cbe.getMessage());
         }
     }
 
-    public TypeDTO updateType(TypeDTO updatedType) {
+    public TypeDTO updateType(TypeDTO updatedType) throws BaseException {
         try {
             TypeDTO returnedTypeDTO = null;
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(updatedType);
@@ -156,31 +171,27 @@ public class CMISTypeManagerService {
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(newType);
             return returnedTypeDTO;
         } catch (CmisPermissionDeniedException cp) {
-            throw new TMPermissionDeniedException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage());
         } catch (CmisBaseException cbe) {
-            throw new TMBaseException(cbe.getMessage());
+            throw new BaseException(cbe.getMessage());
         }
     }
 
-    public void deleteType(TypeDTO deletedType) {
+    public void deleteType(TypeDTO deletedType) throws BaseException {
         try {
             session.deleteType(deletedType.getId());
+        } catch (CmisInvalidArgumentException cp) {
+            throw new ModificationException(cp.getMessage());
         } catch (CmisPermissionDeniedException cp) {
-            throw new TMPermissionDeniedException(cp.getMessage());
+            throw new ConnectionException(cp.getMessage());
         } catch (CmisBaseException c) {
-            throw new TMBaseException(c.getMessage());
+            throw new BaseException(c.getMessage());
         }
     }
 
-    public TypeDTO getSecondaryTypes() {
-        try {
+    public TypeDTO getSecondaryTypes() throws BaseException {
             ObjectType baseSecondary = getTypeById("cmis:secondary");
             TypeDTO returnedDTO = ObjectTypeReader.readWithChildren(baseSecondary);
             return returnedDTO;
-        } catch (CmisPermissionDeniedException cp) {
-            throw new TMPermissionDeniedException(cp.getMessage());
-        } catch (CmisBaseException c) {
-            throw new TMBaseException(c.getMessage());
-        }
     }
 }

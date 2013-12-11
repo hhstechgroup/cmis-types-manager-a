@@ -1,10 +1,10 @@
 <h:form xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui"
-        id="formTree" styleClass="mar30">
+        id="treeForm" styleClass="mar30">
 
-    <p:tree value="#{treeBean.root}"
+    <p:tree id="tree"
+            value="#{treeBean.root}"
             var="node"
-            id="tree"
             dynamic="true"
             selectionMode="single"
             selection="#{treeBean.selected}">

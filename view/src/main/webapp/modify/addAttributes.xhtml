@@ -5,8 +5,6 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:uib="http://engagepoint.com/uib">
 
-
-
 <uib:gridContainer>
 
 <uib:gridRow fluid="true">
@@ -15,8 +13,8 @@
         <p:outputLabel value="Name"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="displayName" placeholder="Input value:"
-                   value="#{treeBean.newDTO.displayName}" required="true" />
+        <p:inputText id="displayName" value="#{treeBean.newDTO.displayName}" required="true"/>
+        <p:watermark for="displayName" value="Input value:"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -27,8 +25,8 @@
         <p:outputLabel value="ID"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="id" placeholder="Input value:"
-                   value="#{treeBean.newDTO.id}" required="true" />
+        <p:inputText id="id" value="#{treeBean.newDTO.id}" required="true"/>
+        <p:watermark for="id" value="Input value:"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -39,8 +37,8 @@
         <p:outputLabel value="Description"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="description" placeholder="Input value:"
-                   value="#{treeBean.newDTO.description}" required="true" />
+        <p:inputText id="description" value="#{treeBean.newDTO.description}" required="true" />
+        <p:watermark for="description" value="Input value:"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -51,8 +49,8 @@
         <p:outputLabel value="Query name"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="queryName" placeholder="Input value:"
-                   value="#{treeBean.newDTO.queryName}" required="true"/>
+        <p:inputText id="queryName" value="#{treeBean.newDTO.queryName}" required="true"/>
+        <p:watermark for="queryName" value="Input value:"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -63,8 +61,8 @@
         <p:outputLabel value="Local name"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="localName" placeholder="Input value:"
-                   value="#{treeBean.newDTO.localName}" required="true" />
+        <p:inputText id="localName" value="#{treeBean.newDTO.localName}" required="true"/>
+        <p:watermark for="localName" value="Input value:"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -75,7 +73,7 @@
         <p:outputLabel value="Parent"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="parentId" value="#{treeBean.currentDTO.id}" disabled="true"/>
+        <p:inputText id="parentId" value="#{treeBean.currentDTO.id}" disabled="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -86,7 +84,7 @@
         <p:outputLabel value="Base type"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="baseTypeId" value="#{treeBean.currentDTO.baseTypeId}" disabled="true"/>
+        <p:inputText id="baseTypeId" value="#{treeBean.currentDTO.baseTypeId}" disabled="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -97,8 +95,8 @@
         <p:outputLabel value="Local namespace"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="localNamespace" placeholder="Input value:"
-                   value="#{treeBean.newDTO.localNamespace}" required="true"/>
+        <p:inputText id="localNamespace" value="#{treeBean.newDTO.localNamespace}" required="true"/>
+        <p:watermark for="localNamespace" value="Input value:"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -230,8 +228,4 @@
 
 
 </uib:gridContainer>
-
-
-
-
 </ui:composition>

@@ -11,11 +11,16 @@
 </h:head>
 
 <ui:define name="mainContent">
-<p:commandButton id="createError" update="uib-norification-warn" action="#{treeBean.creat()}"/>
-<uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisibility}" type="notification"
-               styleClass="ui-messages-warn">
-    <p>#{treeBean.errorMessage}</p>
+
+
+<uib:infoblock id="ui-messages-error" visible="#{error.errorVisibility}" type="notification"
+               styleClass="ui-messages-error">
+    <p>#{error.errorMessage}</p>
+    <p:commandButton value="OK" styleClass="secondary small" icon="ui-icon-edit"
+            action="#{error.hideInfoBlock}"
+            update="ui-messages-error"/>
 </uib:infoblock>
+
 
 <h2>Create new type</h2>
 <uib:gridContainer>
@@ -318,7 +323,7 @@
                                rows="40"
                                value="#{secType.secondaryTypes}">
                     <p:column headerText="Selected secondary types">
-                        <h:outputText id="prop_id" value="#{secondaryTypes.displayName}" var="id"/>
+                        <h:outputText id="prop_id1" value="#{secondaryTypes.displayName}" var="id"/>
 
                     </p:column>
 
@@ -353,7 +358,7 @@
                                      oncomplete="jQuery('#fullPropertyModal').modal('show');return false;"/>
                 </p:column>
             </uib:dataTable>
-            <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
+            <p:commandButton title="Add metadata" id="addMetadata1" value="Add metadata"
                              update=":fullPropertyForm"
                              oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/>
         </h:form>

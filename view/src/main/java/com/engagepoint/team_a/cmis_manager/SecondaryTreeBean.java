@@ -1,6 +1,6 @@
 package com.engagepoint.team_a.cmis_manager;
 
-import com.engagepoint.team_a.cmis_manager.exceptions.TMBaseException;
+import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -43,7 +43,7 @@ public class SecondaryTreeBean implements Serializable {
             typeDTO = CMISTypeManagerService.getInstance().getSecondaryTypes();
             root = new DefaultTreeNode("Secondary Types Root", null);
             render(typeDTO, root);
-        } catch (TMBaseException t) {
+        } catch (BaseException t) {
             errorMessage = t.getMessage();
             errorVisibility = "true";
         }

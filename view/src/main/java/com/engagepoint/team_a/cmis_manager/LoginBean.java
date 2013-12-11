@@ -1,6 +1,10 @@
 package com.engagepoint.team_a.cmis_manager;
 
+import com.engagepoint.team_a.cmis_manager.exceptions.ConnectionException;
+import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
+
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -13,7 +17,8 @@ public class LoginBean implements Serializable {
     private String username;
     private String password;
     private String sessionID;
-
+    @ManagedProperty("#{error}")
+    private ErrorBean errorBean;
     @NotNull(message = "Please enter url")
     private String url;
     //@NotNull(message = "Please enter port")
@@ -22,7 +27,9 @@ public class LoginBean implements Serializable {
     ////
     private String chosenRepo;
     private String[] availabeReposList;
-
+    public void setErrorBean(ErrorBean errorBean) {
+        this.errorBean = errorBean;
+    }
     public String getChosenRepo() {
         return chosenRepo;
     }
@@ -84,9 +91,9 @@ public class LoginBean implements Serializable {
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("sessionID",sessionID);
             page = "/show/index?faces-redirect=true";
-        }catch (Exception e){
+        }catch (BaseException e){
             sessionID=null;
-            page = "/error";
+            page = "/error?faces-redirect=true";
         }
         return page;
     }
@@ -101,8 +108,12 @@ public class LoginBean implements Serializable {
             availabeReposList = service.getRepoList(url);
             chosenRepo = availabeReposList[0];
 
-        }catch (Exception e){
-            return "/error";
+        }catch (BaseException e){
+            errorBean.setErrorMessage(e.getMessage());
+            sessionID = "error";
+            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            httpSession.setAttribute("sessionID",sessionID);
+            return "/error?faces-redirect=true";
         }
         return null;
     }

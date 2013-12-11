@@ -1,15 +1,13 @@
 package com.engagepoint.team_a.cmis_manager;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.*;
 import java.io.Serializable;
 
 @ManagedBean(name = "error")
 @SessionScoped
 public class ErrorBean implements Serializable{
 
-    private String errorMessage="we";
-    private String errorVisibility="false";
+    private String errorMessage;
+    private String errorVisibility;
 
     public String getErrorVisibility() {
         return errorVisibility;
@@ -27,5 +25,8 @@ public class ErrorBean implements Serializable{
         this.errorMessage = errorMessage;
     }
 
-
+    public void hideInfoBlock() {
+        errorVisibility = "false";
+        errorMessage = null;
+    }
 }
