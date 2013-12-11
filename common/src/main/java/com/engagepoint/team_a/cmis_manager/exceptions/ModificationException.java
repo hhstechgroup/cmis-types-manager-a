@@ -6,4 +6,8 @@ public class ModificationException extends BaseException {
         super(message);
     }
 
+    public ModificationException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
+
 }

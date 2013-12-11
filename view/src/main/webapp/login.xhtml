@@ -13,11 +13,9 @@
                 <uib:gridContainer>
 
                     <uib:gridRow fluid="true">
-
                         <uib:gridColumn column="2">
                             <p:outputLabel value="" />
                         </uib:gridColumn>
-
                         <uib:gridColumn column="3">
                             <p:outputLabel value="Login:"/>
                         </uib:gridColumn>
@@ -25,7 +23,6 @@
                         <uib:gridColumn column="4">
                             <p:inputText value="#{login.username}" id="username" label="username"/>
                         </uib:gridColumn>
-
                         <uib:gridColumn column="3"></uib:gridColumn>
 
                     </uib:gridRow>
@@ -52,29 +49,18 @@
                         <uib:gridColumn column="2">
                             <p:outputLabel value="" />
                         </uib:gridColumn>
+
                         <uib:gridColumn column="3">
                             <p:outputLabel value="URL:"/>
                         </uib:gridColumn>
-                        <uib:gridColumn column="6">
+
+                        <uib:gridColumn column="4">
                             <p:inputText value="#{login.url}" id="url" label="URL" required="true"/>
                         </uib:gridColumn>
 
-                        <uib:gridColumn column="1"></uib:gridColumn>
+                        <uib:gridColumn column="3">  <p:commandButton id="getRepoButton" value="Get repo list" action="#{login.getRepoList}"
+                                                                      update="@form" /></uib:gridColumn>
 
-                    </uib:gridRow>
-
-                    <uib:gridRow fluid="true">
-
-                        <uib:gridColumn column="4">
-                            <p:outputLabel value=""/>
-                        </uib:gridColumn>
-
-                        <uib:gridColumn column="4">
-                            <p:commandButton id="getRepoButton" value="Get repo list" action="#{login.getRepoList}"
-                                             update="@form" />
-                        </uib:gridColumn>
-
-                        <uib:gridColumn column="4"/>
                     </uib:gridRow>
 
                     <uib:gridRow fluid="true">
@@ -82,7 +68,7 @@
                         <uib:gridColumn column="2">
                             <p:outputLabel value="" />
                         </uib:gridColumn>
-                        <uib:gridColumn column="8">
+                        <uib:gridColumn column="7">
 
                             <p:selectOneMenu id="selectMenu" value="#{login.chosenRepo}" disabled="#{login.availabeReposList == null}">
                                 <f:selectItems value="#{login.availabeReposList}"/>
@@ -90,7 +76,10 @@
                             </p:selectOneMenu>
 
                         </uib:gridColumn>
-                        <uib:gridColumn column="3"/>
+                        <uib:gridColumn column="3">
+                            <p:commandButton id="loginButton" value="Login"
+                                                                      action="#{login.doLogin}" disabled="#{login.chosenRepo == null}"/>
+                        </uib:gridColumn>
                     </uib:gridRow>
 
                     <uib:gridRow fluid="true">
@@ -100,8 +89,7 @@
                         </uib:gridColumn>
 
                         <uib:gridColumn column="4">
-                            <p:commandButton id="loginButton" value="Login"
-                                             action="#{login.doLogin}" disabled="#{login.chosenRepo == null}"/>
+
                         </uib:gridColumn>
 
                         <uib:gridColumn column="4"/>

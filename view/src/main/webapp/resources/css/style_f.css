@@ -34,7 +34,7 @@
 
 #mainForm li.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
     display: block;
-    border-radius: 3px 3px 0px 0px;
+    border-radius: 3px 3px 0 0;
     text-decoration: none;
     padding: 10px 21px;
     background: rgb(233, 233, 233);
@@ -68,14 +68,15 @@
     color: #ffffff;
 }
 
-#mainForm  .ui-widget-content .ui-button.ui-state-default {
+#mainForm  .ui-widget-content .ui-button.ui-state-default,
+#allProperties .ui-widget-content .ui-button.ui-state-default {
     display: inline-block;
     font-family: MuseoSans700, sans-serif;
     font-size: 16px;
-    padding: 0px 25px;
+    padding: 0 25px;
     height: 34px;
     line-height: 34px;
-    margin-right: 0px;
+    margin-right: 0;
     border: 1px solid rgb(53, 53, 53);
     color: white;
     cursor: pointer;
@@ -86,7 +87,8 @@
     vertical-align: top;
 }
 
-#mainForm  .ui-widget-content .ui-button.ui-state-default:hover {
+#mainForm  .ui-widget-content .ui-button.ui-state-default:hover,
+#allProperties  .ui-widget-content .ui-button.ui-state-default:hover {
     color: rgb(34, 34, 34);
     border: 1px solid rgb(165, 163, 155);
     background: linear-gradient(rgb(247, 247, 247), rgb(226, 225, 225)) rgb(247, 247, 247);
