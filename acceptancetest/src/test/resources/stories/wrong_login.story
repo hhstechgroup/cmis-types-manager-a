@@ -2,6 +2,6 @@
 !--
 !--When the user opens the default page
 !--And the user fills 'url' field with 'ololololo'
-!--And the user fills 'port' field with '8080'
+!--And press 'Get repo list' button
 !--And press 'Login' button
 !--Then should open page with 'Error page' title

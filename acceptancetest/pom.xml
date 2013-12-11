@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <webdriver.driver>firefox</webdriver.driver>
-        <acceptancetest.base.version>1.0-M21</acceptancetest.base.version>
+        <acceptancetest.base.version>1.0-M24</acceptancetest.base.version>
         <thucydides.version>0.9.204</thucydides.version>
         <thucydides.jbehave.version>0.9.204</thucydides.jbehave.version>
         <thucydides.project.key>acceptancetest_THUCJBEHAVE</thucydides.project.key>
