@@ -7,8 +7,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
+import java.io.InputStream;
 import java.io.Serializable;
 
 @ManagedBean(name = "login")
@@ -86,6 +88,7 @@ public class LoginBean implements Serializable {
         String page;
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
         try{
+            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("WEB-INF/o.txt");
             service.connect(chosenRepo);
             sessionID = service.getSession().toString();
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
