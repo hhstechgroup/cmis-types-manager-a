@@ -33,6 +33,7 @@ public class FileUploadController {
     public void handleFileUpload(FileUploadEvent event) {
         try {
             UploadedFile file = event.getFile();
+
             msgLbl=file.getFileName()+" content type: "+file.getContentType();
             show="true";
             create(file.getInputstream());

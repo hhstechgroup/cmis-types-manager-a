@@ -1,36 +1,33 @@
-        <h:form xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../template.xhtml"
-                xmlns:uib="http://engagepoint.com/uib"
-                id="allPropertiesForm" prependId="false" rendered="#{treeBean.attributesVisible}">
-            <h2>Metadata for #{treeBean.currentDTO.displayName}</h2>
-            <uib:dataTable id="allProperties" var="property"
-                           rows="40"
-                           value="#{treeBean.currentDTO.propertyList}">
+<h:form xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:h="http://java.sun.com/jsf/html"
+        template="../template.xhtml"
+        xmlns:uib="http://engagepoint.com/uib"
+        id="allPropertiesForm" prependId="false" rendered="#{treeBean.attributesVisible}">
 
-                <p:column headerText="ID">
-                    <h:outputText id="prop_id" value="#{property.id}" var="id"/>
-                </p:column>
-                <p:column headerText="Display Name">
-                    <h:outputText value="#{property.displayName}"/>
-                </p:column>
-                <p:column headerText="Description">
-                    <h:outputText value="#{property.description}"/>
-                </p:column>
-                <p:column headerText="Full Info">
-                    <p:commandButton title="Full Info" id="fullInfo" value="Info"
-                                     update=":fullPropertyForm"
-                                     oncomplete="jQuery('#fullPropertyModal').modal('show');return false;"/>
-                </p:column>
-            </uib:dataTable>
-            <f:facet name="footer">
-                <p:commandButton title="Cancel" mode="client" value="Cancel"
-                                 styleClass="secondary"
-                                 oncomplete="jQuery('#allPropertiesModal').modal('hide');
-                                         return false;"/>
-            </f:facet>
+    <uib:dataTable id="allProperties" var="property"
+                   rows="30"
+                   value="#{treeBean.currentDTO.propertyList}" selection="#{treeBean.propertyRows}">
+        <f:attribute name="propRow" value="#{property}"/>
+        <p:column headerText="ID">
+            <h:outputText id="prop_id" value="#{property.id}" var="id"/>
+        </p:column>
+        <p:column headerText="Display Name">
+            <h:outputText value="#{property.displayName}"/>
+        </p:column>
+        <p:column headerText="Description">
+            <h:outputText value="#{property.description}"/>
+        </p:column>
+        <p:column headerText="Full Info">
 
-        </h:form>
+            <p:commandButton title="Full Info" id="fullInfo" value="Info"
+                             actionListener="#{treeBean.passProperty(property)}"
+                             update=":fullPropertyForm"
+                             oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
+            </p:commandButton>
+
+        </p:column>
+    </uib:dataTable>
+
+</h:form>

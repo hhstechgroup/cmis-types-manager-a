@@ -20,41 +20,30 @@
                                     <h:inputHidden id="nodeSelected" value="#{treeBean.selected.type}" required="true"/>
                                     <h:inputHidden id="typeCreateAbility" value="#{treeBean.typeCreateable}"
                                                    required="true"/>
-
                                 </h:panelGrid>
-
-
                             </p:tab>
-                            <p:tab id="tab2" title="Add attributes">
 
-                                <!--<h3>Input attributes</h3>-->
+                            <p:tab id="tab2" title="Add attributes">
                                 <h:panelGrid id="grid" columns="2" cellpadding="10">
                                     <ui:include src="/modify/addAttributes.xhtml"/>
-
                                 </h:panelGrid>
-
                             </p:tab>
 
-
                             <p:tab id="tab3" title="Secondary type">
-
-                                <!--<h3> Chose secondary type </h3>-->
                                 <ui:include src="/modify/addSecondaryType.xhtml"/>
-
                             </p:tab>
 
                             <p:tab id="tab4" title="Add metadata">
-                                <!--<h3>View parent metadata and add new one</h3>-->
                                 <h:panelGrid columns="1" cellpadding="10">
                                     <ui:include src="/modify/addMetadata.xhtml"/>
                                 </h:panelGrid>
-
                             </p:tab>
                         </p:wizard>
                     </h:form>
                 </uib:gridColumn>
             </uib:gridRow>
         </uib:gridContainer>
+
         <h:form id="fullPropertyForm" prependId="false">
             <uib:modal id="fullPropertyModal" header="Full Property Info">
                 <p:panelGrid columns="2" id="fullPropertyGrid">
@@ -111,7 +100,6 @@
                     <h:outputText value="#{treeBean.propertyRow1.extensions}"/>
                 </p:panelGrid>
                 <f:facet name="footer">
-
                     <p:commandButton title="Cancel" mode="client" value="Cancel"
                                      styleClass="secondary"
                                      oncomplete="jQuery('#fullPropertyModal').modal('hide');

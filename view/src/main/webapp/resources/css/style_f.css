@@ -32,7 +32,7 @@
     border-radius: 3px;
 }
 
-#mainForm li.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+#mainForm li.ui-state-default, #teForm.ui-widget-header .ui-state-default {
     display: block;
     border-radius: 3px 3px 0 0;
     text-decoration: none;
@@ -62,13 +62,14 @@
     visibility: hidden;
 }
 
-#mainForm li.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+#mainForm li.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {
     background: rgb(0, 117, 172);
     color: rgb(255, 255, 255);
     color: #ffffff;
 }
 
-#mainForm  .ui-widget-content .ui-button.ui-state-default,
+#mainForm .ui-widget-content .ui-button.ui-state-default,
+#testForm .ui-widget-content .ui-button.ui-state-default,
 #allProperties .ui-widget-content .ui-button.ui-state-default {
     display: inline-block;
     font-family: MuseoSans700, sans-serif;
@@ -88,7 +89,7 @@
 }
 
 #mainForm  .ui-widget-content .ui-button.ui-state-default:hover,
-#allProperties  .ui-widget-content .ui-button.ui-state-default:hover {
+#allProperties  .ui-widget-content .ui-button.ui-state-default:hover, #testForm .ui-widget-content .ui-button.ui-state-default:hover{
     color: rgb(34, 34, 34);
     border: 1px solid rgb(165, 163, 155);
     background: linear-gradient(rgb(247, 247, 247), rgb(226, 225, 225)) rgb(247, 247, 247);

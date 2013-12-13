@@ -15,15 +15,14 @@
                              update="ui-messages-error"/>
         </uib:infoblock>
 
-        <h:form id="testForm">
+        <uib:gridContainer id="testForm">
             <p:commandLink id="lbl" value="Back to tree"
                            actionListener="#{treeBean.treeEnable}"
                            oncomplete="mytab.select(0)" update="testForm"
                            rendered="#{!treeBean.treeRender}"/>
 
-            <p:tabView widgetVar="mytab"
-                       id="mainTab"
-                       effect="slide" effectDuration="normal">
+            <p:tabView id="mainTab"
+                       effect="slide" effectDuration="normal" widgetVar="mytab">
 
                 <p:tab id="tree" title="Tree" rendered="#{treeBean.treeRender}">
                     <h2>Tree Type</h2>
@@ -39,67 +38,63 @@
                 </p:tab>
 
             </p:tabView>
-        </h:form>
+        </uib:gridContainer>
         <h:form id="fullPropertyForm" prependId="false">
             <uib:modal id="fullPropertyModal" header="Full Property Info">
                 <p:panelGrid columns="2" id="fullPropertyGrid">
 
                     <h:outputText value="ID: "/>
-                    <h:outputText value="#{property.id}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.id}"/>
 
                     <h:outputText value="Local Name: "/>
-                    <h:outputText value="#{property.localName}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.localName}"/>
 
                     <h:outputText value="Local Namespace: "/>
-                    <h:outputText value="#{property.localNamespace}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.localNamespace}"/>
 
                     <h:outputText value="Display Name: "/>
-                    <h:outputText value="#{property.displayName}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.displayName}"/>
 
                     <h:outputText value="Query Name: "/>
-                    <h:outputText value="#{property.queryName}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.queryName}"/>
 
                     <h:outputText value="Description: "/>
-                    <h:outputText value="#{property.description}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.description}"/>
 
                     <h:outputText value="Inherited: "/>
-                    <h:outputText value="#{property.inherited}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.inherited}"/>
 
                     <h:outputText value="Required: "/>
-                    <h:outputText value="#{property.required}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.required}"/>
 
                     <h:outputText value="Queryable: "/>
-                    <h:outputText value="#{property.queryable}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.queryable}"/>
 
                     <h:outputText value="Orderable: "/>
-                    <h:outputText value="#{property.orderable}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.orderable}"/>
 
                     <h:outputText value="Open Choice: "/>
-                    <h:outputText value="#{property.openChoice}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.openChoice}"/>
 
                     <h:outputText value="Property Type: "/>
-                    <h:outputText value="#{property.propertyType}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.propertyType}"/>
 
                     <h:outputText value="Cardinality: "/>
-                    <h:outputText value="#{property.cardinality}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.cardinality}"/>
 
                     <h:outputText value="Updatability: "/>
-                    <h:outputText value="#{property.updatability}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.updatability}"/>
 
                     <h:outputText value="Choise List: "/>
-                    <h:outputText value="#{property.choiseList}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.choiseList}"/>
 
                     <h:outputText value="Default Value: "/>
-                    <h:outputText value="#{property.defaultValue}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.defaultValue}"/>
 
                     <h:outputText value="Extensions: "/>
-                    <h:outputText value="#{property.extensions}"/>
+                    <h:outputText value="#{treeBean.propertyRow1.extensions}"/>
                 </p:panelGrid>
                 <f:facet name="footer">
-                    <p:commandButton title="Back" mode="client" value="Back"
-                                     oncomplete="jQuery('#fullPropertyModal').modal('hide');
-                                         jQuery('#allPropertiesModal').modal('show');
-                                         return false;"/>
                     <p:commandButton title="Cancel" mode="client" value="Cancel"
                                      styleClass="secondary"
                                      oncomplete="jQuery('#fullPropertyModal').modal('hide');
@@ -107,6 +102,7 @@
                 </f:facet>
             </uib:modal>
         </h:form>
+
 
     </ui:define>
 </ui:composition>
