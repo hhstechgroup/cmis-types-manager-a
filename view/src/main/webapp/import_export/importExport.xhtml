@@ -6,44 +6,20 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="../template.xhtml">
     <ui:define name="mainContent">
-
-
         <uib:gridContainer>
             <uib:gridRow>
                 <uib:gridColumn column="3">
-                <p:commandButton id="export" value="Export" onclick="PF('dlg1').show();" type="button"/>
-                </uib:gridColumn>
-
-                <uib:gridColumn column="3">
-                <p:commandButton id="import" value="Import" />
-                </uib:gridColumn>
-                <uib:gridColumn column="2">
-                    <p:selectOneMenu  effect="fade">
-                        <f:selectItem itemLabel="XML" itemValue="Save to XML" />
-                        <f:selectItem itemLabel="JSON" itemValue="Save to JSON" />
-                    </p:selectOneMenu>
-                    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
-                        <p:graphicImage value="/design/ajaxloadingbar.gif" />
-                    </p:dialog>
-
-                    <h:form id="form">
-
-                        <p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"
-                                         icon="ui-icon-arrowthichk-s">
-                            <p:fileDownload value="#{fileDownloadController.file}" />
+                    <h:form>
+                        <p:selectOneMenu value="#{fileDownloadController.type}">
+                            <p:ajax listener="#{fileDownloadController.setURL}"/>
+                            <f:selectItem itemLabel="Select One" itemValue=""/>
+                            <f:selectItems value="#{fileDownloadController.types}" var="type"
+                                           itemLabel="Save to #{type}" itemValue="#{type}"/>
+                        </p:selectOneMenu>
+                        <p:commandButton id="save" value="Save" ajax="false" disabled="#{treeBean.currentDTO == null}">
+                            <p:fileDownload value="#{fileDownloadController.file}"/>
                         </p:commandButton>
-
                     </h:form>
-
-                    <script type="text/javascript">
-                        function start() {
-                            PF('statusDialog').show();
-                        }
-
-                        function stop() {
-                            PF('statusDialog').hide();
-                        }
-                    </script>
                 </uib:gridColumn>
             </uib:gridRow>
             <uib:gridRow fluid="true">
@@ -52,8 +28,5 @@
                 </uib:gridColumn>
             </uib:gridRow>
         </uib:gridContainer>
-        <p:dialog id="basicDialog" header="Basic Dialog" widgetVar="dlg1">
-            <h:outputText value="Resistance to PrimeFaces is futile!" />
-        </p:dialog>
     </ui:define>
 </ui:composition>
