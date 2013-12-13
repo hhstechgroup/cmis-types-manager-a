@@ -1,0 +1,19 @@
+<h:form xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        id="treeForm" styleClass="mar30">
+
+    <p:tree id="tree"
+            value="#{treeBean.root}"
+            var="node"
+            dynamic="true"
+            selectionMode="single"
+            selection="#{treeBean.selected}"
+            >
+        <p:ajax event="select" listener="#{treeBean.onNodeSelect}" update=":testForm"
+                oncomplete="mytab.select(0)"/>
+
+        <p:treeNode id="treeNode" >
+            <h:outputText value="#{node}" id="lblNode"/>
+        </p:treeNode>
+    </p:tree>
+</h:form>
