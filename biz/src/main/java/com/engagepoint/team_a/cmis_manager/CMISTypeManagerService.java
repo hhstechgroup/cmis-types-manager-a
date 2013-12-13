@@ -9,6 +9,7 @@ import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
@@ -30,9 +31,6 @@ public class CMISTypeManagerService {
     private String pass = "";
 
     private Map<String, Repository> map = new HashMap<String, Repository>();
-
-    private String repo = "/chemistry-opencmis-server-inmemory-0.10.0";     //if not inmemory - change to "/cmis"
-    private String repoID = "A1";                                           //may change to
 
     private CMISTypeManagerService() {
     }
@@ -123,13 +121,14 @@ public class CMISTypeManagerService {
             throw new BaseException(c.getMessage(), c);
         }
     }
+
     /**
-     * TODO
-     * This method should throw exceptions
      *
-     * @param newType some com.engagepoint.team_a.cmis_manager.model.TypeDTO instance, that not exist in CMIS repository
+     * @param newType some TypeDTO instance, that not exist in CMIS repository
+     * @throws ModificationException
+     * @throws ConnectionException
+     * @throws BaseException
      * @return new instance if created, null if not
-     * @throws Exception must throw exceptions
      */
     public TypeDTO createType(TypeDTO newType) throws BaseException {
 
@@ -185,9 +184,25 @@ public class CMISTypeManagerService {
         return returnedTypeDTO;
     }
 
+    /**
+     * Delete type in repository.
+     * @throws ModificationException
+     * @throws ConnectionException
+     * @throws BaseException
+     * @param deletedType
+     */
     public void deleteType(TypeDTO deletedType) throws BaseException {
+
         try {
+
+            List<Tree<ObjectType>> list = session.getTypeDescendants(deletedType.getId(), -1, false);
+
+            if (list != null && !list.isEmpty()) {
+                deleteTree(list);
+            }
+
             session.deleteType(deletedType.getId());
+
         } catch (CmisInvalidArgumentException cp) {
             throw new ModificationException(cp.getMessage(), cp);
         } catch (CmisPermissionDeniedException cp) {
@@ -195,7 +210,23 @@ public class CMISTypeManagerService {
         } catch (CmisBaseException c) {
             throw new BaseException(c.getMessage(), c);
         }
+
+
+
     }
+
+    private void deleteTree(List<Tree<ObjectType>> list) {
+
+        for (Tree<ObjectType> objectTypeTree : list) {
+
+            if ( objectTypeTree.getChildren() != null && !objectTypeTree.getChildren().isEmpty()) {
+                deleteTree(objectTypeTree.getChildren());
+            }
+            session.deleteType(objectTypeTree.getItem().getId());
+        }
+
+    }
+
 
     public TypeDTO getSecondaryTypes() throws BaseException {
             ObjectType baseSecondary = getTypeById("cmis:secondary");
