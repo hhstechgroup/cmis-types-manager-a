@@ -6,6 +6,12 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="../template.xhtml">
     <ui:define name="mainContent">
+        <uib:infoblock id="warn" visible="#{fileUploadController.show}" type="notification"
+                       styleClass="ui-messages-warn">
+            <p>#{fileUploadController.msgLbl}</p>
+        </uib:infoblock>
+        <h2>Export Import Type</h2>
+        
         <uib:gridContainer>
             <uib:gridRow>
                 <uib:gridColumn column="3">
@@ -20,6 +26,16 @@
                             <p:fileDownload value="#{fileDownloadController.file}"/>
                         </p:commandButton>
                     </h:form>
+                    <form>
+                        <p:fileUpload
+                                label="Import!!"
+                                fileUploadListener="#{fileUploadController.handleFileUpload}"
+                                mode="advanced" dragDropSupport="false"
+                                sizeLimit="100000"
+                                allowTypes="/(\.|\/)(txt|xml|json)$/"
+                                auto="true"
+                                update=":warn"/>
+                    </form>  
                 </uib:gridColumn>
             </uib:gridRow>
             <uib:gridRow fluid="true">
