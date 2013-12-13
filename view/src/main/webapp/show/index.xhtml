@@ -14,31 +14,32 @@
                              action="#{error.hideInfoBlock}"
                              update="ui-messages-error"/>
         </uib:infoblock>
-     <h:form id="testForm">
-      <p:commandLink id="lbl" value="Back to tree"
-                     actionListener="#{treeBean.treeEnable}"
-                     oncomplete="mytab.select(0)" update="testForm"
-                     rendered="#{!treeBean.treeRender}"/>
 
-        <p:tabView widgetVar="mytab"
-                   id="mainTab"
-                   effect="slide" effectDuration="normal">
+        <h:form id="testForm">
+            <p:commandLink id="lbl" value="Back to tree"
+                           actionListener="#{treeBean.treeEnable}"
+                           oncomplete="mytab.select(0)" update="testForm"
+                           rendered="#{!treeBean.treeRender}"/>
 
-            <p:tab id="tree" title="Tree" rendered="#{treeBean.treeRender}">
-                <h2>Tree Type</h2>
-                <ui:include src="showTree.xhtml"/>
-            </p:tab>
+            <p:tabView widgetVar="mytab"
+                       id="mainTab"
+                       effect="slide" effectDuration="normal">
 
-            <p:tab id="attributes" title="Attributes" rendered="#{!treeBean.treeRender}">
-                <ui:include src="add.xhtml"/>
-            </p:tab>
+                <p:tab id="tree" title="Tree" rendered="#{treeBean.treeRender}">
+                    <h2>Tree Type</h2>
+                    <ui:include src="showTree.xhtml"/>
+                </p:tab>
 
-            <p:tab id="metadata" title="Metadata" rendered="#{!treeBean.treeRender}">
-                <ui:include src="property.xhtml"/>
-            </p:tab>
+                <p:tab id="attributes" title="Attributes" rendered="#{!treeBean.treeRender}">
+                    <ui:include src="add.xhtml"/>
+                </p:tab>
 
-        </p:tabView>
-     </h:form>
+                <p:tab id="metadata" title="Metadata" rendered="#{!treeBean.treeRender}">
+                    <ui:include src="property.xhtml"/>
+                </p:tab>
+
+            </p:tabView>
+        </h:form>
         <h:form id="fullPropertyForm" prependId="false">
             <uib:modal id="fullPropertyModal" header="Full Property Info">
                 <p:panelGrid columns="2" id="fullPropertyGrid">
