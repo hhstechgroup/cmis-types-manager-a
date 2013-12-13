@@ -25,8 +25,22 @@ public class TreeBean implements Serializable {
     private TreeNode selected = null;
     private TypeDTO currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
-
     private TreeNode rootUpdate;
+    private boolean treeRender=true;
+
+    public boolean isTreeRender() {
+        return treeRender;
+    }
+
+    public void treeEnable(){
+        treeRender=!treeRender;
+    }
+
+    public void setTreeRender(boolean treeRender) {
+        this.treeRender = treeRender;
+    }
+
+
 
     ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
 
@@ -265,6 +279,7 @@ public class TreeBean implements Serializable {
         else {
             typeCreateable = null;
         }
+       treeEnable();
     }
 
     private void render(List<TypeDTO> tree, TreeNode parent) {
@@ -276,7 +291,6 @@ public class TreeBean implements Serializable {
                 return;
             }
         }
-        return;
     }
 
     public String addType(){
@@ -352,6 +366,7 @@ public class TreeBean implements Serializable {
         } else {
             mutability = null;
         }
+        //treeRender=false;
     }
 
     public void updateType() {

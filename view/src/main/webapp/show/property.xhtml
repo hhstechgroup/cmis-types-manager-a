@@ -1,17 +1,11 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+        <h:form xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="../template.xhtml"
-                xmlns:uib="http://engagepoint.com/uib">
-    <ui:define name="mainContent">
-        <uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisible}" type="notification"
-                       styleClass="ui-messages-warn">
-            <p>There is no node selected. Select any type to see its property. </p>
-        </uib:infoblock>
-
-        <h:form id="allPropertiesForm" prependId="false" rendered="#{treeBean.attributesVisible}">
+                xmlns:uib="http://engagepoint.com/uib"
+                id="allPropertiesForm" prependId="false" rendered="#{treeBean.attributesVisible}">
             <h2>Metadata for #{treeBean.currentDTO.displayName}</h2>
             <uib:dataTable id="allProperties" var="property"
                            rows="40"
@@ -40,73 +34,3 @@
             </f:facet>
 
         </h:form>
-
-        <h:form id="fullPropertyForm" prependId="false">
-            <uib:modal id="fullPropertyModal" header="Full Property Info">
-                <p:panelGrid columns="2" id="fullPropertyGrid">
-
-                    <h:outputText value="ID: "/>
-                    <h:outputText value="#{property.id}"/>
-
-                    <h:outputText value="Local Name: "/>
-                    <h:outputText value="#{property.localName}"/>
-
-                    <h:outputText value="Local Namespace: "/>
-                    <h:outputText value="#{property.localNamespace}"/>
-
-                    <h:outputText value="Display Name: "/>
-                    <h:outputText value="#{property.displayName}"/>
-
-                    <h:outputText value="Query Name: "/>
-                    <h:outputText value="#{property.queryName}"/>
-
-                    <h:outputText value="Description: "/>
-                    <h:outputText value="#{property.description}"/>
-
-                    <h:outputText value="Inherited: "/>
-                    <h:outputText value="#{property.inherited}"/>
-
-                    <h:outputText value="Required: "/>
-                    <h:outputText value="#{property.required}"/>
-
-                    <h:outputText value="Queryable: "/>
-                    <h:outputText value="#{property.queryable}"/>
-
-                    <h:outputText value="Orderable: "/>
-                    <h:outputText value="#{property.orderable}"/>
-
-                    <h:outputText value="Open Choice: "/>
-                    <h:outputText value="#{property.openChoice}"/>
-
-                    <h:outputText value="Property Type: "/>
-                    <h:outputText value="#{property.propertyType}"/>
-
-                    <h:outputText value="Cardinality: "/>
-                    <h:outputText value="#{property.cardinality}"/>
-
-                    <h:outputText value="Updatability: "/>
-                    <h:outputText value="#{property.updatability}"/>
-
-                    <h:outputText value="Choise List: "/>
-                    <h:outputText value="#{property.choiseList}"/>
-
-                    <h:outputText value="Default Value: "/>
-                    <h:outputText value="#{property.defaultValue}"/>
-
-                    <h:outputText value="Extensions: "/>
-                    <h:outputText value="#{property.extensions}"/>
-                </p:panelGrid>
-                <f:facet name="footer">
-                    <p:commandButton title="Back" mode="client" value="Back"
-                                     oncomplete="jQuery('#fullPropertyModal').modal('hide');
-                                         jQuery('#allPropertiesModal').modal('show');
-                                         return false;"/>
-                    <p:commandButton title="Cancel" mode="client" value="Cancel"
-                                     styleClass="secondary"
-                                     oncomplete="jQuery('#fullPropertyModal').modal('hide');
-                                         return false;"/>
-                </f:facet>
-            </uib:modal>
-        </h:form>
-    </ui:define>
-</ui:composition>

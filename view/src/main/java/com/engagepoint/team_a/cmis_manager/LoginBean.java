@@ -2,7 +2,6 @@ package com.engagepoint.team_a.cmis_manager;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.ConnectionException;
 import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -24,7 +23,7 @@ public class LoginBean implements Serializable {
     @NotNull(message = "Please enter url")
     private String url;
     //@NotNull(message = "Please enter port")
-   // private String port;
+    // private String port;
 
     ////
     private String chosenRepo;

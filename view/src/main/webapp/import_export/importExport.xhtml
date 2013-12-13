@@ -26,16 +26,15 @@
                             <p:fileDownload value="#{fileDownloadController.file}"/>
                         </p:commandButton>
                     </h:form>
-                    <form>
+                    <h:form>
                         <p:fileUpload
-                                label="Import!!"
                                 fileUploadListener="#{fileUploadController.handleFileUpload}"
                                 mode="advanced" dragDropSupport="false"
                                 sizeLimit="100000"
                                 allowTypes="/(\.|\/)(txt|xml|json)$/"
                                 auto="true"
                                 update=":warn"/>
-                    </form>  
+                    </h:form>
                 </uib:gridColumn>
             </uib:gridRow>
             <uib:gridRow fluid="true">
