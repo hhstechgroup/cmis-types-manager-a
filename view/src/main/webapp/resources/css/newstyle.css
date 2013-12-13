@@ -32,7 +32,7 @@
     border-radius: 3px;
 }
 
-#mainForm li.ui-state-default, #teForm.ui-widget-header .ui-state-default {
+#mainForm li.ui-state-default, #testForm.ui-widget-header .ui-state-default {
     display: block;
     border-radius: 3px 3px 0 0;
     text-decoration: none;
@@ -61,7 +61,11 @@
     clear: both;
     visibility: hidden;
 }
-
+#testForm li.ui-state-default {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4f4f4f;
+}
 #mainForm li.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {
     background: rgb(0, 117, 172);
     color: rgb(255, 255, 255);

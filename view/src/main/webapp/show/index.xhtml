@@ -18,13 +18,13 @@
         <uib:gridContainer id="testForm">
             <p:commandLink id="lbl" value="Back to tree"
                            actionListener="#{treeBean.treeEnable}"
-                           oncomplete="mytab.select(0)" update="testForm"
+                           oncomplete="mytab.select(0);" update="testForm"
                            rendered="#{!treeBean.treeRender}"/>
 
             <p:tabView id="mainTab"
                        effect="slide" effectDuration="normal" widgetVar="mytab">
 
-                <p:tab id="tree" title="Tree" rendered="#{treeBean.treeRender}">
+                <p:tab id="tree" title="Tree" titleStyle="visibility: hidden;border: 0;" rendered="#{treeBean.treeRender}">
                     <h2>Tree Type</h2>
                     <ui:include src="showTree.xhtml"/>
                 </p:tab>
