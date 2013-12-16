@@ -9,7 +9,6 @@ import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
-import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
@@ -25,11 +24,6 @@ public class CMISTypeManagerService {
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
-    private String url = "localhost";
-    private String port = "8080";
-    private String name = "";
-    private String pass = "";
-
     private Map<String, Repository> map = new HashMap<String, Repository>();
 
     private CMISTypeManagerService() {
@@ -42,42 +36,23 @@ public class CMISTypeManagerService {
         return cmisTypeManagerService;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
-
-    public String[] getRepoList(String url) throws ConnectionException {
-        this.url = url;
-//        this.port = port;
+    public String[] getRepoList(String username, String password, String url) throws ConnectionException {
 
         SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
-        parameter.put(SessionParameter.USER, name);
-        parameter.put(SessionParameter.PASSWORD, pass);
+        parameter.put(SessionParameter.USER, username);
+        parameter.put(SessionParameter.PASSWORD, password);
 
         parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-        //parameter.put(SessionParameter.REPOSITORY_ID, "A1");
         List<Repository> list;
+
         try {
             list = factory.getRepositories(parameter);
         } catch (CmisBaseException e) {
             throw new ConnectionException(e.getMessage(), e);
         }
-
 
         if (list.isEmpty()) {
             throw new ConnectionException("no such session");
@@ -85,10 +60,12 @@ public class CMISTypeManagerService {
 
         map.clear();
         List<String> array = new ArrayList<String>();
+
         for (Repository repo : list) {
             map.put(repo.getName(), repo);
             array.add(repo.getName());
         }
+
         return array.toArray(new String[0]);
     }
 
@@ -103,11 +80,11 @@ public class CMISTypeManagerService {
         session.getBinding().close();
     }
 
-    public Session getSession() {
-        return session;
+    public String getSessionID() {
+        return session.toString();
     }
 
-    public List<TypeDTO> getTypes() throws BaseException {
+    public List<TypeDTO> getAllTypes() throws BaseException {
         try {
             List<TypeDTO> typeList = new ArrayList<TypeDTO>();
             List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
@@ -123,8 +100,8 @@ public class CMISTypeManagerService {
     }
 
     /**
-     *
-     * @param newType some TypeDTO instance, that not exist in CMIS repository
+     * Create type in repository.
+     * @param newType some TypeDTO instance
      * @throws ModificationException
      * @throws ConnectionException
      * @throws BaseException
@@ -151,6 +128,14 @@ public class CMISTypeManagerService {
         return returnedTypeDTO;
     }
 
+    /**
+     * Get type from repository.
+     * @param id some TypeDTO instance ID
+     * @throws ModificationException
+     * @throws ConnectionException
+     * @throws BaseException
+     * @return new instance if created, null if not
+     */
     public ObjectType getTypeById(String id) throws BaseException {
 
         ObjectType returnedType;
@@ -168,6 +153,14 @@ public class CMISTypeManagerService {
         return returnedType;
     }
 
+    /**
+     * Update type in repository.
+     * @param updatedType some TypeDTO instance
+     * @throws ModificationException
+     * @throws ConnectionException
+     * @throws BaseException
+     * @return new instance if created, null if not
+     */
     public TypeDTO updateType(TypeDTO updatedType) throws BaseException {
         TypeDTO returnedTypeDTO;
 
@@ -226,7 +219,6 @@ public class CMISTypeManagerService {
         }
 
     }
-
 
     public TypeDTO getSecondaryTypes() throws BaseException {
             ObjectType baseSecondary = getTypeById("cmis:secondary");

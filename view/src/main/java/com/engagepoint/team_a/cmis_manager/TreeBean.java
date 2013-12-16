@@ -28,6 +28,8 @@ public class TreeBean implements Serializable {
     private TreeNode rootUpdate;
     private boolean treeRender=true;
 
+    private CMISTypeManagerService service = CMISTypeManagerService.getInstance();
+
     public boolean isTreeRender() {
         return treeRender;
     }
@@ -105,8 +107,8 @@ public class TreeBean implements Serializable {
 
     public void deleteType(){
         try {
-            CMISTypeManagerService.getInstance().deleteType(currentDTO);
-            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            service.deleteType(currentDTO);
+            List<TypeDTO> list = service.getAllTypes();
             root = new DefaultTreeNode("Root", null);
             render(list, root);
             newDTO = new TypeDTO();
@@ -208,7 +210,7 @@ public class TreeBean implements Serializable {
 
     public TreeBean() {
         try {
-            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            List<TypeDTO> list = service.getAllTypes();
             root = new DefaultTreeNode("Root", null);
             render(list, root);
 
@@ -298,8 +300,8 @@ public class TreeBean implements Serializable {
             //TODO temporary stub
             newDTO.setPropertyRows(new ArrayList<PropertyRow>());
 
-            CMISTypeManagerService.getInstance().createType(newDTO);
-            List<TypeDTO> list = CMISTypeManagerService.getInstance().getTypes();
+            service.createType(newDTO);
+            List<TypeDTO> list = service.getAllTypes();
             root = new DefaultTreeNode("Root", null);
             render(list, root);
             newDTO = new TypeDTO();
