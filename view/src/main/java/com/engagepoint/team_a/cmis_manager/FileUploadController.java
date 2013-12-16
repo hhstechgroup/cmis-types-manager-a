@@ -19,6 +19,13 @@ public class FileUploadController {
     private String msgLbl = "";
     private String show="false";
     private String fileExtension;
+    @ManagedProperty(value = "#{treeBean}")
+    private TreeBean treeBean;
+    public void setTreeBean(TreeBean treeBean) {
+        this.treeBean = treeBean;
+    }
+
+
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
 
@@ -82,6 +89,7 @@ public class FileUploadController {
         } catch (IOException e) {
             msgLbl=e.getMessage();
         }
+        treeBean.updateTree();
     }
 
     public void hideMsg() {

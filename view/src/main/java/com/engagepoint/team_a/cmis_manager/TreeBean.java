@@ -301,10 +301,7 @@ public class TreeBean implements Serializable {
             newDTO.setPropertyRows(new ArrayList<PropertyRow>());
 
             service.createType(newDTO);
-            List<TypeDTO> list = service.getAllTypes();
-            root = new DefaultTreeNode("Root", null);
-            render(list, root);
-            newDTO = new TypeDTO();
+            updateTree();
         } catch (ModificationException m) {
             errorBean.setErrorMessage(m.getMessage());
             errorBean.setErrorVisibility("true");
@@ -318,6 +315,18 @@ public class TreeBean implements Serializable {
             return "/error";
         }
         return null;
+    }
+    public void updateTree(){
+        List<TypeDTO> list = null;
+        try {
+            list = service.getAllTypes();
+            root = new DefaultTreeNode("Root", null);
+            render(list, root);
+            newDTO = new TypeDTO();
+        } catch (BaseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
     }
 
     public void passProperty(PropertyRow propertyRow){
