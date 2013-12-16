@@ -9,6 +9,16 @@
         <uib:infoblock id="warn" visible="#{fileUploadController.show}" type="notification"
                        styleClass="ui-messages-warn">
             <p>#{fileUploadController.msgLbl}</p>
+            <p:commandButton id="inf1" value="OK" styleClass="secondary small" icon="ui-icon-edit"
+                             action="#{fileUploadController.hideMsg}"
+                             update="warn"/>
+        </uib:infoblock>
+        <uib:infoblock id="ui-messages-error" visible="#{error.errorVisibility}" type="notification"
+                       styleClass="ui-messages-error">
+            <p>#{error.errorMessage}</p>
+            <p:commandButton id="inf2" value="OK" styleClass="secondary small" icon="ui-icon-edit"
+                             action="#{error.hideInfoBlock}"
+                             update="ui-messages-error"/>
         </uib:infoblock>
         <h2>Export Import Type</h2>
         
@@ -36,7 +46,7 @@
                                 sizeLimit="100000"
                                 allowTypes="/(\.|\/)(txt|xml|json)$/"
                                 auto="true"
-                                update=":warn"/>
+                                update=":warn, :ui-messages-error"/>
                     </h:form>
                 </uib:gridColumn>
             </uib:gridRow>

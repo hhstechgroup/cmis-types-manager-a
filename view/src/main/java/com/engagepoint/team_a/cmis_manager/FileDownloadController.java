@@ -1,5 +1,6 @@
 package com.engagepoint.team_a.cmis_manager;
 
+import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -8,6 +9,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,14 +20,18 @@ public class FileDownloadController {
     private StreamedContent file;
     private String type;
     private String[] types = {"xml", "json"};
+    @ManagedProperty(value = "#{treeBean}")
+    private TreeBean treeBean;
+    @ManagedProperty(value = "#{error}")
+    private ErrorBean errorBean;
+
+    public void setErrorBean(ErrorBean errorBean) {
+        this.errorBean = errorBean;
+    }
 
     public void setTreeBean(TreeBean treeBean) {
         this.treeBean = treeBean;
     }
-
-    @ManagedProperty(value = "#{treeBean}")
-
-    private TreeBean treeBean;
 
     public FileDownloadController() {
     }
@@ -38,9 +44,19 @@ public class FileDownloadController {
         String currentTypeName = treeBean.getCurrentDTO().getId();
         InputStream stream = null;
         if(type.equals("xml")){
-            stream = convertor.createXMLFromType(currentTypeName);
+            try {
+                stream = convertor.createXMLFromType(currentTypeName);
+            } catch (XMLStreamException e) {
+                errorBean.setErrorMessage(e.getMessage());
+                errorBean.setErrorVisibility("true");
+            }
         } else if(type.equals("json")){
-            stream = convertor.createJSONFromType(currentTypeName);
+            try {
+                stream = convertor.createJSONFromType(currentTypeName);
+            } catch (BaseException e) {
+                errorBean.setErrorMessage(e.getMessage());
+                errorBean.setErrorVisibility("true");
+            }
         }
         String saveName = currentTypeName + "." + type;
         file = new DefaultStreamedContent(stream, "image/jpg", saveName);
