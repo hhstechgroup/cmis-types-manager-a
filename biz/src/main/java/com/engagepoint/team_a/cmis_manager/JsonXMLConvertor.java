@@ -5,8 +5,7 @@ import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
+
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
 
