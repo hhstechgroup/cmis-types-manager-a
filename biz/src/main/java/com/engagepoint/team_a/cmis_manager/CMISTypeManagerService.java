@@ -24,6 +24,14 @@ public class CMISTypeManagerService {
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
     private Map<String, Repository> map = new HashMap<String, Repository>();
 
     private CMISTypeManagerService() {

@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean
+@ManagedBean(name = "treeBean")
 @SessionScoped
 public class TreeBean implements Serializable {
 

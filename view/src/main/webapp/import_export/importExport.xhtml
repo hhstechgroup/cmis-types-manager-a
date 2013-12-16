@@ -17,12 +17,12 @@
                 <uib:gridColumn column="3">
                     <h:form id="selectOne">
                         <p:selectOneMenu value="#{fileDownloadController.type}">
-                            <p:ajax listener="#{fileDownloadController.setURL}" update="save"/>
+                            <p:ajax update="save"/>
                             <f:selectItem itemLabel="Select One" itemValue=""/>
                             <f:selectItems value="#{fileDownloadController.types}" var="type"
                                            itemLabel="Save to #{type}" itemValue="#{type}"/>
                         </p:selectOneMenu>
-                        <p:commandButton id="save" value="Save" ajax="false"
+                        <p:commandButton id="save" value="Save" ajax="false"  actionListener="#{fileDownloadController.setDownloadedFile}"
                                          disabled="#{treeBean.currentDTO == null or fileDownloadController.type == null}">
                         <p:fileDownload value="#{fileDownloadController.file}"/>
                         </p:commandButton>

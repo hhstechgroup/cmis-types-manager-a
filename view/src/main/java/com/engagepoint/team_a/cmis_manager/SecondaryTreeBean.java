@@ -50,7 +50,8 @@ public class SecondaryTreeBean implements Serializable {
         }
     }
 
-    public TreeNode[] getSelectedNodes() {
+
+        public TreeNode[] getSelectedNodes() {
         return selectedNodes;
     }
 

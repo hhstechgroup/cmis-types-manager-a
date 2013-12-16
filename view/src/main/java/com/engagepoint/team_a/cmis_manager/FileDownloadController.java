@@ -4,9 +4,11 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+import java.io.IOException;
 import java.io.InputStream;
 
 @ManagedBean
@@ -17,11 +19,39 @@ public class FileDownloadController {
     private String type;
     private String[] types = {"xml", "json"};
 
+    public void setTreeBean(TreeBean treeBean) {
+        this.treeBean = treeBean;
+    }
+
+    @ManagedProperty(value = "#{treeBean}")
+
+    private TreeBean treeBean;
+
     public FileDownloadController() {
     }
 
     public String[] getTypes() {
         return types;
+    }
+    public void setDownloadedFile(){
+        JsonXMLConvertor convertor = new JsonXMLConvertor();
+        String currentTypeName = treeBean.getCurrentDTO().getId();
+        InputStream stream = null;
+        if(type.equals("xml")){
+            stream = convertor.createXMLFromType(currentTypeName);
+        } else if(type.equals("json")){
+            stream = convertor.createJSONFromType(currentTypeName);
+        }
+        String saveName = currentTypeName + "." + type;
+        file = new DefaultStreamedContent(stream, "image/jpg", saveName);
+        try {
+            if(stream != null){
+                stream.close();
+            }
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
     }
 
     public void setTypes(String[] types) {
@@ -44,13 +74,6 @@ public class FileDownloadController {
         this.file = file;
     }
 
-    public void setURL() {
-        file = null;
-        String url = "/WEB-INF/web." + type;
-        String saveName = "downloaded_optimus." + type;
-        InputStream stream = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream(url);
-        file = new DefaultStreamedContent(stream, "image/jpg", saveName);
-    }
 }
 
 

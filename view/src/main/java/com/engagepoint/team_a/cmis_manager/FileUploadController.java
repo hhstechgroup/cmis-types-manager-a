@@ -7,13 +7,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import java.io.*;
+import java.util.StringTokenizer;
 
 @ManagedBean
 @RequestScoped
 public class FileUploadController {
     private String msgLbl = "----";
     private String show="false";
-
+    private String fileExtension;
     public String getShow() {
         return show;
     }
@@ -33,54 +34,27 @@ public class FileUploadController {
     public void handleFileUpload(FileUploadEvent event) {
         try {
             UploadedFile file = event.getFile();
+             show="true";
+            String fileName = file.getFileName();
+            String [] array = fileName.split("\\.");
+            fileExtension = array[array.length - 1];
+            InputStream generatedFileInputStream = file.getInputstream();
+            JsonXMLConvertor convertor = new JsonXMLConvertor();
+            if(fileExtension.equals("json")){
+                convertor.createTypeFromJSON(generatedFileInputStream);
+                msgLbl = "File successfully added!";
+            } else if(fileExtension.equals("xml")) {
+                convertor.createTypeFromXML(generatedFileInputStream);
+                msgLbl = "File successfully added!";
+            }else {
+                msgLbl = "Wrong format, try again!";
+            }
 
-            msgLbl=file.getFileName()+" content type: "+file.getContentType();
-            show="true";
-            create(file.getInputstream());
         } catch (IOException e) {
             msgLbl=e.getMessage();
         }
     }
 
-    public void create(InputStream inputStream) {
-        OutputStream outputStream = null;
-        String pathStr = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/files");
-        File path = new File(pathStr);
 
-        if (!path.exists()) {
-            path.mkdir();
-        }
-        try {
-            File newFile = File.createTempFile("iadfasfd", "fasdfasdf", path);
-//            msgLbl+=newFile.getAbsolutePath();
-//            msgLbl+=" "+newFile.getPath()+"--"+newFile.getName();
-            outputStream = new FileOutputStream(newFile);
-            byte[] bytes = new byte[inputStream.available()];
-            while (inputStream.read(bytes) != -1) {
-                outputStream.write(bytes);
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (outputStream != null) {
-                try {
-                    // outputStream.flush();
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }
 
