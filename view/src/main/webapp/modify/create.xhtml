@@ -114,19 +114,19 @@
                 <p:panelGrid columns="2" id="metadataGrid">
 
                     <h:outputText value="ID: "/>
-                    <p:inputText value="#{treeBean.newProperty.id}"/>
+                    <p:inputText id="id" value="#{treeBean.newProperty.id}"/>
 
                     <h:outputText value="Local Name: "/>
-                    <p:inputText value="#{treeBean.newProperty.localName}"/>
+                    <p:inputText id="localname" value="#{treeBean.newProperty.localName}"/>
 
                     <h:outputText value="Local Namespace: "/>
-                    <p:inputText value="#{treeBean.newProperty.localNamespace}"/>
+                    <p:inputText id="localnamespace" value="#{treeBean.newProperty.localNamespace}"/>
 
                     <h:outputText value="Display Name: "/>
-                    <p:inputText value="#{treeBean.newProperty.displayName}"/>
+                    <p:inputText id="displayname" value="#{treeBean.newProperty.displayName}"/>
 
                     <h:outputText value="Query Name: "/>
-                    <p:inputText value="#{treeBean.newProperty.queryName}"/>
+                    <p:inputText id="queryname" value="#{treeBean.newProperty.queryName}"/>
 
                     <h:outputText value="Description: "/>
                     <p:inputText value="#{treeBean.newProperty.description}"/>
@@ -171,7 +171,7 @@
                                      oncomplete="jQuery('#addMetadataModal').modal('hide');
                                          return false;"
                             />
-                    <p:commandButton title="Add" mode="client" value="Add metadata"
+                    <p:commandButton id="add" title="Add" mode="client" value="Add metadata"
                                      styleClass="secondary"
                                      oncomplete="jQuery('#addMetadataModal').modal('hide');
                                  return false;" update=":mainForm"
