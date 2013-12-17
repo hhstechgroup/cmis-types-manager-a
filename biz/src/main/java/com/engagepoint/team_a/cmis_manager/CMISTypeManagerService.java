@@ -9,12 +9,17 @@ import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
+import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
 
+import javax.xml.stream.XMLStreamException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,14 +28,6 @@ import java.util.Map;
 public class CMISTypeManagerService {
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
 
     private Map<String, Repository> map = new HashMap<String, Repository>();
 
@@ -63,7 +60,7 @@ public class CMISTypeManagerService {
         }
 
         if (list.isEmpty()) {
-            throw new ConnectionException("no such session");
+            throw new ConnectionException("no connection");
         }
 
         map.clear();
@@ -78,9 +75,15 @@ public class CMISTypeManagerService {
     }
 
     public void connect(String repoName) throws ConnectionException {
+
+        if(map.isEmpty()) {
+            throw new ConnectionException("There are no available repository. Use 'getRepoList' at first");
+        }
+
         session = map.get(repoName).createSession();
+
         if (session == null) {
-            throw new ConnectionException("no such session");
+            throw new ConnectionException("no session");
         }
     }
 
@@ -92,6 +95,12 @@ public class CMISTypeManagerService {
         return session.toString();
     }
 
+    /**
+     * Get all types in repository.
+     * @throws ConnectionException
+     * @throws BaseException
+     * @return list of base types trees
+     */
     public List<TypeDTO> getAllTypes() throws BaseException {
         try {
             List<TypeDTO> typeList = new ArrayList<TypeDTO>();
@@ -186,7 +195,7 @@ public class CMISTypeManagerService {
     }
 
     /**
-     * Delete type in repository.
+     * Delete type in repository. If type have children, this method delete all children.
      * @throws ModificationException
      * @throws ConnectionException
      * @throws BaseException
@@ -229,8 +238,87 @@ public class CMISTypeManagerService {
     }
 
     public TypeDTO getSecondaryTypes() throws BaseException {
-            ObjectType baseSecondary = getTypeById("cmis:secondary");
-            TypeDTO returnedDTO = ObjectTypeReader.readWithChildren(baseSecondary);
-            return returnedDTO;
+        ObjectType baseSecondary = getTypeById("cmis:secondary");
+        TypeDTO returnedDTO = ObjectTypeReader.readWithChildren(baseSecondary);
+        return returnedDTO;
     }
+
+    /**
+     * Create
+     */
+    public void createMultiply() throws BaseException{
+
+        if(query == null || query.isEmpty()) {
+            throw new BaseException("No data");
+        }
+
+        HashMap<String, String> resultMap = new HashMap<String, String>();
+
+        TypeDefinition returnedTypeDefinition;
+
+        for(TypeDefinition type : query) {
+
+            try {
+                returnedTypeDefinition = session.createType(type);
+                if (returnedTypeDefinition != null) {
+                    resultMap.put(returnedTypeDefinition.getDisplayName(), "in repo");
+                } else {
+                    resultMap.put(type.getDisplayName(), "can not create");
+                }
+
+            } catch (CmisBaseException ex) {
+                resultMap.put(type.getDisplayName(), "can not create");
+            }
+
+        }
+
+    }
+
+    private ArrayList<TypeDefinition> query;
+
+    public List<FileStatusReport> readAndValidate(HashMap<String, InputStream> streamHashMap) {
+
+        if(streamHashMap == null) {
+            throw new NullPointerException("Input value is null");
+        }
+
+        ArrayList<FileStatusReport> fileStatusList = new ArrayList<FileStatusReport>();
+        HashMap<String, TypeDefinition> okTypeMap = new HashMap<String, TypeDefinition>();
+
+        for (String fileName : streamHashMap.keySet()) {
+
+            InputStream stream = streamHashMap.get(fileName);
+
+            if(fileName.endsWith( SupportedFileFormat.XML.toString() )) {
+                try {
+                    //stream.close() in this method
+                    TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
+
+                    okTypeMap.put(fileName, type);
+                } catch (XMLStreamException e) {
+                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
+                }
+            } else if(fileName.endsWith( SupportedFileFormat.JSON.toString() )) {
+                try {
+                    //stream.close() in this method
+                    TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
+
+                    okTypeMap.put(fileName, type);
+                } catch (IOException e) {
+                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
+                } catch (JSONParseException e) {
+                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
+                }
+            } else {
+                fileStatusList.add(new FileStatusReport(fileName, "Wrong file format."));
+            }
+
+        }
+
+        query = DataSorter.validateAndSort(okTypeMap, fileStatusList);
+
+        return fileStatusList;
+    }
+
+
 }

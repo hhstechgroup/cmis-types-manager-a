@@ -1,6 +1,7 @@
 package com.engagepoint.team_a.cmis_manager;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
+import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -40,32 +41,35 @@ public class FileDownloadController {
         return types;
     }
     public void setDownloadedFile(){
-        JsonXMLConvertor convertor = new JsonXMLConvertor();
-        String currentTypeName = treeBean.getCurrentDTO().getId();
+
+        TypeDTO currentType = treeBean.getCurrentDTO();
         InputStream stream = null;
-        if(type.equals("xml")){
+
+       if(type.equals("xml")){
             try {
-                stream = convertor.createXMLFromType(currentTypeName);
-            } catch (XMLStreamException e) {
+                stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.XML);
+            } catch (BaseException e) {
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
         } else if(type.equals("json")){
             try {
-                stream = convertor.createJSONFromType(currentTypeName);
+                stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.JSON);
             } catch (BaseException e) {
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
         }
-        String saveName = currentTypeName + "." + type;
+
+        String saveName = currentType.getId() + "." + type;
         file = new DefaultStreamedContent(stream, "image/jpg", saveName);
+
         try {
             if(stream != null){
                 stream.close();
             }
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace(); //TODO
             }
 
     }

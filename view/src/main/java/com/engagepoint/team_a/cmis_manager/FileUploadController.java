@@ -9,18 +9,26 @@ import org.primefaces.model.UploadedFile;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class FileUploadController {
     private String msgLbl = "";
     private String show="false";
     private String fileExtension;
     @ManagedProperty(value = "#{treeBean}")
     private TreeBean treeBean;
+    private HashMap<String, InputStream> fileMap = new HashMap<String, InputStream>();
+    private List<FileStatusReport> fileStatus = new ArrayList<FileStatusReport>();
+
+    public List<FileStatusReport> getFileStatus() {
+        return fileStatus;
+    }
+
     public void setTreeBean(TreeBean treeBean) {
         this.treeBean = treeBean;
     }
@@ -49,47 +57,30 @@ public class FileUploadController {
         this.msgLbl = msgLbl;
     }
 
-    public void handleFileUpload(FileUploadEvent event) {
+    public void processFiles() {
+        fileStatus = CMISTypeManagerService.getInstance().readAndValidate(fileMap);
+
         try {
+            CMISTypeManagerService.getInstance().createMultiply();
+        } catch (BaseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void handleFileUpload(FileUploadEvent event) {
+
             UploadedFile file = event.getFile();
              show="true";
             String fileName = file.getFileName();
-            String [] array = fileName.split("\\.");
-            fileExtension = array[array.length - 1];
-            InputStream generatedFileInputStream = file.getInputstream();
-            JsonXMLConvertor convertor = new JsonXMLConvertor();
-            if(fileExtension.equals("json")){
-                try {
-                    convertor.createTypeFromJSON(generatedFileInputStream);
-                    msgLbl = "File successfully added!";
-                } catch (JSONParseException e) {
-                    hideMsg();
-                    errorBean.setErrorMessage(e.getMessage());
-                    errorBean.setErrorVisibility("true");
-                } catch (BaseException e) {
-                    hideMsg();
-                    errorBean.setErrorMessage(e.getMessage());
-                    errorBean.setErrorVisibility("true");
-                }
-
-            } else if(fileExtension.equals("xml")) {
-                try {
-                    convertor.createTypeFromXML(generatedFileInputStream);
-                    msgLbl = "File successfully added!";
-                } catch (BaseException e) {
-                    hideMsg();
-                    errorBean.setErrorMessage(e.getMessage());
-                    errorBean.setErrorVisibility("true");
-                }
-
-            }else {
-                msgLbl = "Wrong format, try again!";
+            InputStream generatedFileInputStream = null;
+            try {
+                generatedFileInputStream = file.getInputstream();
+            } catch (IOException e) {
+                e.printStackTrace();  //TODO
             }
-
-        } catch (IOException e) {
-            msgLbl=e.getMessage();
-        }
-        treeBean.updateTree();
+            fileMap.put(fileName, generatedFileInputStream);
     }
 
     public void hideMsg() {

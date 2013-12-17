@@ -14,6 +14,7 @@ import java.io.Serializable;
 @ManagedBean(name = "login")
 @SessionScoped
 public class LoginBean implements Serializable {
+
     private String username;
     private String password;
     private String sessionID;
@@ -45,10 +46,6 @@ public class LoginBean implements Serializable {
         return sessionID;
     }
 
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -77,7 +74,7 @@ public class LoginBean implements Serializable {
         String page;
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
         try{
-            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("WEB-INF/o.txt");
+
             service.connect(chosenRepo);
             sessionID = service.getSessionID();
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -114,7 +111,6 @@ public class LoginBean implements Serializable {
         username = null;
         password = null;
         url = null;
-//        port = null;
         sessionID=null;
 
         availabeReposList = null;

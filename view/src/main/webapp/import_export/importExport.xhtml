@@ -36,6 +36,7 @@
                                          disabled="#{treeBean.currentDTO == null or fileDownloadController.type == null}">
                         <p:fileDownload value="#{fileDownloadController.file}"/>
                         </p:commandButton>
+
                     </h:form>
                     <h:form>
                         <p:fileUpload
@@ -48,6 +49,7 @@
                                 auto="true"
                                 update=":warn, :ui-messages-error"/>
                     </h:form>
+                    <p:commandButton id="push" value="Push" actionListener="#{fileUploadController.processFiles}"/>
                 </uib:gridColumn>
             </uib:gridRow>
             <uib:gridRow fluid="true">
