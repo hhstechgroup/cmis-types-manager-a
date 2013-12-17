@@ -17,6 +17,7 @@ import java.util.*;
 @ManagedBean
 @ViewScoped
 public class FileUploadController {
+
     private String msgLbl = "";
     private String show="false";
     private String fileExtension;
@@ -66,6 +67,8 @@ public class FileUploadController {
             e.printStackTrace();
         }
 
+        fileMap.clear();
+        fileStatus.clear();
     }
 
 
