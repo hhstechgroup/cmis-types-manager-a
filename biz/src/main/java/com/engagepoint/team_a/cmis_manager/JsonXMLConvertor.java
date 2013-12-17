@@ -6,6 +6,7 @@ import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
+import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 
 public class JsonXMLConvertor {
+    public static final Logger LOG = Logger.getLogger(JsonXMLConvertor.class);
 
     public static TypeDefinition createTypeFromXML(InputStream fileStream) throws XMLStreamException {
         TypeDefinition type;
@@ -25,7 +27,7 @@ public class JsonXMLConvertor {
             try {
                 fileStream.close();
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage());
             }
         }
         return type;
@@ -40,7 +42,7 @@ public class JsonXMLConvertor {
             try {
                 fileStream.close();
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage());
             }
         }
 
@@ -60,7 +62,7 @@ public class JsonXMLConvertor {
                     outputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage());
             }
         }
 
@@ -80,7 +82,7 @@ public class JsonXMLConvertor {
                     outputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage());
             }
         }
 

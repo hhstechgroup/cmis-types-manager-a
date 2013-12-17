@@ -324,7 +324,8 @@ public class TreeBean implements Serializable {
             render(list, root);
             newDTO = new TypeDTO();
         } catch (BaseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            errorBean.setErrorMessage(e.getMessage());
+            errorBean.setErrorVisibility("true");
         }
 
     }

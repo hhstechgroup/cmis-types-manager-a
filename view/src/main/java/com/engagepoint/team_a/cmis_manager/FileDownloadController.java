@@ -2,6 +2,7 @@ package com.engagepoint.team_a.cmis_manager;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
+import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -25,6 +26,7 @@ public class FileDownloadController {
     private TreeBean treeBean;
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
+    public static final Logger LOG = Logger.getLogger(FileDownloadController.class);
 
     public void setErrorBean(ErrorBean errorBean) {
         this.errorBean = errorBean;
@@ -69,8 +71,8 @@ public class FileDownloadController {
                 stream.close();
             }
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
-            }
+            LOG.error(e.getMessage());
+        }
 
     }
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
+import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import javax.faces.bean.ManagedBean;
@@ -25,6 +26,7 @@ public class FileUploadController {
     private TreeBean treeBean;
     private HashMap<String, InputStream> fileMap = new HashMap<String, InputStream>();
     private List<FileStatusReport> fileStatus = new ArrayList<FileStatusReport>();
+    public static final Logger LOG = Logger.getLogger(FileDownloadController.class);
 
     public List<FileStatusReport> getFileStatus() {
         return fileStatus;
@@ -64,7 +66,7 @@ public class FileUploadController {
         try {
             CMISTypeManagerService.getInstance().createMultiply();
         } catch (BaseException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage());
         }
 
         msgLbl="Types created";
@@ -84,7 +86,7 @@ public class FileUploadController {
             try {
                 generatedFileInputStream = file.getInputstream();
             } catch (IOException e) {
-                e.printStackTrace();  //TODO
+                LOG.error(e.getMessage());
             }
             fileMap.put(fileName, generatedFileInputStream);
     }
