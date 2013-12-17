@@ -52,7 +52,7 @@ public class TreeBean implements Serializable {
     private PropertyRow propertyRow1 = new PropertyRow();
     private PropertyRow newProperty = new PropertyRow();
     private String errorMessage;
-    private String errorVisible;
+    private String errorVisible="false";
     private boolean disableDeleteBtn = true;
     private String errorDialogMsg;
 

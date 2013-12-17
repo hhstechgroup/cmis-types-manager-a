@@ -61,13 +61,12 @@
                                 sizeLimit="100000"
                                 allowTypes="/(\.|\/)(txt|xml|json)$/"
                                 auto="true"
-                                update=":warn, :ui-messages-error"
-                                />
+                                update=":warn, :ui-messages-error"/>
                     </h:form>
                 </uib:gridColumn>
 
                 <uib:gridColumn column="3">
-                    <p:commandButton id="push" value="Push"/>
+                    <p:commandButton id="push" value="Push" action="#{fileUploadController.processFiles}" update=":warn" />
                 </uib:gridColumn>
 
             </uib:gridRow>
@@ -91,6 +90,8 @@
                 </uib:gridColumn>
             </uib:gridRow>
         </uib:gridContainer>
+
+
 
     </ui:define>
 </ui:composition>

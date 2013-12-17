@@ -67,6 +67,7 @@ public class FileUploadController {
             e.printStackTrace();
         }
 
+        msgLbl="Types created";
         treeBean.updateTree();
         fileMap.clear();
         fileStatus.clear();
@@ -78,6 +79,7 @@ public class FileUploadController {
             UploadedFile file = event.getFile();
              show="true";
             String fileName = file.getFileName();
+            msgLbl=file.getFileName()+" ";
             InputStream generatedFileInputStream = null;
             try {
                 generatedFileInputStream = file.getInputstream();
