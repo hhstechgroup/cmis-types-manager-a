@@ -272,6 +272,7 @@ public class CMISTypeManagerService {
 
         }
 
+        query = null;
     }
 
     private ArrayList<TypeDefinition> query;
@@ -319,6 +320,5 @@ public class CMISTypeManagerService {
 
         return fileStatusList;
     }
-
 
 }
