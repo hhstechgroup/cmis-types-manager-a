@@ -67,6 +67,7 @@ public class FileUploadController {
             e.printStackTrace();
         }
 
+        treeBean.updateTree();
         fileMap.clear();
         fileStatus.clear();
     }
