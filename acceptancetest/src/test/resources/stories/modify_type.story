@@ -24,11 +24,12 @@ And clicks on element by './/*[@id='mainForm:form:treeMultiple:0']/span/span[3]'
 And press 'Next' button
 
 And press 'Add metadata' button
-And the user fills 'j_idt160' field with 'TestMetadata'
-And the user fills 'j_idt162' field with 'just for testing'
-And the user fills 'j_idt164' field with 'testMeta'
-And the user fills 'j_idt166' field with 'oneMeta'
-And the user fills 'j_idt168' field with 'twoMeta'
+And the user fills 'id' field with 'TestMetadata'
+And the user fills 'localname' field with 'just for testing'
+And the user fills 'localnamespace' field with 'testMeta'
+And the user fills 'displayname' field with 'oneMeta'
+And the user fills 'queryname' field with 'twoMeta'
+And clicks on element with id/name/className 'add'
 And press 'Create' button
 
 Scenario: user updates type

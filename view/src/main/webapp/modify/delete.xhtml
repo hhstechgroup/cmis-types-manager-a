@@ -26,7 +26,7 @@
                 <p:commandButton title="Cancel" id="cancelButton" mode="client" value="Cancel"
                                  styleClass="secondary"
                                  oncomplete="jQuery('#dialogDelete').modal('hide');return false;"/>
-                <p:commandButton title="Delete" mode="client" value="Continue"
+                <p:commandButton id='dltbtn' title="Delete" mode="client" value="Continue"
                                  rendered="#{treeBean.disableDeleteBtn}"
                                  oncomplete="jQuery('#dialogDelete').modal('hide');return false;"
                                  actionListener="#{treeBean.deleteType}" update=":treeForm"/>

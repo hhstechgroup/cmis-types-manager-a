@@ -24,34 +24,54 @@
         
         <uib:gridContainer>
             <uib:gridRow>
-                <uib:gridColumn column="3">
-                    <h:form id="selectOne">
-                        <p:selectOneMenu value="#{fileDownloadController.type}">
-                            <p:ajax update="save"/>
-                            <f:selectItem itemLabel="Select One" itemValue=""/>
-                            <f:selectItems value="#{fileDownloadController.types}" var="type"
-                                           itemLabel="Save to #{type}" itemValue="#{type}"/>
-                        </p:selectOneMenu>
-                        <p:commandButton id="save" value="Save" ajax="false"  actionListener="#{fileDownloadController.setDownloadedFile}"
-                                         disabled="#{treeBean.currentDTO == null or fileDownloadController.type == null}">
-                        <p:fileDownload value="#{fileDownloadController.file}"/>
-                        </p:commandButton>
 
+                <uib:gridColumn column="6">
+                    <h:form id="selectOne">
+                        <uib:gridContainer>
+                            <uib:gridRow>
+                                <uib:gridColumn column="6">
+                                    <p:selectOneMenu value="#{fileDownloadController.type}">
+                                        <p:ajax update="save"/>
+                                        <f:selectItem itemLabel="Select One" itemValue=""/>
+                                        <f:selectItems value="#{fileDownloadController.types}" var="type"
+                                                       itemLabel="Save to #{type}" itemValue="#{type}"/>
+                                    </p:selectOneMenu>
+                                </uib:gridColumn>
+                                <uib:gridColumn column="2">
+                                    <p:commandButton id="save" value="Export" ajax="false"
+                                                     actionListener="#{fileDownloadController.setDownloadedFile}"
+                                                     disabled="#{treeBean.currentDTO == null or fileDownloadController.type == null}">
+                                        <p:fileDownload value="#{fileDownloadController.file}"/>
+                                    </p:commandButton>
+                                </uib:gridColumn>
+                            </uib:gridRow>
+                        </uib:gridContainer>
                     </h:form>
-                    <h:form>
+
+                </uib:gridColumn>
+                <uib:gridColumn column="3">
+                    <h:form id="form">
+
                         <p:fileUpload
+                                id = "import"
                                 fileUploadListener="#{fileUploadController.handleFileUpload}"
                                 mode="advanced" dragDropSupport="false"
-                                label="import"
+                                label="Import"
                                 multiple="true"
                                 sizeLimit="100000"
                                 allowTypes="/(\.|\/)(txt|xml|json)$/"
                                 auto="true"
-                                update=":warn, :ui-messages-error"/>
+                                update=":warn, :ui-messages-error"
+                                />
                     </h:form>
-                    <p:commandButton id="push" value="Push" actionListener="#{fileUploadController.processFiles}"/>
                 </uib:gridColumn>
+
+                <uib:gridColumn column="3">
+                    <p:commandButton id="push" value="Push"/>
+                </uib:gridColumn>
+
             </uib:gridRow>
+
             <uib:gridRow fluid="true">
                 <uib:gridColumn column="12">
                     <h:form>
@@ -71,5 +91,6 @@
                 </uib:gridColumn>
             </uib:gridRow>
         </uib:gridContainer>
+
     </ui:define>
 </ui:composition>
