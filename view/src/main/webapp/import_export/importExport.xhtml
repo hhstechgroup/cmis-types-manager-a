@@ -66,14 +66,14 @@
                 </uib:gridColumn>
 
                 <uib:gridColumn column="3">
-                    <p:commandButton id="push" value="Push" action="#{fileUploadController.processFiles}" update=":warn" />
+                    <p:commandButton id="push" value="Push" action="#{fileUploadController.processFiles}" update=":warn, :treeForm" />
                 </uib:gridColumn>
 
             </uib:gridRow>
 
             <uib:gridRow fluid="true">
                 <uib:gridColumn column="12">
-                    <h:form>
+                    <h:form id="treeForm">
                         <p:tree id="tree"
                                 value="#{treeBean.root}"
                                 var="node"

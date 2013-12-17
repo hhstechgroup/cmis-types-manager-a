@@ -26,7 +26,7 @@ public class FileDownloadController {
 
     private StreamedContent file;
     private String type;
-    private String[] types = {"xml", "json", "Branch XML", "Branch JSON"};
+    private String[] types = {"xml", "json", "Tree XML", "Tree JSON"};
     @ManagedProperty(value = "#{treeBean}")
     private TreeBean treeBean;
     @ManagedProperty(value = "#{error}")
@@ -134,7 +134,7 @@ public class FileDownloadController {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
             try {
-                out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName()));
+                out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName()+ ".xml"));
                 out.write(((ByteArrayOutputStream) stream).toByteArray());
                 out.closeEntry();
             } catch (IOException e) {
@@ -191,7 +191,7 @@ public class FileDownloadController {
             }
 
             try {
-                out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName()));
+                out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName()+".json"));
                 out.write(((ByteArrayOutputStream) stream).toByteArray());
                 out.closeEntry();
             } catch (IOException e) {
