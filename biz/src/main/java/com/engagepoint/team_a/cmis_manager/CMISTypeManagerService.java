@@ -290,7 +290,7 @@ public class CMISTypeManagerService {
 
             InputStream stream = streamHashMap.get(fileName);
 
-            if(fileName.endsWith( ".xml" )) {
+            if(fileName.endsWith(".xml")) {
                 try {
                     //stream.close() in this method
                     TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
@@ -299,7 +299,7 @@ public class CMISTypeManagerService {
                 } catch (XMLStreamException e) {
                     fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 }
-            } else if(fileName.endsWith( ".json" )) {
+            } else if(fileName.endsWith(".json")) {
                 try {
                     //stream.close() in this method
                     TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
