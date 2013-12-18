@@ -4,6 +4,7 @@ import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
 import com.engagepoint.team_a.cmis_manager.wrappers.TypeDefinitionWrapper;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
+import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
@@ -23,6 +24,8 @@ import java.util.zip.ZipOutputStream;
 @ManagedBean
 @SessionScoped
 public class FileDownloadController {
+
+    public static final Logger LOG = Logger.getLogger(FileDownloadController.class);
 
     private StreamedContent file;
     private String type;
@@ -65,10 +68,10 @@ public class FileDownloadController {
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
-        } else if(type.equals("Branch XML")){
+        } else if(type.equals("Tree XML")){
             getTypeWithAllChildrenXML();
 
-       } else if (type.equals("Branch JSON")){
+       } else if (type.equals("Tree JSON")){
            getTypeWithAllChildrenJSON();
        }
 
@@ -82,7 +85,7 @@ public class FileDownloadController {
                 stream.close();
             }
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+              LOG.error(e.getMessage(), e);
             }
 
     }
@@ -104,6 +107,7 @@ public class FileDownloadController {
 
 
     public void getTypeWithAllChildrenXML(){
+
         listOfChildren = new ArrayList<TypeDTO>();
         TreeNode selected = treeBean.getSelected();
         listOfChildren.add((TypeDTO) selected.getData());
@@ -122,7 +126,7 @@ public class FileDownloadController {
         try {
             out = new ZipOutputStream(new FileOutputStream(new File(path)));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOG.error(e.getMessage(), e);
         }
 
         for (int i = 0; i < listOfDefinitions.size(); i++) {
@@ -131,27 +135,27 @@ public class FileDownloadController {
             try {
                 TypeUtils.writeToXML(listOfDefinitions.get(i), stream);
             } catch (XMLStreamException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOG.error(e.getMessage(), e);
             }
             try {
                 out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName()+ ".xml"));
                 out.write(((ByteArrayOutputStream) stream).toByteArray());
                 out.closeEntry();
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOG.error(e.getMessage(), e);
             }
         }
         try {
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOG.error(e.getMessage(), e);
         }
 
         InputStream stream = null;
         try {
             stream = new FileInputStream(path);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOG.error(e.getMessage(), e);
         }
         file = new DefaultStreamedContent(stream, "image/jpg", "types_in_xml.zip");
 
@@ -177,7 +181,7 @@ public class FileDownloadController {
         try {
             out = new ZipOutputStream(new FileOutputStream(new File(path)));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOG.error(e.getMessage(), e);
         }
 
         for (int i = 0; i < listOfDefinitions.size(); i++) {
@@ -187,7 +191,7 @@ public class FileDownloadController {
             try {
                 TypeUtils.writeToJSON(listOfDefinitions.get(i), stream);
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOG.error(e.getMessage(), e);
             }
 
             try {
@@ -195,20 +199,20 @@ public class FileDownloadController {
                 out.write(((ByteArrayOutputStream) stream).toByteArray());
                 out.closeEntry();
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOG.error(e.getMessage(), e);
             }
         }
         try {
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOG.error(e.getMessage(), e);
         }
 
         InputStream stream = null;
         try {
             stream = new FileInputStream(path);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOG.error(e.getMessage(), e);
         }
         file = new DefaultStreamedContent(stream, "image/jpg", "types_in_json.zip");
 

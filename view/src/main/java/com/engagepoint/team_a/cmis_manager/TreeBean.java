@@ -68,7 +68,7 @@ public class TreeBean implements Serializable {
 
     @ManagedProperty("#{error}")
     private ErrorBean errorBean;
-    public static final Logger LOG=Logger.getLogger(TreeBean.class);
+    public static final Logger LOG = Logger.getLogger(TreeBean.class);
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;
 

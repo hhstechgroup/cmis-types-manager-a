@@ -14,7 +14,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 
+import org.apache.log4j.Logger;
+
 public class JsonXMLConvertor {
+
+    public static final Logger LOG = Logger.getLogger(JsonXMLConvertor.class);
 
     public static TypeDefinition createTypeFromXML(InputStream fileStream) throws XMLStreamException {
         TypeDefinition type;
@@ -25,7 +29,7 @@ public class JsonXMLConvertor {
             try {
                 fileStream.close();
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage(), e);
             }
         }
         return type;
@@ -40,7 +44,7 @@ public class JsonXMLConvertor {
             try {
                 fileStream.close();
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage(), e);
             }
         }
 
@@ -60,7 +64,7 @@ public class JsonXMLConvertor {
                     outputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage(), e);
             }
         }
 
@@ -80,7 +84,7 @@ public class JsonXMLConvertor {
                     outputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOG.error(e.getMessage(), e);
             }
         }
 
@@ -90,7 +94,7 @@ public class JsonXMLConvertor {
     public static InputStream createFileFromType(TypeDTO typeDTO, SupportedFileFormat supportedFileFormat) throws BaseException {
 
         TypeDefinition typeDefinition = new TypeDefinitionWrapper(typeDTO);
-        InputStream inputStream = null;
+        InputStream inputStream;
 
         switch (supportedFileFormat) {
             case JSON:
