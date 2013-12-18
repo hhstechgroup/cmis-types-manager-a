@@ -66,7 +66,7 @@ public class FileUploadController {
         try {
             CMISTypeManagerService.getInstance().createMultiply();
         } catch (BaseException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
 
         msgLbl="Types created";
@@ -86,7 +86,7 @@ public class FileUploadController {
             try {
                 generatedFileInputStream = file.getInputstream();
             } catch (IOException e) {
-                LOG.error(e.getMessage());
+                LOG.error(e.getMessage(), e);
             }
             fileMap.put(fileName, generatedFileInputStream);
     }
