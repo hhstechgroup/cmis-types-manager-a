@@ -6,7 +6,7 @@ And press 'Get repo list' button
 And press 'Login' button
 And clicks on element by './/*[@id='leftMenuForm:importexport']/a'
 And the user uploads the fileName/filePath 'src/test/resources/files/xmlns.xml' to field with 'form:import_input'
-Then the text 'File successfully added!' should be in the page source
+And clicks on element by './/*[@id='push']'
 
 When the user opens the default page
 And clicks on element by './/*[@id='mainTab:treeForm:tree:2']/span/span[1]'

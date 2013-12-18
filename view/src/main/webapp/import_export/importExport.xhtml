@@ -34,7 +34,7 @@
                                         <p:ajax update="save"/>
                                         <f:selectItem itemLabel="Select One" itemValue=""/>
                                         <f:selectItems value="#{fileDownloadController.types}" var="type"
-                                                       itemLabel="Save to #{type}" itemValue="#{type}"/>
+                                                        itemValue="#{type}"/>
                                     </p:selectOneMenu>
                                 </uib:gridColumn>
                                 <uib:gridColumn column="2">
@@ -66,14 +66,14 @@
                 </uib:gridColumn>
 
                 <uib:gridColumn column="3">
-                    <p:commandButton id="push" value="Push" action="#{fileUploadController.processFiles}" update=":warn" />
+                    <p:commandButton id="push" value="Push" action="#{fileUploadController.processFiles}" update=":warn, :treeForm" />
                 </uib:gridColumn>
 
             </uib:gridRow>
 
             <uib:gridRow fluid="true">
                 <uib:gridColumn column="12">
-                    <h:form>
+                    <h:form id="treeForm">
                         <p:tree id="tree"
                                 value="#{treeBean.root}"
                                 var="node"
