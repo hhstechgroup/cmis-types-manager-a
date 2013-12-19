@@ -13,7 +13,7 @@
     </render-kit>
     <factory>
         <exception-handler-factory>
-            com.engagepoint.team_a.cmis_manager.ExceptionHandlerFactory
+            com.engagepoint.teama.cmismanager.ExceptionHandlerFactory
         </exception-handler-factory>
     </factory>
 </faces-config>
