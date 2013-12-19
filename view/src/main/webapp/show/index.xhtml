@@ -16,6 +16,7 @@
         </uib:infoblock>
 
         <uib:gridContainer id="testForm">
+
             <p:commandLink id="lbl" value="Back to tree"
                            actionListener="#{treeBean.treeEnable}"
                            oncomplete="mytab.select(0);" update="testForm"
@@ -39,6 +40,7 @@
 
             </p:tabView>
         </uib:gridContainer>
+
         <h:form id="fullPropertyForm" prependId="false">
             <uib:modal id="fullPropertyModal" header="Full Property Info">
                 <p:panelGrid columns="2" id="fullPropertyGrid">

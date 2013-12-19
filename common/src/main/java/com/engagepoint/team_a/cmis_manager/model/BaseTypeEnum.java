@@ -24,7 +24,7 @@ public enum BaseTypeEnum {
         return baseTypeId;
     }
 
-    public static BaseTypeEnum fromValue(String value) throws IllegalArgumentException {
+    public static BaseTypeEnum fromValue(String value) {
         for (BaseTypeEnum baseTypeEnum : BaseTypeEnum.values()) {
             if (baseTypeEnum.getValue().equals(value)) {
                 return baseTypeEnum;

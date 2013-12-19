@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -20,69 +21,83 @@ import java.util.List;
 @SessionScoped
 public class TreeBean implements Serializable {
 
+    public static final Logger LOG = Logger.getLogger(TreeBean.class);
     private static final long serialVersionUID = 2023524722101427935L;
     private TreeNode root;
     private TreeNode selected = null;
     private TypeDTO currentDTO = null;
     private TypeDTO newDTO = new TypeDTO();
     private TreeNode rootUpdate;
-    private boolean treeRender=true;
-
+    private boolean treeRender = true;
+    private List<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
     private CMISTypeManagerService service = CMISTypeManagerService.getInstance();
+    private String mutability = null;
+    private PropertyRow propertyRow1 = new PropertyRow();
+    private PropertyRow newProperty = new PropertyRow();
+    private String errorMessage;
+    private String errorVisible = "false";
+    private boolean disableDeleteBtn = true;
+    private String errorDialogMsg;
+    private String typeCreatable = null;
+    @ManagedProperty("#{error}")
+    private ErrorBean errorBean;
+    private boolean attributesVisible = false;
+    private boolean metadataVisible = false;
+    private boolean disableBtn = true;
+    private final String TRUE = "true";
+    private final String ROOT = "Root";
+
+    public TreeBean() {
+        try {
+            List<TypeDTO> list = service.getAllTypes();
+            root = new DefaultTreeNode(ROOT, null);
+            render(list, root);
+            rootUpdate = new DefaultTreeNode(ROOT, null);
+            render(list, rootUpdate);
+        } catch (ModificationException m) {
+            errorBean.setErrorMessage(m.getMessage());
+            errorBean.setErrorVisibility(TRUE);
+        } catch (ConnectionException tp) {
+            errorBean.setErrorMessage(tp.getMessage());
+            errorBean.setErrorVisibility(TRUE);
+        } catch (BaseException t) {
+            errorBean.setErrorMessage(t.getMessage());
+            errorBean.setErrorVisibility(TRUE);
+        }
+    }
 
     public boolean isTreeRender() {
         return treeRender;
-    }
-
-    public void treeEnable(){
-        treeRender=!treeRender;
     }
 
     public void setTreeRender(boolean treeRender) {
         this.treeRender = treeRender;
     }
 
-
-
-    ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
-
-    //
-    private String mutability = null;
-
-    private PropertyRow propertyRow1 = new PropertyRow();
-    private PropertyRow newProperty = new PropertyRow();
-    private String errorMessage;
-    private String errorVisible="false";
-    private boolean disableDeleteBtn = true;
-    private String errorDialogMsg;
-
-    public String getTypeCreateable() {
-        return typeCreateable;
+    public void treeEnable() {
+        treeRender = !treeRender;
     }
 
-    public void setTypeCreateable(String typeCreateable) {
-        this.typeCreateable = typeCreateable;
+    public String getTypeCreatable() {
+        return typeCreatable;
     }
 
-    private String typeCreateable = null;
-
-    @ManagedProperty("#{error}")
-    private ErrorBean errorBean;
-    public static final Logger LOG = Logger.getLogger(TreeBean.class);
-    private boolean attributesVisible = false;
-    private boolean metadataVisible = false;
+    public void setTypeCreatable(String typeCreatable) {
+        this.typeCreatable = typeCreatable;
+    }
 
     public void setErrorBean(ErrorBean errorBean) {
         this.errorBean = errorBean;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public String getErrorVisible() {
+        return String.valueOf(errorVisible);
     }
 
-    public String getErrorVisible() {
-        return String.valueOf(currentDTO == null);
+    public void setErrorVisible(String errorVisible) {
+        this.errorVisible = errorVisible;
     }
+
     public void deleteConditions() {
         if (currentDTO != null) {
             if (currentDTO.isMutabilityCanDelete()) {
@@ -94,7 +109,7 @@ public class TreeBean implements Serializable {
                     disableDeleteBtn = true;
                 }
             } else {
-                errorDialogMsg = "Can't delete "+currentDTO.getDisplayName()+" type!!";
+                errorDialogMsg = "Can't delete " + currentDTO.getDisplayName() + " type!!";
                 disableDeleteBtn = false;
             }
 
@@ -105,16 +120,16 @@ public class TreeBean implements Serializable {
 
     }
 
-    public void deleteType(){
+    public void deleteType() {
         try {
             service.deleteType(currentDTO);
             List<TypeDTO> list = service.getAllTypes();
-            root = new DefaultTreeNode("Root", null);
+            root = new DefaultTreeNode(ROOT, null);
             render(list, root);
             newDTO = new TypeDTO();
         } catch (BaseException t) {
             errorBean.setErrorMessage(t.getMessage());
-            errorBean.setErrorVisibility("true");
+            errorBean.setErrorVisibility(TRUE);
         }
     }
 
@@ -130,10 +145,6 @@ public class TreeBean implements Serializable {
         return disableBtn;
     }
 
-    public void setDisableBtn(boolean disableBtn) {
-        this.disableBtn = disableBtn;
-    }
-
     public String getErrorDialogMsg() {
         return errorDialogMsg;
     }
@@ -143,12 +154,12 @@ public class TreeBean implements Serializable {
     }
 
     public String getErrorMessage() {
-        return errorMessage;}
-
-    public void setErrorVisible(String errorVisible) {
-        this.errorVisible = errorVisible;
+        return errorMessage;
     }
 
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 
     public PropertyRow getNewProperty() {
         return newProperty;
@@ -166,16 +177,18 @@ public class TreeBean implements Serializable {
         this.propertyRow1 = propertyRow1;
     }
 
-    public ArrayList<PropertyRow> getPropertyRows() {
+    public List<PropertyRow> getPropertyRows() {
         return propertyRows;
     }
 
-    public void setPropertyRows(ArrayList<PropertyRow> propertyRows) {
+    public void setPropertyRows(List<PropertyRow> propertyRows) {
         this.propertyRows = propertyRows;
     }
 
     public boolean isAttributesVisible() {
-        return currentDTO!=null;
+        //todo bad for sonar - but need for logic
+        attributesVisible=currentDTO!=null;
+        return attributesVisible;
     }
 
     public void setAttributesVisible(boolean attributesVisible) {
@@ -198,34 +211,12 @@ public class TreeBean implements Serializable {
         this.newDTO = newDTO;
     }
 
-    private boolean disableBtn = true;
-
     public TypeDTO getCurrentDTO() {
         return currentDTO;
     }
 
     public void setCurrentDTO(TypeDTO currentDTO) {
         this.currentDTO = currentDTO;
-    }
-
-    public TreeBean() {
-        try {
-            List<TypeDTO> list = service.getAllTypes();
-            root = new DefaultTreeNode("Root", null);
-            render(list, root);
-
-            rootUpdate = new DefaultTreeNode("Root", null);
-            render(list, rootUpdate);
-        } catch (ModificationException m) {
-            errorBean.setErrorMessage(m.getMessage());
-            errorBean.setErrorVisibility("true");
-        } catch (ConnectionException tp) {
-            errorBean.setErrorMessage(tp.getMessage());
-            errorBean.setErrorVisibility("true");
-        } catch (BaseException t) {
-            errorBean.setErrorMessage(t.getMessage());
-            errorBean.setErrorVisibility("true");
-        }
     }
 
     public TreeNode getRoot() {
@@ -248,19 +239,17 @@ public class TreeBean implements Serializable {
         return disableBtn;
     }
 
+    public void setDisableBtn(boolean disableBtn) {
+        this.disableBtn = disableBtn;
+    }
+
     public void onNodeSelect(NodeSelectEvent event) {
         currentDTO = (TypeDTO) selected.getData();
-        if (selected != null && currentDTO.isMutabilityCanCreate()){
-            disableBtn = false;
-        }
-        else {
-            disableBtn = true;
-        }
+        disableBtn = !(selected != null && currentDTO.isMutabilityCanCreate());
 
         newDTO = new TypeDTO();
         newDTO.setParentTypeId(currentDTO.getId());
         newDTO.setBaseTypeId(currentDTO.getBaseTypeId());
-        //newDTO.setChildren(null);
 
         newDTO.setCreatable(currentDTO.isCreatable());
         newDTO.setFileable(currentDTO.isFileable());
@@ -275,13 +264,12 @@ public class TreeBean implements Serializable {
         newDTO.setMutabilityCanDelete(currentDTO.isMutabilityCanDelete());
         newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
 
-        if(currentDTO.isMutabilityCanCreate() == true){
-            typeCreateable = "true";
+        if (currentDTO.isMutabilityCanCreate()) {
+            typeCreatable = TRUE;
+        } else {
+            typeCreatable = null;
         }
-        else {
-            typeCreateable = null;
-        }
-       treeEnable();
+        treeEnable();
     }
 
     private void render(List<TypeDTO> tree, TreeNode parent) {
@@ -295,7 +283,7 @@ public class TreeBean implements Serializable {
         }
     }
 
-    public String addType(){
+    public String addType() {
         try {
             //TODO temporary stub
             newDTO.setPropertyRows(new ArrayList<PropertyRow>());
@@ -304,50 +292,49 @@ public class TreeBean implements Serializable {
             updateTree();
         } catch (ModificationException m) {
             errorBean.setErrorMessage(m.getMessage());
-            errorBean.setErrorVisibility("true");
+            errorBean.setErrorVisibility(TRUE);
         } catch (ConnectionException tp) {
             errorBean.setErrorMessage(tp.getMessage());
-            errorBean.setErrorVisibility("true");
+            errorBean.setErrorVisibility(TRUE);
             return "/error";
         } catch (BaseException t) {
             errorBean.setErrorMessage(t.getMessage());
-            errorBean.setErrorVisibility("true");
+            errorBean.setErrorVisibility(TRUE);
             return "/error";
         }
         return null;
     }
-    public void updateTree(){
-        List<TypeDTO> list = null;
+
+    public void updateTree() {
+        List<TypeDTO> list;
         try {
             list = service.getAllTypes();
-            root = new DefaultTreeNode("Root", null);
+            root = new DefaultTreeNode(ROOT, null);
             render(list, root);
             newDTO = new TypeDTO();
         } catch (BaseException e) {
             errorBean.setErrorMessage(e.getMessage());
-            errorBean.setErrorVisibility("true");
+            errorBean.setErrorVisibility(TRUE);
         }
 
     }
 
-    public void passProperty(PropertyRow propertyRow){
+    public void passProperty(PropertyRow propertyRow) {
         this.propertyRow1 = propertyRow;
     }
 
-    public void addMetadata(){
+    public void addMetadata() {
         currentDTO.getPropertyRows().add(newProperty);
     }
 
-    //update methods
-
-    public void addMetadataUpdate(){
+    public void addMetadataUpdate() {
         newDTO.getPropertyRows().add(newProperty);
     }
 
     public void onNodeSelectUpdate(NodeSelectEvent event) {
         currentDTO = (TypeDTO) selected.getData();
 
-        if(currentDTO.isMutabilityCanUpdate()) {
+        if (currentDTO.isMutabilityCanUpdate()) {
             mutability = "allowed";
 
             newDTO = new TypeDTO();
@@ -374,21 +361,16 @@ public class TreeBean implements Serializable {
             newDTO.setMutabilityCanDelete(currentDTO.isMutabilityCanDelete());
             newDTO.setMutabilityCanUpdate(currentDTO.isMutabilityCanUpdate());
 
-            newDTO.setPropertyRows((ArrayList)currentDTO.getPropertyRows());
+            newDTO.setPropertyRows((ArrayList) currentDTO.getPropertyRows());
         } else {
             mutability = null;
         }
-        //treeRender=false;
     }
 
     public void updateType() {
 
         currentDTO.setDescription(newDTO.getDescription());
 
-        //this fields are constant
-        //currentDTO.setParentTypeId(newDTO.getParentTypeId());
-        //currentDTO.setBaseTypeId(newDTO.getBaseTypeId());
-        //currentDTO.setId(currentDTO.getId());
         currentDTO.setDisplayName(newDTO.getDisplayName());
         currentDTO.setDescription(newDTO.getDescription());
         currentDTO.setQueryName(newDTO.getQueryName());

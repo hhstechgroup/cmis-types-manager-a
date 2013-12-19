@@ -16,7 +16,11 @@ import java.io.ByteArrayOutputStream;
 
 import org.apache.log4j.Logger;
 
-public class JsonXMLConvertor {
+public final class JsonXMLConvertor {
+
+    private JsonXMLConvertor() {
+
+    }
 
     public static final Logger LOG = Logger.getLogger(JsonXMLConvertor.class);
 

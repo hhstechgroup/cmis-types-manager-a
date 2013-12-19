@@ -19,9 +19,18 @@ public class SecondaryTreeBean implements Serializable {
     private String errorMessage;
     private String errorVisibility;
     private TreeNode root;
-    private TypeDTO typeDTO;
     private TreeNode[] selectedNodes;
-    private List<TypeDTO> secondaryTypes;
+
+    public SecondaryTreeBean() {
+        try {
+            TypeDTO typeDTO = CMISTypeManagerService.getInstance().getSecondaryTypes();
+            root = new DefaultTreeNode("Secondary Types Root", null);
+            render(typeDTO, root);
+        } catch (BaseException t) {
+            errorMessage = t.getMessage();
+            errorVisibility = "true";
+        }
+    }
 
     public String getErrorMessage() {
         return errorMessage;
@@ -39,19 +48,7 @@ public class SecondaryTreeBean implements Serializable {
         this.errorVisibility = errorVisibility;
     }
 
-    public SecondaryTreeBean() {
-        try {
-            typeDTO = CMISTypeManagerService.getInstance().getSecondaryTypes();
-            root = new DefaultTreeNode("Secondary Types Root", null);
-            render(typeDTO, root);
-        } catch (BaseException t) {
-            errorMessage = t.getMessage();
-            errorVisibility = "true";
-        }
-    }
-
-
-        public TreeNode[] getSelectedNodes() {
+    public TreeNode[] getSelectedNodes() {
         return selectedNodes;
     }
 
@@ -60,7 +57,7 @@ public class SecondaryTreeBean implements Serializable {
     }
 
     public List<TypeDTO> getSecondaryTypes() {
-        secondaryTypes = new ArrayList<TypeDTO>();
+        List<TypeDTO> secondaryTypes = new ArrayList<TypeDTO>();
         if (selectedNodes != null) {
             for (TreeNode node : selectedNodes) {
                 TypeDTO data = (TypeDTO) node.getData();

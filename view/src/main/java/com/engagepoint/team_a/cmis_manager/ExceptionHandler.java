@@ -1,10 +1,6 @@
 package com.engagepoint.team_a.cmis_manager;
 
-import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
@@ -26,7 +22,7 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
     }
 
     @Override
-    public void handle() throws FacesException {
+    public void handle() {
         Iterator iterator = getUnhandledExceptionQueuedEvents().iterator();
 
         while (iterator.hasNext()) {
@@ -40,10 +36,10 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
                 flash.put("errorDetails", throwable.getMessage());
 
                 String tmp = "";
-                for(int i = 0; i < throwable.getStackTrace().length; ++i)  tmp = tmp + throwable.getStackTrace()[i] + "\n";
+                for(int i = 0; i < throwable.getStackTrace().length; ++i) {
+                    tmp = tmp + throwable.getStackTrace()[i] + "\n";
+                }
                 flash.put("errorLog", tmp);
-
-                System.out.println("ErrorCatched" + throwable.getMessage());
 
                 NavigationHandler navigationHandler = fc.getApplication().getNavigationHandler();
                 navigationHandler.handleNavigation(fc, null, "errorUnhandled?faces-redirect=true");

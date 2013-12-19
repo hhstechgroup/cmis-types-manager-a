@@ -13,7 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import java.util.zip.ZipOutputStream;
 public class FileDownloadController {
 
     public static final Logger LOG = Logger.getLogger(FileDownloadController.class);
-
     private StreamedContent file;
     private String type;
     private String[] types = {"xml", "json", "Tree XML", "Tree JSON"};
@@ -34,6 +32,10 @@ public class FileDownloadController {
     private TreeBean treeBean;
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
+    private List<TypeDTO> listOfChildren = null;
+
+    public FileDownloadController() {
+    }
 
     public void setErrorBean(ErrorBean errorBean) {
         this.errorBean = errorBean;
@@ -43,61 +45,62 @@ public class FileDownloadController {
         this.treeBean = treeBean;
     }
 
-    public FileDownloadController() {
-    }
-
     public String[] getTypes() {
         return types;
     }
-    public void setDownloadedFile(){
+
+    public void setTypes(String[] types) {
+        String[] tmp = types;
+        this.types = tmp;
+    }
+
+    public void setDownloadedFile() {
 
         TypeDTO currentType = treeBean.getCurrentDTO();
         InputStream stream = null;
 
-       if(type.equals("xml")){
+        if (type.equals("xml")) {
             try {
                 stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.XML);
             } catch (BaseException e) {
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
-        } else if(type.equals("json")){
+        } else if (type.equals("json")) {
             try {
                 stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.JSON);
             } catch (BaseException e) {
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
-        } else if(type.equals("Tree XML")){
+        } else if (type.equals("Tree XML")) {
             getTypeWithAllChildrenXML();
 
-       } else if (type.equals("Tree JSON")){
-           getTypeWithAllChildrenJSON();
-       }
+        } else if (type.equals("Tree JSON")) {
+            getTypeWithAllChildrenJSON();
+        }
 
-        if(type.equals("json") || type.equals("xml")){
+        if (type.equals("json") || type.equals("xml")) {
             String saveName = currentType.getId() + "." + type;
             file = new DefaultStreamedContent(stream, "image/jpg", saveName);
         }
 
         try {
-            if(stream != null){
+            if (stream != null) {
                 stream.close();
             }
-            } catch (IOException e) {
-              LOG.error(e.getMessage(), e);
-            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
 
     }
 
-
-    private ArrayList<TypeDTO> listOfChildren = null;
-    private void findAllTypeChildren(List<TreeNode> list){
+    private void findAllTypeChildren(List<TreeNode> list) {
         for (int i = 0; i < list.size(); i++) {
-            listOfChildren.add((TypeDTO)list.get(i).getData());
-            if(list.get(i).getChildren() != null){
+            listOfChildren.add((TypeDTO) list.get(i).getData());
+            if (list.get(i).getChildren() != null) {
                 findAllTypeChildren(list.get(i).getChildren());
-            }else {
+            } else {
                 return;
             }
 
@@ -105,13 +108,12 @@ public class FileDownloadController {
 
     }
 
-
-    public void getTypeWithAllChildrenXML(){
+    public void getTypeWithAllChildrenXML() {
 
         listOfChildren = new ArrayList<TypeDTO>();
         TreeNode selected = treeBean.getSelected();
         listOfChildren.add((TypeDTO) selected.getData());
-        if(listOfChildren!=null){
+        if (listOfChildren != null) {
             findAllTypeChildren(selected.getChildren());
         }
         ArrayList<TypeDefinitionWrapper> listOfDefinitions = new ArrayList<TypeDefinitionWrapper>();
@@ -138,9 +140,11 @@ public class FileDownloadController {
                 LOG.error(e.getMessage(), e);
             }
             try {
-                out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName()+ ".xml"));
-                out.write(((ByteArrayOutputStream) stream).toByteArray());
-                out.closeEntry();
+                if (out != null) {
+                    out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName() + ".xml"));
+                    out.write(((ByteArrayOutputStream) stream).toByteArray());
+                    out.closeEntry();
+                }
             } catch (IOException e) {
                 LOG.error(e.getMessage(), e);
             }
@@ -162,11 +166,11 @@ public class FileDownloadController {
 
     }
 
-    public void getTypeWithAllChildrenJSON(){
+    public void getTypeWithAllChildrenJSON() {
         listOfChildren = new ArrayList<TypeDTO>();
         TreeNode selected = treeBean.getSelected();
         listOfChildren.add((TypeDTO) selected.getData());
-        if(listOfChildren!=null){
+        if (listOfChildren != null) {
             findAllTypeChildren(selected.getChildren());
         }
         ArrayList<TypeDefinitionWrapper> listOfDefinitions = new ArrayList<TypeDefinitionWrapper>();
@@ -195,7 +199,8 @@ public class FileDownloadController {
             }
 
             try {
-                out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName()+".json"));
+
+                out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName() + ".json"));
                 out.write(((ByteArrayOutputStream) stream).toByteArray());
                 out.closeEntry();
             } catch (IOException e) {
@@ -217,12 +222,6 @@ public class FileDownloadController {
         file = new DefaultStreamedContent(stream, "image/jpg", "types_in_json.zip");
 
 
-    }
-
-
-
-    public void setTypes(String[] types) {
-        this.types = types;
     }
 
     public String getType() {

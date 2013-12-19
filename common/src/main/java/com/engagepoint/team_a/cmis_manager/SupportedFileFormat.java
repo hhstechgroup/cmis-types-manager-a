@@ -15,7 +15,7 @@ public enum SupportedFileFormat {
         return supportedFileFormat;
     }
 
-    public static SupportedFileFormat fromValue(String value) throws IllegalArgumentException {
+    public static SupportedFileFormat fromValue(String value) {
         for (SupportedFileFormat supportedFileFormat : SupportedFileFormat.values()) {
             if (supportedFileFormat.getValue().equals(value)) {
                 return supportedFileFormat;

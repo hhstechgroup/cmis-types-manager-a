@@ -1,32 +1,33 @@
 package com.engagepoint.team_a.cmis_manager;
 
-import java.io.IOException;
-
 import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
-import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
 import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ManagedBean
 @ViewScoped
 public class FileUploadController {
 
+    public static final Logger LOG = Logger.getLogger(FileDownloadController.class);
     private String msgLbl = "";
-    private String show="false";
-    private String fileExtension;
+    private String show = "false";
     @ManagedProperty(value = "#{treeBean}")
     private TreeBean treeBean;
-    private HashMap<String, InputStream> fileMap = new HashMap<String, InputStream>();
+    private Map<String, InputStream> fileMap = new HashMap<String, InputStream>();
     private List<FileStatusReport> fileStatus = new ArrayList<FileStatusReport>();
-    public static final Logger LOG = Logger.getLogger(FileDownloadController.class);
+    @ManagedProperty(value = "#{error}")
+    private ErrorBean errorBean;
 
     public List<FileStatusReport> getFileStatus() {
         return fileStatus;
@@ -36,9 +37,9 @@ public class FileUploadController {
         this.treeBean = treeBean;
     }
 
-
-    @ManagedProperty(value = "#{error}")
-    private ErrorBean errorBean;
+    public ErrorBean getErrorBean() {
+        return errorBean;
+    }
 
     public void setErrorBean(ErrorBean errorBean) {
         this.errorBean = errorBean;
@@ -69,26 +70,25 @@ public class FileUploadController {
             LOG.error(e.getMessage(), e);
         }
 
-        msgLbl="Types created";
+        msgLbl = "Types created";
         treeBean.updateTree();
         fileMap.clear();
         fileStatus.clear();
     }
 
-
     public void handleFileUpload(FileUploadEvent event) {
 
-            UploadedFile file = event.getFile();
-             show="true";
-            String fileName = file.getFileName();
-            msgLbl=file.getFileName()+" ";
-            InputStream generatedFileInputStream = null;
-            try {
-                generatedFileInputStream = file.getInputstream();
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
-            fileMap.put(fileName, generatedFileInputStream);
+        UploadedFile file = event.getFile();
+        show = "true";
+        String fileName = file.getFileName();
+        msgLbl = file.getFileName() + " ";
+        InputStream generatedFileInputStream = null;
+        try {
+            generatedFileInputStream = file.getInputstream();
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        fileMap.put(fileName, generatedFileInputStream);
     }
 
     public void hideMsg() {

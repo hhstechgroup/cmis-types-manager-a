@@ -36,13 +36,13 @@ public class TypeDTO implements Serializable {
     private boolean controllablePolicy;
 
     ////////////
-    private ArrayList<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
+    private List<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
 
     public List<PropertyRow> getPropertyRows() {
         return propertyRows;
     }
 
-    public void setPropertyRows(ArrayList<PropertyRow> propertyRows) {
+    public void setPropertyRows(List<PropertyRow> propertyRows) {
         this.propertyRows = propertyRows;
     }
 

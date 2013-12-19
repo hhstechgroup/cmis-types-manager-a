@@ -5,10 +5,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
-import java.io.InputStream;
 import java.io.Serializable;
 
 @ManagedBean(name = "login")
@@ -25,7 +23,7 @@ public class LoginBean implements Serializable {
 
     private String chosenRepo;
 
-    private String[] availabeReposList;
+    private String[] availableReposList;
 
     public void setErrorBean(ErrorBean errorBean) {
         this.errorBean = errorBean;
@@ -38,8 +36,8 @@ public class LoginBean implements Serializable {
         this.chosenRepo = chosenRepo;
     }
 
-    public String[] getAvailabeReposList() {
-        return availabeReposList;
+    public String[] getAvailableReposList() {
+        return availableReposList;
     }
 
     public String getSessionID() {
@@ -91,8 +89,8 @@ public class LoginBean implements Serializable {
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
 
         try{
-            availabeReposList = service.getRepoList(username, password, url);
-            chosenRepo = availabeReposList[0];
+            availableReposList = service.getRepoList(username, password, url);
+            chosenRepo = availableReposList[0];
 
         }catch (BaseException e){
             errorBean.setErrorMessage(e.getMessage());
@@ -113,7 +111,7 @@ public class LoginBean implements Serializable {
         url = null;
         sessionID=null;
 
-        availabeReposList = null;
+        availableReposList = null;
         chosenRepo = null;
 
         CMISTypeManagerService.getInstance().disconnect();

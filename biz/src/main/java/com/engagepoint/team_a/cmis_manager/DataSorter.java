@@ -3,27 +3,28 @@ package com.engagepoint.team_a.cmis_manager;
 import com.engagepoint.team_a.cmis_manager.exceptions.ValidationException;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.*;
 
-public class DataSorter {
+public final class DataSorter {
+
+    private DataSorter() {
+
+    }
 
     public static final String SAME_ID_ERROR = "Same ID";
 
-    public static ArrayList<TypeDefinition> validateAndSort(HashMap<String, TypeDefinition> typeDefinitionMap, ArrayList<FileStatusReport> fileStatusList) {
+    public static List<TypeDefinition> validateAndSort(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
 
-        HashMap<String, ArrayList<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, ArrayList<TypeDefinition>>();
-        TreeSet<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
+        Map<String, List<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, List<TypeDefinition>>();
+        Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
 
-        for(String fileName : typeDefinitionMap.keySet()) {
+        for (String fileName : typeDefinitionMap.keySet()) {
 
             TypeDefinition type = typeDefinitionMap.get(fileName);
 
             try {
                 validateTypeDefinition(type);
-                if (! typeDefinitionTreeSet.add(type)) {
+                if (!typeDefinitionTreeSet.add(type)) {
                     fileStatusList.add(new FileStatusReport(fileName, SAME_ID_ERROR));
                 }
             } catch (ValidationException e) {
@@ -34,7 +35,7 @@ public class DataSorter {
         for (TypeDefinition type : typeDefinitionTreeSet) {
             if (sortedByIdTypeMap.containsKey(type.getParentTypeId())) {
 
-                ArrayList<TypeDefinition> children = sortedByIdTypeMap.get(type.getParentTypeId());
+                List<TypeDefinition> children = sortedByIdTypeMap.get(type.getParentTypeId());
                 children.add(type);
 
             } else {
@@ -47,12 +48,12 @@ public class DataSorter {
 
         for (TypeDefinition type : typeDefinitionTreeSet) {
 
-            if( sortedByIdTypeMap.containsKey( type.getId() )) {
-                ArrayList<TypeDefinition> temp = sortedByIdTypeMap.get( type.getParentTypeId() );
+            if (sortedByIdTypeMap.containsKey(type.getId())) {
+                List<TypeDefinition> temp = sortedByIdTypeMap.get(type.getParentTypeId());
 
-                if(!temp.isEmpty()) {
+                if (!temp.isEmpty()) {
                     temp.addAll(sortedByIdTypeMap.get(type.getId()));
-                    sortedByIdTypeMap.put(type.getId(), temp );
+                    sortedByIdTypeMap.put(type.getId(), temp);
                 }
 
             }
@@ -60,14 +61,14 @@ public class DataSorter {
         }
 
         for (TypeDefinition type : typeDefinitionTreeSet) {
-            if( sortedByIdTypeMap.containsKey( type.getId() )) {
+            if (sortedByIdTypeMap.containsKey(type.getId())) {
                 sortedByIdTypeMap.remove(type.getId());
             }
         }
 
-        ArrayList<TypeDefinition> resultList = new ArrayList<TypeDefinition>();
+        List<TypeDefinition> resultList = new ArrayList<TypeDefinition>();
 
-        if(sortedByIdTypeMap.isEmpty()) {
+        if (sortedByIdTypeMap.isEmpty()) {
             fileStatusList.add(new FileStatusReport("ID collision", resultList.size() + " files."));
         } else {
 
@@ -115,7 +116,8 @@ public class DataSorter {
         if (type.isQueryable() == null) {
             throw new ValidationException("Queryable flag must be set.");
         } else if (type.isQueryable().booleanValue()) {
-            if (type.getQueryName() == null || type.getQueryName().isEmpty()) {
+            String tmp =type.getQueryName();
+            if (tmp == null || tmp.isEmpty()) {
                 throw new ValidationException("Queryable flag is set to TRUE, but the query name is not set.");
             }
         }
@@ -139,7 +141,8 @@ public class DataSorter {
         if (type.getBaseTypeId() == null) {
             throw new ValidationException("Base type id must be set.");
         } else if (!type.getBaseTypeId().value().equals(type.getParentTypeId())) {
-            if (type.getParentTypeId() == null || type.getParentTypeId().isEmpty()) {
+            String tmp = type.getParentTypeId();
+            if (tmp == null || tmp.isEmpty()) {
                 throw new ValidationException("Parent type id must be set.");
             }
         }
@@ -147,8 +150,20 @@ public class DataSorter {
     }
 
     private static boolean checkQueryName(String queryName) {
-        return queryName != null && queryName.length() > 0 && queryName.indexOf(' ') < 0 && queryName.indexOf(',') < 0
-                && queryName.indexOf('"') < 0 && queryName.indexOf('\'') < 0 && queryName.indexOf('\\') < 0
-                && queryName.indexOf('.') < 0 && queryName.indexOf('(') < 0 && queryName.indexOf(')') < 0;
+        return queryName != null && queryName.length() > 0 && checkString(queryName);
+    }
+
+    private static boolean checkString(String str) {
+        String tmp[] = {" ", ",", "\"", "'", "\\", ".", "(", ")"};
+
+        for (int i = 0; i < tmp.length; ++i)
+        {
+            if (str.contains(tmp[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -9,6 +9,7 @@ import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.apache.chemistry.opencmis.commons.enums.Updatability;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyDefinitionWrapper implements PropertyDefinition, Serializable {
@@ -18,7 +19,6 @@ public class PropertyDefinitionWrapper implements PropertyDefinition, Serializab
     public PropertyDefinitionWrapper(PropertyRow row) {
         this.row = row;
     }
-
 
     @Override
     public String getId() {
@@ -90,26 +90,23 @@ public class PropertyDefinitionWrapper implements PropertyDefinition, Serializab
         return row.isOpenChoice();
     }
 
-    //TODO
     @Override
     public List getDefaultValue() {
-        return null;
+        return new ArrayList();
     }
 
-    //TODO
     @Override
     public List<Choice> getChoices() {
-        return null;
+        return new ArrayList<Choice>();
     }
 
-    //TODO
     @Override
     public List<CmisExtensionElement> getExtensions() {
-        return null;
+        return new ArrayList<CmisExtensionElement>();
     }
 
-    //TODO
     @Override
     public void setExtensions(List<CmisExtensionElement> cmisExtensionElements) {
+
     }
 }

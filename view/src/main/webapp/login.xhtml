@@ -23,7 +23,7 @@
                         <uib:gridColumn column="4">
                             <p:inputText value="#{login.username}" id="username" label="username"/>
                         </uib:gridColumn>
-                        <uib:gridColumn column="3"></uib:gridColumn>
+                        <uib:gridColumn column="3"/>
 
                     </uib:gridRow>
 
@@ -41,7 +41,7 @@
                             <p:inputText value="#{login.password}" id="password" label="password"/>
                         </uib:gridColumn>
 
-                        <uib:gridColumn column="3"></uib:gridColumn>
+                        <uib:gridColumn column="3"/>
                     </uib:gridRow>
 
                     <uib:gridRow fluid="true">
@@ -70,8 +70,8 @@
                         </uib:gridColumn>
                         <uib:gridColumn column="7">
 
-                            <p:selectOneMenu id="selectMenu" value="#{login.chosenRepo}" disabled="#{login.availabeReposList == null}">
-                                <f:selectItems value="#{login.availabeReposList}"/>
+                            <p:selectOneMenu id="selectMenu" value="#{login.chosenRepo}" disabled="#{login.availableReposList == null}">
+                                <f:selectItems value="#{login.availableReposList}"/>
                                 <p:ajax update="loginForm:loginButton"/>
                             </p:selectOneMenu>
 

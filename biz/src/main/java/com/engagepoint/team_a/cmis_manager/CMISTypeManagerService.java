@@ -25,7 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CMISTypeManagerService {
+public final class CMISTypeManagerService {
+
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
@@ -125,9 +126,7 @@ public class CMISTypeManagerService {
      * @return new instance if created, null if not
      */
     public TypeDTO createType(TypeDTO newType) throws BaseException {
-
         TypeDTO returnedTypeDTO;
-
         try {
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
             ObjectType createdType = session.createType(typeDefinitionWrapper);
@@ -239,8 +238,7 @@ public class CMISTypeManagerService {
 
     public TypeDTO getSecondaryTypes() throws BaseException {
         ObjectType baseSecondary = getTypeById("cmis:secondary");
-        TypeDTO returnedDTO = ObjectTypeReader.readWithChildren(baseSecondary);
-        return returnedDTO;
+        return ObjectTypeReader.readWithChildren(baseSecondary);
     }
 
     /**
@@ -275,14 +273,9 @@ public class CMISTypeManagerService {
         query = null;
     }
 
-    private ArrayList<TypeDefinition> query;
+    private List<TypeDefinition> query;
 
-    public List<FileStatusReport> readAndValidate(HashMap<String, InputStream> streamHashMap) {
-
-        if(streamHashMap == null) {
-            throw new NullPointerException("Input value is null");
-        }
-
+    public List<FileStatusReport> readAndValidate(Map<String, InputStream> streamHashMap) {
         ArrayList<FileStatusReport> fileStatusList = new ArrayList<FileStatusReport>();
         HashMap<String, TypeDefinition> okTypeMap = new HashMap<String, TypeDefinition>();
 
@@ -292,7 +285,6 @@ public class CMISTypeManagerService {
 
             if(fileName.endsWith(".xml")) {
                 try {
-                    //stream.close() in this method
                     TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
 
                     okTypeMap.put(fileName, type);
@@ -301,7 +293,6 @@ public class CMISTypeManagerService {
                 }
             } else if(fileName.endsWith(".json")) {
                 try {
-                    //stream.close() in this method
                     TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
 
                     okTypeMap.put(fileName, type);
@@ -316,7 +307,7 @@ public class CMISTypeManagerService {
 
         }
 
-        query = DataSorter.validateAndSort(okTypeMap, fileStatusList);
+        query = DataSorter.validateAndSort( okTypeMap, fileStatusList);
 
         return fileStatusList;
     }

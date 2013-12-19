@@ -9,14 +9,11 @@ import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 
 import java.util.*;
 
-public class ObjectTypeReader {
+public final class ObjectTypeReader {
 
-    /**
-     * Use this method to create com.engagepoint.team_a.cmis_manager.model.TypeDTO instace from ObjectType instace
-     *
-     * @param objType
-     * @return com.engagepoint.team_a.cmis_manager.model.TypeDTO
-     */
+    private ObjectTypeReader() {
+
+    }
 
     public static TypeDTO readIgnoreChildren(ObjectType objType) {
         TypeDTO dto = new TypeDTO();
@@ -43,14 +40,13 @@ public class ObjectTypeReader {
         dto.setFulltextIndexed(objType.isFulltextIndexed());
         dto.setControllableAcl(objType.isControllableAcl());
         dto.setControllablePolicy(objType.isControllablePolicy());
-        dto.setPropertyRows(ObjectTypeReader.readProperties(objType));
+        dto.setPropertyRows((ArrayList) ObjectTypeReader.readProperties(objType));
 
         return dto;
     }
 
-    private static ArrayList<PropertyRow> readProperties(ObjectType objType) {
-
-        ArrayList<PropertyRow> propertyList = new ArrayList<PropertyRow>();
+    private static List<PropertyRow> readProperties(ObjectType objType) {
+        List<PropertyRow> propertyList = new ArrayList<PropertyRow>();
         Map<String, PropertyDefinition<?>> propertyDefinitionMap = new HashMap<String, PropertyDefinition<?>>();
         propertyDefinitionMap.putAll(objType.getPropertyDefinitions());
 
@@ -64,9 +60,7 @@ public class ObjectTypeReader {
     }
 
     private static PropertyRow readPropertyRow(PropertyDefinition definition) {
-
         PropertyRow propertyRow = new PropertyRow();
-
         propertyRow.setDisplayName(definition.getDisplayName());
         propertyRow.setId(definition.getId());
         propertyRow.setDescription(definition.getDescription());
@@ -82,20 +76,18 @@ public class ObjectTypeReader {
         propertyRow.setOrderable(definition.isOrderable());
         propertyRow.setRequired(definition.isRequired());
         propertyRow.setInherited(definition.isInherited());
-
-        try {
-            // definition.isOpenChoice() for BaseTypes return null
+        if(definition.isOpenChoice()!=null){
             propertyRow.setOpenChoice(definition.isOpenChoice());
-        } catch (NullPointerException e) {
+        }  else{
             propertyRow.setOpenChoice(false);
         }
 
+//        propertyRow.setOpenChoice(definition.isOpenChoice());
         return propertyRow;
     }
 
     public static TypeDTO readTree(Tree<ObjectType> objectTypeTree) {
         ObjectType objectType = objectTypeTree.getItem();
-
         return ObjectTypeReader.readWithChildren(objectType);
     }
 
