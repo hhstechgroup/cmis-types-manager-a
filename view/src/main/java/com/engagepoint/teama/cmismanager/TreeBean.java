@@ -23,6 +23,9 @@ public class TreeBean implements Serializable {
 
     public static final Logger LOG = Logger.getLogger(TreeBean.class);
     private static final long serialVersionUID = 2023524722101427935L;
+    private  static final String TRUE = "true";
+    private  static final String ROOT = "Root";
+
     private TreeNode root;
     private TreeNode selected = null;
     private TypeDTO currentDTO = null;
@@ -44,8 +47,7 @@ public class TreeBean implements Serializable {
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;
     private boolean disableBtn = true;
-    private final static String TRUE = "true";
-    private final static String ROOT = "Root";
+
 
     public TreeBean() {
         try {

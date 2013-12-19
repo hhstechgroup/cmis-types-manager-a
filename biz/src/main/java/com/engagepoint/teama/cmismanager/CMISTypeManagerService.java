@@ -28,6 +28,7 @@ import java.util.Map;
 
 public final class CMISTypeManagerService {
     public static final Logger LOG = Logger.getLogger(CMISTypeManagerService.class);
+    public static final String CAN_NOT_CREATE = "can not create";
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
@@ -262,11 +263,11 @@ public final class CMISTypeManagerService {
                 if (returnedTypeDefinition != null) {
                     resultMap.put(returnedTypeDefinition.getDisplayName(), "in repo");
                 } else {
-                    resultMap.put(type.getDisplayName(), "can not create");
+                    resultMap.put(type.getDisplayName(), CAN_NOT_CREATE);
                 }
             } catch (CmisBaseException ex) {
                 LOG.error(ex.getMessage(), ex);
-                resultMap.put(type.getDisplayName(), "can not create");
+                resultMap.put(type.getDisplayName(), CAN_NOT_CREATE);
             }
         }
         query = null;

@@ -157,7 +157,7 @@ public final class DataSorter {
     }
 
     private static boolean checkString(String str) {
-        String tmp[] = {" ", ",", "\"", "'", "\\", ".", "(", ")"};
+        String[] tmp = {" ", ",", "\"", "'", "\\", ".", "(", ")"};
 
         for (int i = 0; i < tmp.length; ++i) {
             if (str.contains(tmp[i])) {

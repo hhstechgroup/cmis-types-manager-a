@@ -95,7 +95,8 @@ public final class JsonXMLConvertor {
         return byteArrayInputStream;
     }
 
-    public static InputStream createFileFromType(TypeDTO typeDTO, SupportedFileFormat supportedFileFormat) throws BaseException {
+    public static InputStream createFileFromType(TypeDTO typeDTO, SupportedFileFormat supportedFileFormat)
+            throws BaseException {
 
         TypeDefinition typeDefinition = new TypeDefinitionWrapper(typeDTO);
         InputStream inputStream;
@@ -118,7 +119,7 @@ public final class JsonXMLConvertor {
             default:
                 throw new BaseException("Unknown file format.");
         }
-
         return inputStream;
     }
+
 }

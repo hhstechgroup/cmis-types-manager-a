@@ -25,9 +25,16 @@ import java.util.zip.ZipOutputStream;
 public class FileDownloadController {
 
     public static final Logger LOG = Logger.getLogger(FileDownloadController.class);
+    public static final String XML = "xml";
+    public static final String JSON = "json";
+    public static final String XML_ALL = "Tree XML";
+    public static final String JSON_ALL = "Tree JSON";
+    public static final String CONTENT_TYPE = "image/jpg";
+    public static final String TYPES_ZIP = "\\types.zip";
+
     private StreamedContent file;
     private String type;
-    private String[] types = {"xml", "json", "Tree XML", "Tree JSON"};
+    private String[] types = {XML, JSON, XML_ALL, JSON_ALL};
     @ManagedProperty(value = "#{treeBean}")
     private TreeBean treeBean;
     @ManagedProperty(value = "#{error}")
@@ -59,7 +66,7 @@ public class FileDownloadController {
         TypeDTO currentType = treeBean.getCurrentDTO();
         InputStream stream = null;
 
-        if (type.equals("xml")) {
+        if (type.equals(XML)) {
             try {
                 stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.XML);
             } catch (BaseException e) {
@@ -67,7 +74,7 @@ public class FileDownloadController {
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
-        } else if (type.equals("json")) {
+        } else if (type.equals(JSON)) {
             try {
                 stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.JSON);
             } catch (BaseException e) {
@@ -75,14 +82,14 @@ public class FileDownloadController {
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
-        } else if (type.equals("Tree XML")) {
+        } else if (type.equals(XML_ALL)) {
             getTypeWithAllChildrenXML();
 
-        } else if (type.equals("Tree JSON")) {
+        } else if (type.equals(JSON_ALL)) {
             getTypeWithAllChildrenJSON();
         }
 
-        if (type.equals("json") || type.equals("xml")) {
+        if (type.equals(JSON) || type.equals(XML)) {
             String saveName = currentType.getId() + "." + type;
             file = new DefaultStreamedContent(stream, "image/jpg", saveName);
         }
@@ -116,7 +123,7 @@ public class FileDownloadController {
         listOfChildren.add((TypeDTO) selected.getData());
         ArrayList<TypeDefinitionWrapper> listOfDefinitions = new ArrayList<TypeDefinitionWrapper>();
         ZipOutputStream out = null;
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + "\\types.zip";
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + TYPES_ZIP;
 
         if (listOfChildren != null) {
             findAllTypeChildren(selected.getChildren());
@@ -161,7 +168,7 @@ public class FileDownloadController {
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
         }
-        file = new DefaultStreamedContent(stream, "image/jpg", "types_in_xml.zip");
+        file = new DefaultStreamedContent(stream, CONTENT_TYPE, "types_in_xml.zip");
     }
 
     public void getTypeWithAllChildrenJSON() {
@@ -178,7 +185,7 @@ public class FileDownloadController {
         }
 
         ZipOutputStream out = null;
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + "\\types.zip";
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + TYPES_ZIP;
 
         try {
             out = new ZipOutputStream(new FileOutputStream(new File(path)));
@@ -209,9 +216,7 @@ public class FileDownloadController {
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
         }
-        file = new DefaultStreamedContent(stream, "image/jpg", "types_in_json.zip");
-
-
+        file = new DefaultStreamedContent(stream, CONTENT_TYPE, "types_in_json.zip");
     }
 
     public String getType() {
@@ -229,7 +234,6 @@ public class FileDownloadController {
     public void setFile(StreamedContent file) {
         this.file = file;
     }
-
 }
 
 

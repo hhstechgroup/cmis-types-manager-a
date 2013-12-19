@@ -36,7 +36,6 @@ public class TypeDefinitionWrapper implements Serializable, TypeDefinition {
     private TypeMutability typeMutability;
 
     private Map<String, PropertyDefinition<?>> propertyDefinitionMap = new IdentityHashMap<String, PropertyDefinition<?>>();
-    public TypeDefinitionWrapper(){}
 
     public TypeDefinitionWrapper(TypeDTO typeDTO) {
         id = typeDTO.getId();
