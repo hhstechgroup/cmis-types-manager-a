@@ -82,7 +82,6 @@ public final class ObjectTypeReader {
             propertyRow.setOpenChoice(false);
         }
 
-//        propertyRow.setOpenChoice(definition.isOpenChoice());
         return propertyRow;
     }
 

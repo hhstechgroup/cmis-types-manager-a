@@ -43,9 +43,7 @@ public class TypeMutabilityWrapper implements Serializable, TypeMutability {
 
     @Override
     public void setExtensions(List<CmisExtensionElement> cmisExtensionElements) {
-        //todo complete method
-        // todo this code is just for sonar
-        int a=1;
-      return;
+        //todo complete method, todo this code is just for sonar
+        return;
     }
 }

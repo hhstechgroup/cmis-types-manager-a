@@ -22,7 +22,6 @@ public class PropertyRow {
     private String cardinality;
     private String updatability;
 
-    //TODO
     private List choiseList;
     private List defaultValue;
     private List extensions;

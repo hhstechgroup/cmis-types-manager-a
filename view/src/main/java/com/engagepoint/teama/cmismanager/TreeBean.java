@@ -25,6 +25,7 @@ public class TreeBean implements Serializable {
     private static final long serialVersionUID = 2023524722101427935L;
     private  static final String TRUE = "true";
     private  static final String ROOT = "Root";
+    public static final String ERROR_PAGE = "/error";
 
     private TreeNode root;
     private TreeNode selected = null;
@@ -192,7 +193,6 @@ public class TreeBean implements Serializable {
     }
 
     public boolean isAttributesVisible() {
-        //todo bad for sonar - but need for logic
         attributesVisible = currentDTO != null;
         return attributesVisible;
     }
@@ -291,7 +291,7 @@ public class TreeBean implements Serializable {
 
     public String addType() {
         try {
-            //TODO temporary stub
+            //temporary stub
             newDTO.setPropertyRows(new ArrayList<PropertyRow>());
 
             service.createType(newDTO);
@@ -304,12 +304,12 @@ public class TreeBean implements Serializable {
             LOG.error(tp.getMessage(), tp);
             errorBean.setErrorMessage(tp.getMessage());
             errorBean.setErrorVisibility(TRUE);
-            return "/error";
+            return ERROR_PAGE;
         } catch (BaseException t) {
             LOG.error(t.getMessage(), t);
             errorBean.setErrorMessage(t.getMessage());
             errorBean.setErrorVisibility(TRUE);
-            return "/error";
+            return ERROR_PAGE;
         }
         return null;
     }

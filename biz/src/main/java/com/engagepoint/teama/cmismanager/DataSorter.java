@@ -8,10 +8,7 @@ import java.util.*;
 
 public final class DataSorter {
     public static final Logger LOG = Logger.getLogger(DataSorter.class);
-
-    private DataSorter() {
-
-    }
+    public static final String FILES = " files.";
 
     public static final String SAME_ID_ERROR = "Same ID";
 
@@ -72,14 +69,14 @@ public final class DataSorter {
         List<TypeDefinition> resultList = new ArrayList<TypeDefinition>();
 
         if (sortedByIdTypeMap.isEmpty()) {
-            fileStatusList.add(new FileStatusReport("ID collision", resultList.size() + " files."));
+            fileStatusList.add(new FileStatusReport("ID collision", resultList.size() + FILES));
         } else {
 
             for (Collection value : sortedByIdTypeMap.values()) {
                 resultList.addAll(value);
             }
 
-            fileStatusList.add(new FileStatusReport("Ready to upload", resultList.size() + " files."));
+            fileStatusList.add(new FileStatusReport("Ready to upload", resultList.size() + FILES));
 
         }
 

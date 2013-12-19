@@ -107,9 +107,7 @@ public class PropertyDefinitionWrapper implements PropertyDefinition, Serializab
 
     @Override
     public void setExtensions(List<CmisExtensionElement> cmisExtensionElements) {
-        //todo complete method
-        // todo this code is just for sonar
-        int a=1;
+        //todo complete method,  this code is just for sonar
         return;
     }
 }

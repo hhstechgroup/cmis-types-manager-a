@@ -31,6 +31,7 @@ public class FileDownloadController {
     public static final String JSON_ALL = "Tree JSON";
     public static final String CONTENT_TYPE = "image/jpg";
     public static final String TYPES_ZIP = "\\types.zip";
+    public static final String TRUE = "true";
 
     private StreamedContent file;
     private String type;
@@ -72,7 +73,7 @@ public class FileDownloadController {
             } catch (BaseException e) {
                 LOG.error(e.getMessage(), e);
                 errorBean.setErrorMessage(e.getMessage());
-                errorBean.setErrorVisibility("true");
+                errorBean.setErrorVisibility(TRUE);
             }
         } else if (type.equals(JSON)) {
             try {
@@ -80,7 +81,7 @@ public class FileDownloadController {
             } catch (BaseException e) {
                 LOG.error(e.getMessage(), e);
                 errorBean.setErrorMessage(e.getMessage());
-                errorBean.setErrorVisibility("true");
+                errorBean.setErrorVisibility(TRUE);
             }
         } else if (type.equals(XML_ALL)) {
             getTypeWithAllChildrenXML();
@@ -91,7 +92,7 @@ public class FileDownloadController {
 
         if (type.equals(JSON) || type.equals(XML)) {
             String saveName = currentType.getId() + "." + type;
-            file = new DefaultStreamedContent(stream, "image/jpg", saveName);
+            file = new DefaultStreamedContent(stream, CONTENT_TYPE, saveName);
         }
 
         try {
