@@ -1,6 +1,8 @@
 package com.engagepoint.team_a.cmis_manager;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
+import org.apache.log4j.Logger;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -12,7 +14,7 @@ import java.io.Serializable;
 @ManagedBean(name = "login")
 @SessionScoped
 public class LoginBean implements Serializable {
-
+    public static final Logger LOG = Logger.getLogger(LoginBean.class);
     private String username;
     private String password;
     private String sessionID;
@@ -72,13 +74,13 @@ public class LoginBean implements Serializable {
         String page;
         CMISTypeManagerService service = CMISTypeManagerService.getInstance();
         try{
-
             service.connect(chosenRepo);
             sessionID = service.getSessionID();
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("sessionID",sessionID);
             page = "/show/index?faces-redirect=true";
         }catch (BaseException e){
+            LOG.error(e.getMessage(), e);
             sessionID=null;
             page = "/error?faces-redirect=true";
         }
@@ -93,6 +95,7 @@ public class LoginBean implements Serializable {
             chosenRepo = availableReposList[0];
 
         }catch (BaseException e){
+            LOG.error(e.getMessage(), e);
             errorBean.setErrorMessage(e.getMessage());
             sessionID = "error";
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);

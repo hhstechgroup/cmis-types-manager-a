@@ -2,11 +2,12 @@ package com.engagepoint.team_a.cmis_manager;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.ValidationException;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
 public final class DataSorter {
-
+    public static final Logger LOG = Logger.getLogger(DataSorter.class);
     private DataSorter() {
 
     }
@@ -28,6 +29,7 @@ public final class DataSorter {
                     fileStatusList.add(new FileStatusReport(fileName, SAME_ID_ERROR));
                 }
             } catch (ValidationException e) {
+                LOG.error(e.getMessage(), e);
                 fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
             }
         }

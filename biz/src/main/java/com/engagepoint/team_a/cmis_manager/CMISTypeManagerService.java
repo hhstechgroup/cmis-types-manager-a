@@ -16,6 +16,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentExcep
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
+import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class CMISTypeManagerService {
-
+    public static final Logger LOG = Logger.getLogger(CMISTypeManagerService.class);
     private static CMISTypeManagerService cmisTypeManagerService;
     private Session session;
 
@@ -245,15 +246,11 @@ public final class CMISTypeManagerService {
      * Create
      */
     public void createMultiply() throws BaseException{
-
         if(query == null || query.isEmpty()) {
             throw new BaseException("No data");
         }
-
         HashMap<String, String> resultMap = new HashMap<String, String>();
-
         TypeDefinition returnedTypeDefinition;
-
         for(TypeDefinition type : query) {
 
             try {
@@ -263,13 +260,11 @@ public final class CMISTypeManagerService {
                 } else {
                     resultMap.put(type.getDisplayName(), "can not create");
                 }
-
             } catch (CmisBaseException ex) {
+                LOG.error(ex.getMessage(), ex);
                 resultMap.put(type.getDisplayName(), "can not create");
             }
-
         }
-
         query = null;
     }
 
@@ -280,35 +275,31 @@ public final class CMISTypeManagerService {
         HashMap<String, TypeDefinition> okTypeMap = new HashMap<String, TypeDefinition>();
 
         for (String fileName : streamHashMap.keySet()) {
-
-            InputStream stream = streamHashMap.get(fileName);
-
+           InputStream stream = streamHashMap.get(fileName);
             if(fileName.endsWith(".xml")) {
                 try {
                     TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
-
                     okTypeMap.put(fileName, type);
                 } catch (XMLStreamException e) {
+                    LOG.error(e.getMessage(), e);
                     fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 }
             } else if(fileName.endsWith(".json")) {
                 try {
                     TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
-
                     okTypeMap.put(fileName, type);
                 } catch (IOException e) {
+                    LOG.error(e.getMessage(), e);
                     fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 } catch (JSONParseException e) {
+                    LOG.error(e.getMessage(), e);
                     fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 }
             } else {
                 fileStatusList.add(new FileStatusReport(fileName, "Wrong file format."));
             }
-
         }
-
         query = DataSorter.validateAndSort( okTypeMap, fileStatusList);
-
         return fileStatusList;
     }
 

@@ -2,6 +2,7 @@ package com.engagepoint.team_a.cmis_manager;
 
 import com.engagepoint.team_a.cmis_manager.exceptions.BaseException;
 import com.engagepoint.team_a.cmis_manager.model.TypeDTO;
+import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @ManagedBean(name = "secType")
 @ViewScoped
 public class SecondaryTreeBean implements Serializable {
-
+    public static final Logger LOG = Logger.getLogger(SecondaryTreeBean.class);
     private static final long serialVersionUID = 2023524722101427935L;
     private String errorMessage;
     private String errorVisibility;
@@ -27,6 +28,7 @@ public class SecondaryTreeBean implements Serializable {
             root = new DefaultTreeNode("Secondary Types Root", null);
             render(typeDTO, root);
         } catch (BaseException t) {
+            LOG.error(t.getMessage(), t);
             errorMessage = t.getMessage();
             errorVisibility = "true";
         }

@@ -55,12 +55,15 @@ public class TreeBean implements Serializable {
             rootUpdate = new DefaultTreeNode(ROOT, null);
             render(list, rootUpdate);
         } catch (ModificationException m) {
+            LOG.error(m.getMessage(), m);
             errorBean.setErrorMessage(m.getMessage());
             errorBean.setErrorVisibility(TRUE);
         } catch (ConnectionException tp) {
+            LOG.error(tp.getMessage(),tp);
             errorBean.setErrorMessage(tp.getMessage());
             errorBean.setErrorVisibility(TRUE);
         } catch (BaseException t) {
+            LOG.error(t.getMessage(), t);
             errorBean.setErrorMessage(t.getMessage());
             errorBean.setErrorVisibility(TRUE);
         }
@@ -128,6 +131,7 @@ public class TreeBean implements Serializable {
             render(list, root);
             newDTO = new TypeDTO();
         } catch (BaseException t) {
+            LOG.error(t.getMessage(), t);
             errorBean.setErrorMessage(t.getMessage());
             errorBean.setErrorVisibility(TRUE);
         }
@@ -291,13 +295,16 @@ public class TreeBean implements Serializable {
             service.createType(newDTO);
             updateTree();
         } catch (ModificationException m) {
+            LOG.error(m.getMessage(), m);
             errorBean.setErrorMessage(m.getMessage());
             errorBean.setErrorVisibility(TRUE);
         } catch (ConnectionException tp) {
+            LOG.error(tp.getMessage(), tp);
             errorBean.setErrorMessage(tp.getMessage());
             errorBean.setErrorVisibility(TRUE);
             return "/error";
         } catch (BaseException t) {
+            LOG.error(t.getMessage(), t);
             errorBean.setErrorMessage(t.getMessage());
             errorBean.setErrorVisibility(TRUE);
             return "/error";
@@ -313,6 +320,7 @@ public class TreeBean implements Serializable {
             render(list, root);
             newDTO = new TypeDTO();
         } catch (BaseException e) {
+            LOG.error(e.getMessage(), e);
             errorBean.setErrorMessage(e.getMessage());
             errorBean.setErrorVisibility(TRUE);
         }

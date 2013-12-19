@@ -63,6 +63,7 @@ public class FileDownloadController {
             try {
                 stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.XML);
             } catch (BaseException e) {
+                LOG.error(e.getMessage(), e);
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
@@ -70,6 +71,7 @@ public class FileDownloadController {
             try {
                 stream = JsonXMLConvertor.createFileFromType(currentType, SupportedFileFormat.JSON);
             } catch (BaseException e) {
+                LOG.error(e.getMessage(), e);
                 errorBean.setErrorMessage(e.getMessage());
                 errorBean.setErrorVisibility("true");
             }
@@ -109,21 +111,21 @@ public class FileDownloadController {
     }
 
     public void getTypeWithAllChildrenXML() {
-
         listOfChildren = new ArrayList<TypeDTO>();
         TreeNode selected = treeBean.getSelected();
         listOfChildren.add((TypeDTO) selected.getData());
+        ArrayList<TypeDefinitionWrapper> listOfDefinitions = new ArrayList<TypeDefinitionWrapper>();
+        ZipOutputStream out = null;
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + "\\types.zip";
+
         if (listOfChildren != null) {
             findAllTypeChildren(selected.getChildren());
         }
-        ArrayList<TypeDefinitionWrapper> listOfDefinitions = new ArrayList<TypeDefinitionWrapper>();
+
         for (int i = 0; i < listOfChildren.size(); i++) {
             TypeDefinitionWrapper wrapper = new TypeDefinitionWrapper(listOfChildren.get(i));
             listOfDefinitions.add(wrapper);
         }
-
-        ZipOutputStream out = null;
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + "\\types.zip";
 
         try {
             out = new ZipOutputStream(new FileOutputStream(new File(path)));
@@ -136,15 +138,13 @@ public class FileDownloadController {
 
             try {
                 TypeUtils.writeToXML(listOfDefinitions.get(i), stream);
-            } catch (XMLStreamException e) {
-                LOG.error(e.getMessage(), e);
-            }
-            try {
                 if (out != null) {
                     out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName() + ".xml"));
                     out.write(((ByteArrayOutputStream) stream).toByteArray());
                     out.closeEntry();
                 }
+            } catch (XMLStreamException e) {
+                LOG.error(e.getMessage(), e);
             } catch (IOException e) {
                 LOG.error(e.getMessage(), e);
             }
@@ -162,8 +162,6 @@ public class FileDownloadController {
             LOG.error(e.getMessage(), e);
         }
         file = new DefaultStreamedContent(stream, "image/jpg", "types_in_xml.zip");
-
-
     }
 
     public void getTypeWithAllChildrenJSON() {
@@ -190,16 +188,8 @@ public class FileDownloadController {
 
         for (int i = 0; i < listOfDefinitions.size(); i++) {
             OutputStream stream = new ByteArrayOutputStream();
-
-
             try {
                 TypeUtils.writeToJSON(listOfDefinitions.get(i), stream);
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
-
-            try {
-
                 out.putNextEntry(new ZipEntry(listOfDefinitions.get(i).getDisplayName() + ".json"));
                 out.write(((ByteArrayOutputStream) stream).toByteArray());
                 out.closeEntry();
