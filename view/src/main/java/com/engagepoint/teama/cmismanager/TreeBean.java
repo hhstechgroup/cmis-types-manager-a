@@ -10,6 +10,8 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -34,7 +36,8 @@ public class TreeBean implements Serializable {
     private TreeNode rootUpdate;
     private boolean treeRender = true;
     private List<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
-    private CMISTypeManagerService service = CMISTypeManagerService.getInstance();
+    @EJB
+    private CMISTypeManagerService service;
     private String mutability = null;
     private PropertyRow propertyRow1 = new PropertyRow();
     private PropertyRow newProperty = new PropertyRow();
@@ -50,27 +53,36 @@ public class TreeBean implements Serializable {
     private boolean disableBtn = true;
 
 
-    public TreeBean() {
+    @PostConstruct
+    public void init() {
         try {
-            List<TypeDTO> typeList = service.getAllTypes();
+            List<TypeDTO> list = service.getAllTypes();
             root = new DefaultTreeNode(ROOT, null);
-            render(typeList, root);
+            render(list, root);
             rootUpdate = new DefaultTreeNode(ROOT, null);
-            render(typeList, rootUpdate);
+            render(list, rootUpdate);
         } catch (ModificationException m) {
-            LOG.error(m.getMessage(), m);
             errorBean.setErrorMessage(m.getMessage());
             errorBean.setErrorVisibility(TRUE);
         } catch (ConnectionException tp) {
-            LOG.error(tp.getMessage(), tp);
             errorBean.setErrorMessage(tp.getMessage());
             errorBean.setErrorVisibility(TRUE);
         } catch (BaseException t) {
-            LOG.error(t.getMessage(), t);
             errorBean.setErrorMessage(t.getMessage());
             errorBean.setErrorVisibility(TRUE);
         }
     }
+
+    public TreeBean(){}
+
+    public CMISTypeManagerService getService() {
+        return service;
+    }
+
+    public void setService(CMISTypeManagerService service) {
+        this.service = service;
+    }
+
 
     public boolean isTreeRender() {
         return treeRender;

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -28,6 +29,8 @@ public class FileUploadController {
     private List<FileStatusReport> fileStatus = new ArrayList<FileStatusReport>();
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
+    @EJB
+    private CMISTypeManagerService service;
 
     public List<FileStatusReport> getFileStatus() {
         return fileStatus;
@@ -61,11 +64,19 @@ public class FileUploadController {
         this.msgLbl = msgLbl;
     }
 
+    public CMISTypeManagerService getService() {
+        return service;
+    }
+
+    public void setService(CMISTypeManagerService service) {
+        this.service = service;
+    }
+
     public void processFiles() {
-        fileStatus = CMISTypeManagerService.getInstance().readAndValidate(fileMap);
+        fileStatus = service.readAndValidate(fileMap);
 
         try {
-            CMISTypeManagerService.getInstance().createMultiply();
+            service.createMultiply();
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
         }

@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
@@ -21,10 +22,21 @@ public class SecondaryTreeBean implements Serializable {
     private String errorVisibility;
     private TreeNode root;
     private TreeNode[] selectedNodes;
+    @EJB
+    private CMISTypeManagerService service;
+
+    public CMISTypeManagerService getService() {
+        return service;
+    }
+
+    public void setService(CMISTypeManagerService service) {
+        this.service = service;
+    }
 
     public SecondaryTreeBean() {
+
         try {
-            TypeDTO typeDTO = CMISTypeManagerService.getInstance().getSecondaryTypes();
+            TypeDTO typeDTO = service.getSecondaryTypes();
             root = new DefaultTreeNode("Secondary Types Root", null);
             render(typeDTO, root);
         } catch (BaseException t) {

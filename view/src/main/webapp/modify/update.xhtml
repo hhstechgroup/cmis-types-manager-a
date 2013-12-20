@@ -19,30 +19,16 @@
                     <p:wizard id="tab" dynamic="true">
 
                         <p:tab id="tab1" title="Chose node" >
-
-                            <!--h3>Chose tree node:</h3-->
+                           <!--h3>Chose tree node:</h3-->
                             <h:panelGrid columns="2" cellpadding="10">
                                 <ui:include src="/modify/showTreeUpdate.xhtml"/>
                             </h:panelGrid>
-
-
                         </p:tab>
                         <p:tab id="tab2" title="Attributes" >
-
                             <!--h3>Update attributes</h3-->
                             <h:panelGrid id="grid" columns="2" cellpadding="10">
                                 <ui:include src="/modify/updateAttributes.xhtml"/>
-
                             </h:panelGrid>
-
-                        </p:tab>
-
-
-                        <p:tab id="tab3" title="Secondary type" >
-
-                            <!--h3> Chose secondary type </h3-->
-                            <ui:include src="/modify/addSecondaryType.xhtml"/>
-
                         </p:tab>
 
                         <p:tab id="tab4" title="Metadata">
@@ -50,7 +36,6 @@
                             <h:panelGrid columns="1" cellpadding="10">
                                 <ui:include src="/modify/updateMetadata.xhtml"/>
                             </h:panelGrid>
-
                         </p:tab>
 
                     </p:wizard>

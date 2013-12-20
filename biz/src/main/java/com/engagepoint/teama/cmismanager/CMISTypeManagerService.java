@@ -18,6 +18,9 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedExce
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
 import org.apache.log4j.Logger;
 
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,76 +29,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CMISTypeManagerService {
+@Stateless
+@LocalBean
+public class CMISTypeManagerService {
     public static final Logger LOG = Logger.getLogger(CMISTypeManagerService.class);
-    public static final String CAN_NOT_CREATE = "can not create";
-    private static CMISTypeManagerService cmisTypeManagerService;
-    private Session session;
 
-    private Map<String, Repository> map = new HashMap<String, Repository>();
 
-    private CMISTypeManagerService() {
-    }
 
-    public static synchronized CMISTypeManagerService getInstance() {
-        if (cmisTypeManagerService == null) {
-            cmisTypeManagerService = new CMISTypeManagerService();
-        }
-        return cmisTypeManagerService;
-    }
-
+    @EJB
+    private ConnectionCMIS connection;
     public String[] getRepoList(String username, String password, String url) throws ConnectionException {
-
-        SessionFactory factory = SessionFactoryImpl.newInstance();
-        Map<String, String> parameter = new HashMap<String, String>();
-
-        parameter.put(SessionParameter.USER, username);
-        parameter.put(SessionParameter.PASSWORD, password);
-
-        parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
-        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-        List<Repository> list;
-
-        try {
-            list = factory.getRepositories(parameter);
-        } catch (CmisBaseException e) {
-            throw new ConnectionException(e.getMessage(), e);
-        }
-
-        if (list.isEmpty()) {
-            throw new ConnectionException("no connection");
-        }
-
-        map.clear();
-        List<String> array = new ArrayList<String>();
-
-        for (Repository repo : list) {
-            map.put(repo.getName(), repo);
-            array.add(repo.getName());
-        }
-
-        return array.toArray(new String[0]);
+        return connection.getRepoList(username, password, url);
+    }
+    public void connect(String s) throws ConnectionException {
+        connection.connect(s);
+    }
+    public Session getSession(){
+        return connection.getSession();
     }
 
-    public void connect(String repoName) throws ConnectionException {
 
-        if (map.isEmpty()) {
-            throw new ConnectionException("There are no available repository. Use 'getRepoList' at first");
-        }
-
-        session = map.get(repoName).createSession();
-
-        if (session == null) {
-            throw new ConnectionException("no session");
-        }
-    }
 
     public void disconnect() {
-        session.getBinding().close();
+        connection.getSession().getBinding().close();
     }
 
     public String getSessionID() {
-        return session.toString();
+        return connection.getSession().toString();
     }
 
     /**
@@ -108,7 +68,7 @@ public final class CMISTypeManagerService {
     public List<TypeDTO> getAllTypes() throws BaseException {
         try {
             List<TypeDTO> typeList = new ArrayList<TypeDTO>();
-            List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
+            List<Tree<ObjectType>> list = connection.getSession().getTypeDescendants(null, -1, true);
             for (Tree<ObjectType> tree : list) {
                 typeList.add(ObjectTypeReader.readTree(tree));
             }
@@ -133,7 +93,7 @@ public final class CMISTypeManagerService {
         TypeDTO returnedTypeDTO;
         try {
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
-            ObjectType createdType = session.createType(typeDefinitionWrapper);
+            ObjectType createdType = connection.getSession().createType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
         } catch (CmisObjectNotFoundException ex) {
             throw new ModificationException(ex.getMessage(), ex);
@@ -162,7 +122,7 @@ public final class CMISTypeManagerService {
         ObjectType returnedType;
 
         try {
-            returnedType = session.getTypeDefinition(id);
+            returnedType = connection.getSession().getTypeDefinition(id);
         } catch (CmisObjectNotFoundException cp) {
             throw new ModificationException(cp.getMessage(), cp);
         } catch (CmisPermissionDeniedException cp) {
@@ -188,7 +148,7 @@ public final class CMISTypeManagerService {
 
         try {
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(updatedType);
-            ObjectType newType = session.updateType(typeDefinitionWrapper);
+            ObjectType newType = connection.getSession().updateType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(newType);
         } catch (CmisPermissionDeniedException cp) {
             throw new ConnectionException(cp.getMessage(), cp);
@@ -211,13 +171,13 @@ public final class CMISTypeManagerService {
 
         try {
 
-            List<Tree<ObjectType>> list = session.getTypeDescendants(deletedType.getId(), -1, false);
+            List<Tree<ObjectType>> list = connection.getSession().getTypeDescendants(deletedType.getId(), -1, false);
 
             if (list != null && !list.isEmpty()) {
                 deleteTree(list);
             }
 
-            session.deleteType(deletedType.getId());
+            connection.getSession().deleteType(deletedType.getId());
 
         } catch (CmisInvalidArgumentException cp) {
             throw new ModificationException(cp.getMessage(), cp);
@@ -237,7 +197,7 @@ public final class CMISTypeManagerService {
             if (objectTypeTree.getChildren() != null && !objectTypeTree.getChildren().isEmpty()) {
                 deleteTree(objectTypeTree.getChildren());
             }
-            session.deleteType(objectTypeTree.getItem().getId());
+            connection.getSession().deleteType(objectTypeTree.getItem().getId());
         }
 
     }
@@ -259,15 +219,15 @@ public final class CMISTypeManagerService {
         for (TypeDefinition type : query) {
 
             try {
-                returnedTypeDefinition = session.createType(type);
+                returnedTypeDefinition = connection.getSession().createType(type);
                 if (returnedTypeDefinition != null) {
                     resultMap.put(returnedTypeDefinition.getDisplayName(), "in repo");
                 } else {
-                    resultMap.put(type.getDisplayName(), CAN_NOT_CREATE);
+                    resultMap.put(type.getDisplayName(), "can not create");
                 }
             } catch (CmisBaseException ex) {
                 LOG.error(ex.getMessage(), ex);
-                resultMap.put(type.getDisplayName(), CAN_NOT_CREATE);
+                resultMap.put(type.getDisplayName(), "can not create");
             }
         }
         query = null;

@@ -3,6 +3,7 @@ package com.engagepoint.teama.cmismanager;
 import com.engagepoint.teama.cmismanager.exceptions.BaseException;
 import org.apache.log4j.Logger;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -26,10 +27,18 @@ public class LoginBean implements Serializable {
     private ErrorBean errorBean;
     @NotNull(message = "Please enter url")
     private String url;
-
     private String chosenRepo;
-
     private String[] availableReposList;
+    @EJB
+    private CMISTypeManagerService service;
+
+    public CMISTypeManagerService getService() {
+        return service;
+    }
+
+    public void setService(CMISTypeManagerService service) {
+        this.service = service;
+    }
 
     public void setErrorBean(ErrorBean errorBean) {
         this.errorBean = errorBean;
@@ -77,7 +86,6 @@ public class LoginBean implements Serializable {
 
     public String doLogin() {
         String page;
-        CMISTypeManagerService service = CMISTypeManagerService.getInstance();
         try {
             service.connect(chosenRepo);
             sessionID = service.getSessionID();
@@ -93,8 +101,6 @@ public class LoginBean implements Serializable {
     }
 
     public String getRepoList() {
-        CMISTypeManagerService service = CMISTypeManagerService.getInstance();
-
         try {
             availableReposList = service.getRepoList(username, password, url);
             chosenRepo = availableReposList[0];
@@ -122,7 +128,7 @@ public class LoginBean implements Serializable {
         availableReposList = null;
         chosenRepo = null;
 
-        CMISTypeManagerService.getInstance().disconnect();
+        service.disconnect();
         return LOGIN_PAGE_REDIRECT;
     }
 }
