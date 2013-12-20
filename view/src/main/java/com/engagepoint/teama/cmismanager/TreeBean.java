@@ -15,6 +15,9 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +39,10 @@ public class TreeBean implements Serializable {
     private TreeNode rootUpdate;
     private boolean treeRender = true;
     private List<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
-    @EJB
-    private CMISTypeManagerService service;
+
+   @EJB(beanInterface = CMISTypeManagerServiceInterface.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.CMISTypeManagerService")
+
+    private CMISTypeManagerServiceInterface service;
     private String mutability = null;
     private PropertyRow propertyRow1 = new PropertyRow();
     private PropertyRow newProperty = new PropertyRow();
@@ -75,7 +80,7 @@ public class TreeBean implements Serializable {
 
     public TreeBean(){}
 
-    public CMISTypeManagerService getService() {
+    public CMISTypeManagerServiceInterface getService() {
         return service;
     }
 

@@ -29,8 +29,8 @@ public class FileUploadController {
     private List<FileStatusReport> fileStatus = new ArrayList<FileStatusReport>();
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
-    @EJB
-    private CMISTypeManagerService service;
+    @EJB(beanInterface = CMISTypeManagerServiceInterface.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.CMISTypeManagerService")
+    private CMISTypeManagerServiceInterface service;
 
     public List<FileStatusReport> getFileStatus() {
         return fileStatus;
@@ -64,11 +64,11 @@ public class FileUploadController {
         this.msgLbl = msgLbl;
     }
 
-    public CMISTypeManagerService getService() {
+    public CMISTypeManagerServiceInterface getService() {
         return service;
     }
 
-    public void setService(CMISTypeManagerService service) {
+    public void setService(CMISTypeManagerServiceInterface service) {
         this.service = service;
     }
 

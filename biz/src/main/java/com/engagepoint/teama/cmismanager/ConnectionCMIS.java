@@ -10,6 +10,7 @@ import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 
 import javax.ejb.LocalBean;
+import javax.ejb.Remote;
 import javax.ejb.Singleton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 
 @Singleton
-@LocalBean
+@Remote
 public class ConnectionCMIS {
     Map<String, Repository> map = new HashMap<String, Repository>();
 

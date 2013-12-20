@@ -29,14 +29,15 @@ public class LoginBean implements Serializable {
     private String url;
     private String chosenRepo;
     private String[] availableReposList;
-    @EJB
-    private CMISTypeManagerService service;
 
-    public CMISTypeManagerService getService() {
+    @EJB(beanInterface = CMISTypeManagerServiceInterface.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.CMISTypeManagerService")
+    private CMISTypeManagerServiceInterface service;
+
+    public CMISTypeManagerServiceInterface getService() {
         return service;
     }
 
-    public void setService(CMISTypeManagerService service) {
+    public void setService(CMISTypeManagerServiceInterface service) {
         this.service = service;
     }
 

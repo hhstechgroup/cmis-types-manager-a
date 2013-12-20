@@ -7,16 +7,12 @@ import com.engagepoint.teama.cmismanager.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.wrappers.TypeDefinitionWrapper;
 
 import org.apache.chemistry.opencmis.client.api.*;
-import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
-import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
-import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
-import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -30,30 +26,33 @@ import java.util.List;
 import java.util.Map;
 
 @Stateless
-@LocalBean
-public class CMISTypeManagerService {
-    public static final Logger LOG = Logger.getLogger(CMISTypeManagerService.class);
-
+public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
 
 
     @EJB
     private ConnectionCMIS connection;
+
+    @Override
     public String[] getRepoList(String username, String password, String url) throws ConnectionException {
         return connection.getRepoList(username, password, url);
     }
+    @Override
     public void connect(String s) throws ConnectionException {
         connection.connect(s);
     }
+    @Override
     public Session getSession(){
         return connection.getSession();
     }
 
 
 
+    @Override
     public void disconnect() {
         connection.getSession().getBinding().close();
     }
 
+    @Override
     public String getSessionID() {
         return connection.getSession().toString();
     }
@@ -65,6 +64,7 @@ public class CMISTypeManagerService {
      * @throws ConnectionException
      * @throws BaseException
      */
+    @Override
     public List<TypeDTO> getAllTypes() throws BaseException {
         try {
             List<TypeDTO> typeList = new ArrayList<TypeDTO>();
@@ -89,6 +89,7 @@ public class CMISTypeManagerService {
      * @throws ConnectionException
      * @throws BaseException
      */
+    @Override
     public TypeDTO createType(TypeDTO newType) throws BaseException {
         TypeDTO returnedTypeDTO;
         try {
@@ -117,6 +118,7 @@ public class CMISTypeManagerService {
      * @throws ConnectionException
      * @throws BaseException
      */
+    @Override
     public ObjectType getTypeById(String id) throws BaseException {
 
         ObjectType returnedType;
@@ -143,6 +145,7 @@ public class CMISTypeManagerService {
      * @throws ConnectionException
      * @throws BaseException
      */
+    @Override
     public TypeDTO updateType(TypeDTO updatedType) throws BaseException {
         TypeDTO returnedTypeDTO;
 
@@ -167,6 +170,7 @@ public class CMISTypeManagerService {
      * @throws ConnectionException
      * @throws BaseException
      */
+    @Override
     public void deleteType(TypeDTO deletedType) throws BaseException {
 
         try {
@@ -202,6 +206,7 @@ public class CMISTypeManagerService {
 
     }
 
+    @Override
     public TypeDTO getSecondaryTypes() throws BaseException {
         ObjectType baseSecondary = getTypeById("cmis:secondary");
         return ObjectTypeReader.readWithChildren(baseSecondary);
@@ -210,6 +215,7 @@ public class CMISTypeManagerService {
     /**
      * Create
      */
+    @Override
     public void createMultiply() throws BaseException {
         if (query == null || query.isEmpty()) {
             throw new BaseException("No data");
@@ -235,6 +241,7 @@ public class CMISTypeManagerService {
 
     private List<TypeDefinition> query;
 
+    @Override
     public List<FileStatusReport> readAndValidate(Map<String, InputStream> streamHashMap) {
         ArrayList<FileStatusReport> fileStatusList = new ArrayList<FileStatusReport>();
         HashMap<String, TypeDefinition> okTypeMap = new HashMap<String, TypeDefinition>();
