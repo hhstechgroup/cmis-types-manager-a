@@ -8,7 +8,9 @@ import org.primefaces.model.TreeNode;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,13 @@ public class SecondaryTreeBean implements Serializable {
     private TreeNode[] selectedNodes;
     @EJB
     private CMISTypeManagerService service;
+    private UserProperty userProperty;
+    @ManagedProperty(value = "#{treeBean}")
+    private TreeBean treeBean;
+
+    public void setTreeBean(TreeBean treeBean) {
+        this.treeBean = treeBean;
+    }
 
     public CMISTypeManagerService getService() {
         return service;
@@ -36,7 +45,7 @@ public class SecondaryTreeBean implements Serializable {
     public SecondaryTreeBean() {
 
         try {
-            TypeDTO typeDTO = service.getSecondaryTypes();
+            TypeDTO typeDTO = service.getSecondaryTypes(treeBean.getUserProperty());
             root = new DefaultTreeNode("Secondary Types Root", null);
             render(typeDTO, root);
         } catch (BaseException t) {

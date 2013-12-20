@@ -76,7 +76,7 @@ public class FileUploadController {
         fileStatus = service.readAndValidate(fileMap);
 
         try {
-            service.createMultiply();
+            service.createMultiply(treeBean.getUserProperty());
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
         }

@@ -25,27 +25,27 @@ public interface CMISTypeManagerServiceInterface {
 
     String[] getRepoList(String username, String password, String url) throws ConnectionException;
 
-    void connect(String s) throws ConnectionException;
+    void connect(UserProperty userProperty) throws ConnectionException;
 
-    Session getSession();
+    Session getSession(UserProperty userProperty);
 
-    void disconnect();
+    void disconnect(UserProperty userProperty);
 
-    String getSessionID();
+    String getSessionID(UserProperty userProperty);
 
-    List<TypeDTO> getAllTypes() throws BaseException;
+    List<TypeDTO> getAllTypes(UserProperty userProperty) throws BaseException;
 
-    TypeDTO createType(TypeDTO newType) throws BaseException;
+    TypeDTO createType(TypeDTO newType, UserProperty userProperty) throws BaseException;
 
-    ObjectType getTypeById(String id) throws BaseException;
+    ObjectType getTypeById(String id, UserProperty userProperty) throws BaseException;
 
-    TypeDTO updateType(TypeDTO updatedType) throws BaseException;
+    TypeDTO updateType(TypeDTO updatedType, UserProperty userProperty) throws BaseException;
 
-    void deleteType(TypeDTO deletedType) throws BaseException;
+    void deleteType(TypeDTO deletedType, UserProperty userProperty) throws BaseException;
 
-    TypeDTO getSecondaryTypes() throws BaseException;
+    TypeDTO getSecondaryTypes(UserProperty userProperty) throws BaseException;
 
-    void createMultiply() throws BaseException;
+    void createMultiply(UserProperty userProperty) throws BaseException;
 
     List<FileStatusReport> readAndValidate(Map<String, InputStream> streamHashMap);
 }

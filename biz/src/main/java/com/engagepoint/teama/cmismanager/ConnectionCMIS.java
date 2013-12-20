@@ -21,17 +21,23 @@ import java.util.Map;
 @Singleton
 @Remote
 public class ConnectionCMIS {
-    Map<String, Repository> map = new HashMap<String, Repository>();
+    Map<String, Repository> repoMap = new HashMap<String, Repository>();
+    Map<UserProperty, Session> sessionMap = new HashMap<UserProperty, Session>();
 
-    public Session getSession() {
+    public Session getSession(UserProperty userProperty) {
+        Session session = null;
+        if(!sessionMap.containsKey(userProperty)){
+            session = repoMap.get(userProperty.getRepositoryName()).createSession();
+            sessionMap.put(userProperty, session);
+        }else {
+            session = sessionMap.get(userProperty);
+        }
         return session;
     }
 
-    Session session;
+  public String[] getRepoList(String username, String password, String url) throws ConnectionException {
 
-    public String[] getRepoList(String username, String password, String url) throws ConnectionException {
 
-        map = new HashMap<String, Repository>();
         SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
@@ -52,27 +58,27 @@ public class ConnectionCMIS {
             throw new ConnectionException("no connection");
         }
 
-        map.clear();
         List<String> array = new ArrayList<String>();
 
         for (Repository repo : list) {
-            map.put(repo.getName(), repo);
+            repoMap.put(repo.getName(), repo);
             array.add(repo.getName());
         }
 
         return array.toArray(new String[0]);
     }
 
-    public void connect(String repoName) throws ConnectionException {
+    public void connect(UserProperty userProperty) throws ConnectionException {
 
-        if(map.isEmpty()) {
+        if(repoMap.isEmpty()) {
             throw new ConnectionException("There are no available repository. Use 'getRepoList' at first");
         }
 
-        session = map.get(repoName).createSession();
+       Session session = getSession(userProperty);
 
         if (session == null) {
             throw new ConnectionException("no session");
         }
+
     }
 }

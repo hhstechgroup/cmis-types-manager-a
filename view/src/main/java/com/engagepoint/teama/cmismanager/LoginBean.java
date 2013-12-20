@@ -29,6 +29,7 @@ public class LoginBean implements Serializable {
     private String url;
     private String chosenRepo;
     private String[] availableReposList;
+    private UserProperty userProperty;
 
     @EJB(beanInterface = CMISTypeManagerServiceInterface.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.CMISTypeManagerService")
     private CMISTypeManagerServiceInterface service;
@@ -87,9 +88,12 @@ public class LoginBean implements Serializable {
 
     public String doLogin() {
         String page;
+        userProperty = new UserProperty(username, password, chosenRepo);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put("user", userProperty);
         try {
-            service.connect(chosenRepo);
-            sessionID = service.getSessionID();
+            service.connect(userProperty);   //todo correct
+            sessionID = service.getSessionID(userProperty);
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute(SESSION_ID, sessionID);
             page = INDEX_PAGE_REDIRECT;
@@ -129,7 +133,7 @@ public class LoginBean implements Serializable {
         availableReposList = null;
         chosenRepo = null;
 
-        service.disconnect();
+        service.disconnect(userProperty);
         return LOGIN_PAGE_REDIRECT;
     }
 }

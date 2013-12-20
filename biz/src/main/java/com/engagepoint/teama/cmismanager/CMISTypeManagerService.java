@@ -7,15 +7,18 @@ import com.engagepoint.teama.cmismanager.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.wrappers.TypeDefinitionWrapper;
 
 import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
+import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
+import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -27,9 +30,7 @@ import java.util.Map;
 
 @Stateless
 public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
-
-
-    @EJB
+  @EJB
     private ConnectionCMIS connection;
 
     @Override
@@ -37,24 +38,24 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
         return connection.getRepoList(username, password, url);
     }
     @Override
-    public void connect(String s) throws ConnectionException {
-        connection.connect(s);
+    public void connect(UserProperty userProperty) throws ConnectionException {
+        connection.connect(userProperty);
     }
     @Override
-    public Session getSession(){
-        return connection.getSession();
+    public Session getSession(UserProperty userProperty){
+        return connection.getSession(userProperty);
     }
 
 
 
     @Override
-    public void disconnect() {
-        connection.getSession().getBinding().close();
+    public void disconnect(UserProperty userProperty) {
+        connection.getSession(userProperty).getBinding().close();
     }
 
     @Override
-    public String getSessionID() {
-        return connection.getSession().toString();
+    public String getSessionID(UserProperty userProperty) {
+        return connection.getSession(userProperty).toString();
     }
 
     /**
@@ -65,19 +66,18 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
      * @throws BaseException
      */
     @Override
-    public List<TypeDTO> getAllTypes() throws BaseException {
-        try {
-            List<TypeDTO> typeList = new ArrayList<TypeDTO>();
-            List<Tree<ObjectType>> list = connection.getSession().getTypeDescendants(null, -1, true);
-            for (Tree<ObjectType> tree : list) {
-                typeList.add(ObjectTypeReader.readTree(tree));
-            }
-            return typeList;
-        } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage(), cp);
-        } catch (CmisBaseException c) {
-            throw new BaseException(c.getMessage(), c);
+    public List<TypeDTO> getAllTypes(UserProperty userProperty) throws BaseException {        try {
+        List<TypeDTO> typeList = new ArrayList<TypeDTO>();
+        List<Tree<ObjectType>> list = connection.getSession(userProperty).getTypeDescendants(null, -1, true);
+        for (Tree<ObjectType> tree : list) {
+            typeList.add(ObjectTypeReader.readTree(tree));
         }
+        return typeList;
+    } catch (CmisPermissionDeniedException cp) {
+        throw new ConnectionException(cp.getMessage(), cp);
+    } catch (CmisBaseException c) {
+        throw new BaseException(c.getMessage(), c);
+    }
     }
 
     /**
@@ -90,11 +90,11 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
      * @throws BaseException
      */
     @Override
-    public TypeDTO createType(TypeDTO newType) throws BaseException {
+    public TypeDTO createType(TypeDTO newType, UserProperty userProperty) throws BaseException {
         TypeDTO returnedTypeDTO;
         try {
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
-            ObjectType createdType = connection.getSession().createType(typeDefinitionWrapper);
+            ObjectType createdType = connection.getSession(userProperty).createType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
         } catch (CmisObjectNotFoundException ex) {
             throw new ModificationException(ex.getMessage(), ex);
@@ -119,12 +119,12 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
      * @throws BaseException
      */
     @Override
-    public ObjectType getTypeById(String id) throws BaseException {
+    public ObjectType getTypeById(String id, UserProperty userProperty) throws BaseException {
 
         ObjectType returnedType;
 
         try {
-            returnedType = connection.getSession().getTypeDefinition(id);
+            returnedType = connection.getSession(userProperty).getTypeDefinition(id);
         } catch (CmisObjectNotFoundException cp) {
             throw new ModificationException(cp.getMessage(), cp);
         } catch (CmisPermissionDeniedException cp) {
@@ -146,12 +146,12 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
      * @throws BaseException
      */
     @Override
-    public TypeDTO updateType(TypeDTO updatedType) throws BaseException {
+    public TypeDTO updateType(TypeDTO updatedType, UserProperty userProperty) throws BaseException {
         TypeDTO returnedTypeDTO;
 
         try {
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(updatedType);
-            ObjectType newType = connection.getSession().updateType(typeDefinitionWrapper);
+            ObjectType newType = connection.getSession(userProperty).updateType(typeDefinitionWrapper);
             returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(newType);
         } catch (CmisPermissionDeniedException cp) {
             throw new ConnectionException(cp.getMessage(), cp);
@@ -171,17 +171,17 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
      * @throws BaseException
      */
     @Override
-    public void deleteType(TypeDTO deletedType) throws BaseException {
+    public void deleteType(TypeDTO deletedType, UserProperty userProperty) throws BaseException {
 
         try {
 
-            List<Tree<ObjectType>> list = connection.getSession().getTypeDescendants(deletedType.getId(), -1, false);
+            List<Tree<ObjectType>> list = connection.getSession(userProperty).getTypeDescendants(deletedType.getId(), -1, false);
 
             if (list != null && !list.isEmpty()) {
-                deleteTree(list);
+                deleteTree(list, userProperty);
             }
 
-            connection.getSession().deleteType(deletedType.getId());
+            connection.getSession(userProperty).deleteType(deletedType.getId());
 
         } catch (CmisInvalidArgumentException cp) {
             throw new ModificationException(cp.getMessage(), cp);
@@ -194,21 +194,21 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
 
     }
 
-    private void deleteTree(List<Tree<ObjectType>> list) {
+    private void deleteTree(List<Tree<ObjectType>> list, UserProperty userProperty) {
 
         for (Tree<ObjectType> objectTypeTree : list) {
 
             if (objectTypeTree.getChildren() != null && !objectTypeTree.getChildren().isEmpty()) {
-                deleteTree(objectTypeTree.getChildren());
+                deleteTree(objectTypeTree.getChildren(), userProperty);
             }
-            connection.getSession().deleteType(objectTypeTree.getItem().getId());
+            connection.getSession(userProperty).deleteType(objectTypeTree.getItem().getId());
         }
 
     }
 
     @Override
-    public TypeDTO getSecondaryTypes() throws BaseException {
-        ObjectType baseSecondary = getTypeById("cmis:secondary");
+    public TypeDTO getSecondaryTypes(UserProperty userProperty) throws BaseException {
+        ObjectType baseSecondary = getTypeById("cmis:secondary", userProperty);
         return ObjectTypeReader.readWithChildren(baseSecondary);
     }
 
@@ -216,7 +216,7 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
      * Create
      */
     @Override
-    public void createMultiply() throws BaseException {
+    public void createMultiply(UserProperty userProperty) throws BaseException {
         if (query == null || query.isEmpty()) {
             throw new BaseException("No data");
         }
@@ -225,7 +225,7 @@ public class CMISTypeManagerService implements CMISTypeManagerServiceInterface {
         for (TypeDefinition type : query) {
 
             try {
-                returnedTypeDefinition = connection.getSession().createType(type);
+                returnedTypeDefinition = connection.getSession(userProperty).createType(type);
                 if (returnedTypeDefinition != null) {
                     resultMap.put(returnedTypeDefinition.getDisplayName(), "in repo");
                 } else {
