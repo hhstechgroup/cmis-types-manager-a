@@ -1,4 +1,4 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.util;
 
 import com.engagepoint.teama.cmismanager.model.BaseTypeEnum;
 import com.engagepoint.teama.cmismanager.model.PropertyRow;
@@ -6,40 +6,15 @@ import com.engagepoint.teama.cmismanager.model.TypeDTO;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Tree;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
 import java.util.*;
 
 public final class ObjectTypeReader {
 
-    private ObjectTypeReader() {
-
-    }
-
     public static TypeDTO readIgnoreChildren(ObjectType objType) {
-        TypeDTO dto = new TypeDTO();
 
-        dto.setBaseTypeId(BaseTypeEnum.fromValue(objType.getBaseTypeId().value()));
-        dto.setParentTypeId(objType.getParentTypeId());
-
-        dto.setMutabilityCanCreate(objType.getTypeMutability().canCreate());
-        dto.setMutabilityCanDelete(objType.getTypeMutability().canDelete());
-        dto.setMutabilityCanUpdate(objType.getTypeMutability().canUpdate());
-
-        dto.setId(objType.getId());
-        dto.setLocalName(objType.getLocalName());
-        dto.setLocalNamespace(objType.getLocalNamespace());
-        dto.setQueryName(objType.getQueryName());
-        dto.setDisplayName(objType.getDisplayName());
-        dto.setDescription(objType.getDescription());
-
-        dto.setCreatable(objType.isCreatable());
-        dto.setFileable(objType.isFileable());
-        dto.setQueryable(objType.isQueryable());
-
-        dto.setIncludedInSupertypeQuery(objType.isIncludedInSupertypeQuery());
-        dto.setFulltextIndexed(objType.isFulltextIndexed());
-        dto.setControllableAcl(objType.isControllableAcl());
-        dto.setControllablePolicy(objType.isControllablePolicy());
+        TypeDTO dto = readTypeDefinition(objType);
         dto.setPropertyRows((ArrayList) ObjectTypeReader.readProperties(objType));
 
         return dto;
@@ -102,5 +77,34 @@ public final class ObjectTypeReader {
         root.setChildren(children);
 
         return root;
+    }
+
+    public static TypeDTO readTypeDefinition(TypeDefinition typeDefinition) {
+        TypeDTO dto = new TypeDTO();
+
+        dto.setBaseTypeId(BaseTypeEnum.fromValue(typeDefinition.getBaseTypeId().value()));
+        dto.setParentTypeId(typeDefinition.getParentTypeId());
+
+        dto.setMutabilityCanCreate(typeDefinition.getTypeMutability().canCreate());
+        dto.setMutabilityCanDelete(typeDefinition.getTypeMutability().canDelete());
+        dto.setMutabilityCanUpdate(typeDefinition.getTypeMutability().canUpdate());
+
+        dto.setId(typeDefinition.getId());
+        dto.setLocalName(typeDefinition.getLocalName());
+        dto.setLocalNamespace(typeDefinition.getLocalNamespace());
+        dto.setQueryName(typeDefinition.getQueryName());
+        dto.setDisplayName(typeDefinition.getDisplayName());
+        dto.setDescription(typeDefinition.getDescription());
+
+        dto.setCreatable(typeDefinition.isCreatable());
+        dto.setFileable(typeDefinition.isFileable());
+        dto.setQueryable(typeDefinition.isQueryable());
+
+        dto.setIncludedInSupertypeQuery(typeDefinition.isIncludedInSupertypeQuery());
+        dto.setFulltextIndexed(typeDefinition.isFulltextIndexed());
+        dto.setControllableAcl(typeDefinition.isControllableAcl());
+        dto.setControllablePolicy(typeDefinition.isControllablePolicy());
+
+        return dto;
     }
 }

@@ -9,8 +9,6 @@ import java.util.List;
 
 public class TypeMutabilityWrapper implements Serializable, TypeMutability {
 
-    private static final long serialVersionUID = 20235247221121235L;
-
     private boolean create;
     private boolean update;
     private boolean delete;

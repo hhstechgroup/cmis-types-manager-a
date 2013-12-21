@@ -2,23 +2,20 @@ package com.engagepoint.teama.cmismanager;
 
 public class FileStatusReport {
 
-    private String fileName;
+    private String name;
     private String status;
 
-    public FileStatusReport() {
-    }
-
-    public FileStatusReport(String fileName, String status) {
-        this.fileName = fileName;
+    public FileStatusReport(String name, String status) {
+        this.name = name;
         this.status = status;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getName() {
+        return name;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStatus() {

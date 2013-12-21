@@ -1,5 +1,6 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.util;
 
+import com.engagepoint.teama.cmismanager.FileStatusReport;
 import com.engagepoint.teama.cmismanager.exceptions.ValidationException;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.log4j.Logger;
@@ -7,6 +8,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 public final class DataSorter {
+
     public static final Logger LOG = Logger.getLogger(DataSorter.class);
     public static final String FILES = " files.";
 
@@ -14,7 +16,29 @@ public final class DataSorter {
 
     public static List<TypeDefinition> validateAndSort(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
 
-        Map<String, List<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, List<TypeDefinition>>();
+        Set<TypeDefinition> typeDefinitionTreeSet = validate(typeDefinitionMap, fileStatusList);
+
+        Map<String, List<TypeDefinition>> sortedByIdTypeMap = sort(typeDefinitionTreeSet);
+
+        List<TypeDefinition> resultList = new ArrayList<TypeDefinition>();
+
+        if (sortedByIdTypeMap.isEmpty()) {
+            fileStatusList.add(new FileStatusReport("ID collision", resultList.size() + FILES));
+        } else {
+
+            for (Collection value : sortedByIdTypeMap.values()) {
+                resultList.addAll(value);
+            }
+
+            fileStatusList.add(new FileStatusReport("Ready to upload", resultList.size() + FILES));
+
+        }
+
+        return resultList;
+    }
+
+    private static Set<TypeDefinition> validate(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
+
         Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
 
         for (String fileName : typeDefinitionMap.keySet()) {
@@ -31,6 +55,13 @@ public final class DataSorter {
                 fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
             }
         }
+
+        return typeDefinitionTreeSet;
+    }
+
+    private static Map<String, List<TypeDefinition>> sort(Set<TypeDefinition> typeDefinitionTreeSet) {
+
+        Map<String, List<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, List<TypeDefinition>>();
 
         for (TypeDefinition type : typeDefinitionTreeSet) {
             if (sortedByIdTypeMap.containsKey(type.getParentTypeId())) {
@@ -66,21 +97,7 @@ public final class DataSorter {
             }
         }
 
-        List<TypeDefinition> resultList = new ArrayList<TypeDefinition>();
-
-        if (sortedByIdTypeMap.isEmpty()) {
-            fileStatusList.add(new FileStatusReport("ID collision", resultList.size() + FILES));
-        } else {
-
-            for (Collection value : sortedByIdTypeMap.values()) {
-                resultList.addAll(value);
-            }
-
-            fileStatusList.add(new FileStatusReport("Ready to upload", resultList.size() + FILES));
-
-        }
-
-        return resultList;
+        return sortedByIdTypeMap;
     }
 
     public static void validateTypeDefinition(TypeDefinition type) throws ValidationException {

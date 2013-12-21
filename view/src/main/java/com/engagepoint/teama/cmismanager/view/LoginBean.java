@@ -1,6 +1,8 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.view;
 
 import com.engagepoint.teama.cmismanager.exceptions.BaseException;
+import com.engagepoint.teama.cmismanager.exceptions.ConnectionException;
+import com.engagepoint.teama.cmismanager.service.ServiceEJBRemove;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
@@ -11,15 +13,19 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.UUID;
 
 @ManagedBean(name = "login")
 @SessionScoped
 public class LoginBean implements Serializable {
+
     public static final Logger LOG = Logger.getLogger(LoginBean.class);
+
     public static final String ERROR_PAGE_REDIRECT = "/error?faces-redirect=true";
     public static final String SESSION_ID = "sessionID";
     public static final String INDEX_PAGE_REDIRECT = "/show/index?faces-redirect=true";
     public static final String LOGIN_PAGE_REDIRECT = "/login?faces-redirect=true";
+
     private String username;
     private String password;
     private String sessionID;
@@ -29,16 +35,15 @@ public class LoginBean implements Serializable {
     private String url;
     private String chosenRepo;
     private String[] availableReposList;
-    private UserProperty userProperty;
 
-    @EJB(beanInterface = CMISTypeManagerServiceInterface.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.CMISTypeManagerService")
-    private CMISTypeManagerServiceInterface service;
+    @EJB(beanInterface = ServiceEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.ServiceEJB")
+    private ServiceEJBRemove service;
 
-    public CMISTypeManagerServiceInterface getService() {
+    public ServiceEJBRemove getService() {
         return service;
     }
 
-    public void setService(CMISTypeManagerServiceInterface service) {
+    public void setService(ServiceEJBRemove service) {
         this.service = service;
     }
 
@@ -88,14 +93,8 @@ public class LoginBean implements Serializable {
 
     public String doLogin() {
         String page;
-        userProperty = new UserProperty(username, password, chosenRepo);
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getSessionMap().put("user", userProperty);
         try {
-            service.connect(userProperty);   //todo correct
-            sessionID = service.getSessionID(userProperty);
-            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            httpSession.setAttribute(SESSION_ID, sessionID);
+            service.connect(username, password, url, sessionID, chosenRepo);
             page = INDEX_PAGE_REDIRECT;
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
@@ -106,7 +105,14 @@ public class LoginBean implements Serializable {
     }
 
     public String getRepoList() {
+
         try {
+            UUID uuid = UUID.randomUUID();
+            sessionID = uuid.toString();
+
+            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            httpSession.setAttribute(SESSION_ID, sessionID);
+
             availableReposList = service.getRepoList(username, password, url);
             chosenRepo = availableReposList[0];
 
@@ -114,10 +120,9 @@ public class LoginBean implements Serializable {
             LOG.error(e.getMessage(), e);
             errorBean.setErrorMessage(e.getMessage());
             sessionID = "error";
-            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            httpSession.setAttribute(SESSION_ID, sessionID);
             return ERROR_PAGE_REDIRECT;
         }
+
         return null;
     }
 
@@ -125,15 +130,19 @@ public class LoginBean implements Serializable {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         session.invalidate();
 
+        try {
+            service.disconnect(sessionID);
+        } catch (ConnectionException e) {
+            LOG.error(e.getMessage(), e);
+        }
+
         username = null;
         password = null;
         url = null;
-        sessionID = null;
-
         availableReposList = null;
         chosenRepo = null;
+        sessionID = null;
 
-        service.disconnect(userProperty);
         return LOGIN_PAGE_REDIRECT;
     }
 }

@@ -1,10 +1,12 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.view;
 
+import com.engagepoint.teama.cmismanager.ServiceEJB;
 import com.engagepoint.teama.cmismanager.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.exceptions.ModificationException;
 import com.engagepoint.teama.cmismanager.model.PropertyRow;
 import com.engagepoint.teama.cmismanager.model.TypeDTO;
+import com.engagepoint.teama.cmismanager.service.ServiceEJBRemove;
 import org.apache.log4j.Logger;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -15,10 +17,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +38,10 @@ public class TreeBean implements Serializable {
     private TreeNode rootUpdate;
     private boolean treeRender = true;
     private List<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
-    private UserProperty userProperty;
 
+   @EJB(beanInterface = ServiceEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.ServiceEJB")
+    private ServiceEJBRemove service;
 
-   @EJB(beanInterface = CMISTypeManagerServiceInterface.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.CMISTypeManagerService")
-
-    private CMISTypeManagerServiceInterface service;
     private String mutability = null;
     private PropertyRow propertyRow1 = new PropertyRow();
     private PropertyRow newProperty = new PropertyRow();
@@ -57,25 +53,24 @@ public class TreeBean implements Serializable {
     @ManagedProperty("#{error}")
     private ErrorBean errorBean;
 
-    public UserProperty getUserProperty() {
-        return userProperty;
-    }
+    @ManagedProperty("#{login}")
+    private LoginBean loginBean;
 
-    public void setUserProperty(UserProperty userProperty) {
-        this.userProperty = userProperty;
-    }
+    private String sessionID;
 
     private boolean attributesVisible = false;
     private boolean metadataVisible = false;
     private boolean disableBtn = true;
 
+    public String getSessionID() {
+        return sessionID;
+    }
 
     @PostConstruct
     public void init() {
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            userProperty = (UserProperty) context.getExternalContext().getSessionMap().get("user");
-            List<TypeDTO> list = service.getAllTypes(userProperty);
+            sessionID = loginBean.getSessionID();
+            List<TypeDTO> list = service.getAllTypes(sessionID);
             root = new DefaultTreeNode(ROOT, null);
             render(list, root);
             rootUpdate = new DefaultTreeNode(ROOT, null);
@@ -95,13 +90,15 @@ public class TreeBean implements Serializable {
         }
     }
 
+    public void setLoginBean(LoginBean loginBean) {
+        this.loginBean = loginBean;
+    }
 
-
-    public CMISTypeManagerServiceInterface getService() {
+    public ServiceEJBRemove getService() {
         return service;
     }
 
-    public void setService(CMISTypeManagerService service) {
+    public void setService(ServiceEJB service) {
         this.service = service;
     }
 
@@ -162,11 +159,8 @@ public class TreeBean implements Serializable {
 
     public void deleteType() {
         try {
-            service.deleteType(currentDTO, userProperty);
-            List<TypeDTO> list = service.getAllTypes(userProperty);
-            root = new DefaultTreeNode(ROOT, null);
-            render(list, root);
-            newDTO = new TypeDTO();
+            service.deleteType(currentDTO, sessionID);
+            updateTree();
         } catch (BaseException t) {
             LOG.error(t.getMessage(), t);
             errorBean.setErrorMessage(t.getMessage());
@@ -328,7 +322,7 @@ public class TreeBean implements Serializable {
             //temporary stub
             newDTO.setPropertyRows(new ArrayList<PropertyRow>());
 
-            service.createType(newDTO, userProperty);
+            service.createType(newDTO, sessionID);
             updateTree();
         } catch (ModificationException m) {
             LOG.error(m.getMessage(), m);
@@ -351,7 +345,7 @@ public class TreeBean implements Serializable {
     public void updateTree() {
         List<TypeDTO> list;
         try {
-            list = service.getAllTypes(userProperty);
+            list = service.getAllTypes(sessionID);
             root = new DefaultTreeNode(ROOT, null);
             render(list, root);
             newDTO = new TypeDTO();

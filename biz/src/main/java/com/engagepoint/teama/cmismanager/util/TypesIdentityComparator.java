@@ -1,4 +1,4 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.util;
 
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 

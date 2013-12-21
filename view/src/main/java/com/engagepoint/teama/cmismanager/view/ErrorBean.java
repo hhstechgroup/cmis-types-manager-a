@@ -1,4 +1,4 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.view;
 
 import javax.faces.bean.*;
 import java.io.Serializable;

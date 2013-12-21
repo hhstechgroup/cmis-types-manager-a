@@ -1,6 +1,10 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.view;
 
+import com.engagepoint.teama.cmismanager.FileStatusReport;
+import com.engagepoint.teama.cmismanager.ResultSet;
+import com.engagepoint.teama.cmismanager.service.ConvertorEJBRemove;
 import com.engagepoint.teama.cmismanager.exceptions.BaseException;
+import com.engagepoint.teama.cmismanager.service.ServiceEJBRemove;
 import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -29,8 +33,14 @@ public class FileUploadController {
     private List<FileStatusReport> fileStatus = new ArrayList<FileStatusReport>();
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
-    @EJB(beanInterface = CMISTypeManagerServiceInterface.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.CMISTypeManagerService")
-    private CMISTypeManagerServiceInterface service;
+
+    @EJB(beanInterface = ServiceEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.ServiceEJB")
+    private ServiceEJBRemove service;
+
+    @EJB(beanInterface = ConvertorEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.ConvertorEJB")
+    private ConvertorEJBRemove convertor;
+
+    private ResultSet validationResultSet;
 
     public List<FileStatusReport> getFileStatus() {
         return fileStatus;
@@ -64,19 +74,12 @@ public class FileUploadController {
         this.msgLbl = msgLbl;
     }
 
-    public CMISTypeManagerServiceInterface getService() {
-        return service;
-    }
-
-    public void setService(CMISTypeManagerServiceInterface service) {
-        this.service = service;
-    }
-
     public void processFiles() {
-        fileStatus = service.readAndValidate(fileMap);
+
+        validationResultSet = convertor.readAndValidate(fileMap);
 
         try {
-            service.createMultiply(treeBean.getUserProperty());
+            service.createTypes(validationResultSet.getSortedTypeList(), treeBean.getSessionID());
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
         }
