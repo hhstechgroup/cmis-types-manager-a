@@ -47,36 +47,11 @@ public class SessionEJB {
         if (repoToSessionMap.containsKey(repositoryInfo)) {
             idToRepoMap.put(sessionID, repositoryInfo);
         } else {
+            Session session = createNewSession(username, password, url, repositoryName);
 
-            SessionFactory factory = SessionFactoryImpl.newInstance();
-            Map<String, String> parameter = new HashMap<String, String>();
-
-            parameter.put(SessionParameter.USER, username);
-            parameter.put(SessionParameter.PASSWORD, password);
-
-            parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
-            parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-            parameter.put(SessionParameter.REPOSITORY_ID, repositoryName);
-
-            try {
-                Session session = factory.createSession(parameter);
-
-                if (session != null) {
-
-                    repoToSessionMap.put(repositoryInfo, session);
-                    idToRepoMap.put(sessionID, repositoryInfo);
-
-                } else {
-                    throw new ConnectionException("Can not create session");
-                }
-
-            } catch (CmisBaseException e) {
-                throw new ConnectionException(e.getMessage(), e);
-            }
-
+            repoToSessionMap.put(repositoryInfo, session);
+            idToRepoMap.put(sessionID, repositoryInfo);
         }
-
-
     }
 
     public synchronized void closeSession(String sessionID) throws ConnectionException {
@@ -96,4 +71,31 @@ public class SessionEJB {
 
     }
 
+    private Session createNewSession(String username, String password, String url, String repositoryName) throws ConnectionException{
+
+        Session returnedSession;
+
+        SessionFactory factory = SessionFactoryImpl.newInstance();
+        Map<String, String> parameter = new HashMap<String, String>();
+
+        parameter.put(SessionParameter.USER, username);
+        parameter.put(SessionParameter.PASSWORD, password);
+
+        parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
+        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+        parameter.put(SessionParameter.REPOSITORY_ID, repositoryName);
+
+        try {
+            returnedSession = factory.createSession(parameter);
+
+            if (returnedSession == null) {
+                throw new ConnectionException("Can not create session");
+            }
+
+        } catch (CmisBaseException e) {
+            throw new ConnectionException(e.getMessage(), e);
+        }
+
+        return returnedSession;
+    }
 }
