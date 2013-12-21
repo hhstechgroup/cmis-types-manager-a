@@ -8,20 +8,30 @@ import com.engagepoint.teama.cmismanager.util.DataSorter;
 import com.engagepoint.teama.cmismanager.util.JsonXMLConvertor;
 import com.engagepoint.teama.cmismanager.util.ObjectTypeReader;
 import com.engagepoint.teama.cmismanager.wrappers.TypeDefinitionWrapper;
+
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
-import org.apache.log4j.Logger;
 
-import javax.ejb.Stateless;
-import javax.xml.stream.XMLStreamException;
-import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.log4j.Logger;
+import javax.ejb.Stateless;
+import javax.xml.stream.XMLStreamException;
 
 @Stateless
 public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {

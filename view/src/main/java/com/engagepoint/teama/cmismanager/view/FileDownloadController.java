@@ -3,9 +3,13 @@ package com.engagepoint.teama.cmismanager.view;
 import com.engagepoint.teama.cmismanager.service.ConvertorEJBRemove;
 import com.engagepoint.teama.cmismanager.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.model.TypeDTO;
+
 import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+
+import java.io.InputStream;
+import java.io.IOException;
 
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
@@ -13,7 +17,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import java.io.*;
 
 @ManagedBean
 @SessionScoped

@@ -5,7 +5,13 @@ import com.engagepoint.teama.cmismanager.exceptions.ValidationException;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.Set;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.Collection;
 
 public final class DataSorter {
 

@@ -1,6 +1,7 @@
 package com.engagepoint.teama.cmismanager;
 
 import com.engagepoint.teama.cmismanager.exceptions.ConnectionException;
+
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
@@ -10,6 +11,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

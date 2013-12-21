@@ -9,7 +9,12 @@ import com.engagepoint.teama.cmismanager.service.ServiceEJBRemove;
 import com.engagepoint.teama.cmismanager.util.ObjectTypeReader;
 import com.engagepoint.teama.cmismanager.wrappers.TypeDefinitionWrapper;
 
-import org.apache.chemistry.opencmis.client.api.*;
+
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Repository;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.Tree;
+import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
@@ -21,6 +26,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedExce
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
