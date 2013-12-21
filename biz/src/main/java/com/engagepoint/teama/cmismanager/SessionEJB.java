@@ -21,9 +21,23 @@ import java.util.concurrent.ConcurrentHashMap;
 @LocalBean
 public class SessionEJB {
 
+    /**
+     * This map binds unique userID with repository. Different application users can use the same repository
+     * (same username, password, url and repositoryName), and they will have one session for all.
+     */
     private Map<String, RepositoryInfo> idToRepoMap = new ConcurrentHashMap<String, RepositoryInfo>();
+
+    /**
+     * This map contains session pool.
+     */
     private Map<RepositoryInfo, Session> repoToSessionMap = new ConcurrentHashMap<RepositoryInfo, Session>();
 
+    /**
+     * Get session from pool by users sessionID
+     * @param sessionID every user must have unique session ID
+     * @return session
+     * @throws ConnectionException
+     */
     public Session getSession(String sessionID) throws ConnectionException {
 
         Session returnedSession;
@@ -35,12 +49,22 @@ public class SessionEJB {
         }
 
         if (returnedSession == null) {
-            //todo
+            throw new ConnectionException("Session was close");
         }
 
         return returnedSession;
     }
 
+    /**
+     * Bind users sessionID with some session. If session does not exist, create new session. If session exist,
+     * bind sessionID with this session.
+     * @param username username
+     * @param password password
+     * @param url url
+     * @param sessionID every user must have unique session ID
+     * @param repositoryName repository ID
+     * @throws ConnectionException
+     */
     public synchronized void createSession(String username, String password, String url, String sessionID, String repositoryName)
             throws ConnectionException {
 
@@ -56,6 +80,11 @@ public class SessionEJB {
         }
     }
 
+    /**
+     * Remove sessionID from idToRepoMap. If no one use this session at this moment, this method will close it.
+     * @param sessionID every user must have unique session ID
+     * @throws ConnectionException
+     */
     public synchronized void closeSession(String sessionID) throws ConnectionException {
 
         if (! idToRepoMap.containsKey(sessionID)) {
@@ -73,6 +102,14 @@ public class SessionEJB {
 
     }
 
+    /**
+     * Create new session if this necessary.
+     * @param username username
+     * @param password password
+     * @param url url
+     * @param repositoryName repository ID
+     * @throws ConnectionException
+     */
     private Session createNewSession(String username, String password, String url, String repositoryName) throws ConnectionException{
 
         Session returnedSession;

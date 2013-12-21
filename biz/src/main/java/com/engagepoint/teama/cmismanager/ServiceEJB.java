@@ -35,14 +35,18 @@ import java.util.Map;
 @Stateless
 public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
 
+    /**
+     * This EJB handle clients sessions
+     */
     @EJB
     private SessionEJB sessionEJB;
 
     /**
-     *
-     * @param username
-     * @param password
-     * @param url
+     * This method allows us to check does user can connect without creating session. Returns array of repositories ID,
+     * if user with current username, password and url can create session with some repository.
+     * @param username username
+     * @param password password
+     * @param url url
      * @return array of repositories
      * @throws com.engagepoint.teama.cmismanager.exceptions.ConnectionException
      */
@@ -77,7 +81,16 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
         return array.toArray(new String[1]);
     }
 
-
+    /**
+     * This method allows us to bind current user with session. If two or more users use same repository in same tame
+     * and have same username and password, SessionEJB create only one session and share it.
+     * Use this method only once at start!
+     * @param username username
+     * @param password password
+     * @param url url
+     * @param sessionID every user must have unique session ID
+     * @throws ConnectionException
+     */
     @Override
     public void connect(String username, String password, String url, String sessionID, String repositoryName) throws ConnectionException {
 
@@ -88,14 +101,20 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
         }
     }
 
+    /**
+     * This method allows us to close session, if no one use it.
+     * Use this method only one at finish!
+     * @param sessionID every user must have unique session ID
+     * @throws com.engagepoint.teama.cmismanager.exceptions.ConnectionException
+     */
     @Override
     public void disconnect(String sessionID) throws ConnectionException {
         sessionEJB.closeSession(sessionID);
     }
 
     /**
-     * Get all types in repository.
-     *
+     * Get all types from repository.
+     * @param sessionID every user must have unique session ID
      * @return list of base types trees
      * @throws ConnectionException
      * @throws BaseException
@@ -120,8 +139,8 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     }
 
     /**
-     * Create type in repository.
-     *
+     * Create new type in repository.
+     * @param sessionID every user must have unique session ID
      * @param newType some TypeDTO instance
      * @return new instance if created, null if not
      * @throws ModificationException
@@ -151,8 +170,8 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     }
 
     /**
-     * Get type from repository.
-     *
+     * Get type by ID from repository.
+     * @param sessionID every user must have unique session ID
      * @param id some TypeDTO instance ID
      * @return new instance if created, null if not
      * @throws ModificationException
@@ -179,7 +198,7 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
 
     /**
      * Update type in repository.
-     *
+     * @param sessionID every user must have unique session ID
      * @param updatedType some TypeDTO instance
      * @return new instance if created, null if not
      * @throws ModificationException
@@ -187,6 +206,7 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
      * @throws BaseException
      */
     @Override
+    @Deprecated
     public TypeDTO updateType(TypeDTO updatedType, String sessionID) throws BaseException {
         TypeDTO returnedTypeDTO;
         Session session = sessionEJB.getSession(sessionID);
@@ -205,9 +225,9 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     }
 
     /**
-     * Delete type in repository. If type have children, this method delete all children.
-     *
-     * @param deletedType
+     * Delete type in repository. If type have children, this method must delete them too..
+     * @param sessionID every user must have unique session ID
+     * @param deletedType some TypeDTO instance
      * @throws ModificationException
      * @throws ConnectionException
      * @throws BaseException
@@ -238,6 +258,11 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
 
     }
 
+    /**
+     * Util method, that allows delete types and their children.
+     * @param list list of Tree<ObjectType>
+     * @param session users session
+     */
     private void deleteTree(List<Tree<ObjectType>> list, Session session) {
 
         for (Tree<ObjectType> objectTypeTree : list) {
@@ -251,7 +276,12 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     }
 
     /**
-     * Create
+     * Try to create many types at once.
+     * @param typeDTOList list of sorted TypeDTO instances
+     * @param sessionID every user must have unique session ID
+     * @throws BaseException
+     * @see ConvertorEJB
+     * @return list of instances FileStatusReport
      */
     @Override
     public List<FileStatusReport> createTypes(List<TypeDTO> typeDTOList, String sessionID) throws BaseException {

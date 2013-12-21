@@ -38,6 +38,11 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
 
     public static final Logger LOG = Logger.getLogger(ConvertorEJB.class);
 
+    /**
+     * This method allows to read dataStreams from map, then validate and sort them.
+     * @param streamHashMap streamHashMap, where key is file name
+     * @return ResultSet, that contains statusReportList (if convertation or validation fails) and sorted by ParentId TypeDTO instances.
+     */
     @Override
     public ResultSet readAndValidate(Map<String, InputStream> streamHashMap) {
 
@@ -78,6 +83,12 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
         return new ResultSet(fileStatusList, sortedTypeList);
     }
 
+    /**
+     * Convert TypeDTO instance in stream, that contains TypeDefinition in XML.
+     * @param typeDTO TypeDTO instance
+     * @return stream
+     * @throws BaseException
+     */
     @Override
     public InputStream createXMLFromType(TypeDTO typeDTO) throws BaseException {
 
@@ -92,6 +103,12 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
         return inputStream;
     }
 
+    /**
+     * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
+     * @param typeDTO TypeDTO instance
+     * @return stream
+     * @throws BaseException
+     */
     @Override
     public InputStream createJSONFromType(TypeDTO typeDTO) throws BaseException {
 
@@ -106,6 +123,13 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
         return inputStream;
     }
 
+    /**
+     * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in XML.
+     * @param parentTypeDTO TypeDTO instance
+     * @param path path
+     * @return stream
+     * @throws BaseException
+     */
     @Override
     public InputStream createXMLFromTypeIncludeChildren(TypeDTO parentTypeDTO, String path) throws BaseException {
 
@@ -153,6 +177,13 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
         return stream;
     }
 
+    /**
+     * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in JSON.
+     * @param parentTypeDTO TypeDTO instance
+     * @param path path
+     * @return stream
+     * @throws BaseException
+     */
     @Override
     public InputStream createJSONFromTypeIncludeChildren(TypeDTO parentTypeDTO, String path) throws BaseException {
 
@@ -199,6 +230,11 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
 
     }
 
+    /**
+     * This method creates one list, that contains all types and their children.
+     * @param typeDTOList typeDTOList
+     * @return list
+     */
     private List<TypeDTO> getTypeChildren(List<TypeDTO> typeDTOList) {
 
         List<TypeDTO> listOfChildren = new ArrayList<TypeDTO>();
