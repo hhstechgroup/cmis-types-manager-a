@@ -20,6 +20,14 @@ public final class DataSorter {
 
     public static final String SAME_ID_ERROR = "Same ID";
 
+    /**
+     * This method validates typeDefinitions from map, then sort them.
+     * @see com.engagepoint.teama.cmismanager.ConvertorEJB
+     * @param typeDefinitionMap streamHashMap, where key is file name, and value is TypeDefinition instance.
+     * @param fileStatusList if some of TypeDefinition instances fails convertation or validation, method will put in
+     *                       this list new FileStatusReport instance, that contains file name and explanation.
+     * @return List<TypeDefinition>, that contains sorted by ParentId TypeDTO instances.
+     */
     public static List<TypeDefinition> validateAndSort(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
 
         Set<TypeDefinition> typeDefinitionTreeSet = validate(typeDefinitionMap, fileStatusList);
@@ -43,6 +51,15 @@ public final class DataSorter {
         return resultList;
     }
 
+    /**
+     * This method contains part of 'validateAndSort' method.
+     * It validates typeDefinitions from map. If two or more TypeDefinition instances have the same ID,
+     * only one will be add to returned typeDefinitionSet.
+     * @param typeDefinitionMap streamHashMap, where key is file name, and value is TypeDefinition instance.
+     * @param fileStatusList if some of TypeDefinition instances fails convertation or validation, method will put in
+     *                       this list new FileStatusReport instance, that contains file name and explanation.
+     * @return Set<TypeDefinition>, that contains TypeDTO instances with unique ID.
+     */
     private static Set<TypeDefinition> validate(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
 
         Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
@@ -65,6 +82,13 @@ public final class DataSorter {
         return typeDefinitionTreeSet;
     }
 
+    /**
+     * This method contains part of 'validateAndSort' method.
+     * It sorts typeDefinitionTreeSet by parentTypeID. Sort rule is simple: "There are set of TypeDefinition instances:
+     * type1, type2 ... If type1 have parentTypeID, that equals type2 ID, at first we must create type2, then type1 ".
+     * @param typeDefinitionTreeSet that contains TypeDTO instances with unique ID
+     * @return Map<String, List<TypeDefinition>> , where keys ara parentTypeIDs
+     */
     private static Map<String, List<TypeDefinition>> sort(Set<TypeDefinition> typeDefinitionTreeSet) {
 
         Map<String, List<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, List<TypeDefinition>>();
@@ -106,6 +130,10 @@ public final class DataSorter {
         return sortedByIdTypeMap;
     }
 
+    /**
+     * This method validates TypeDefinition instance.
+     * @throws ValidationException
+     */
     public static void validateTypeDefinition(TypeDefinition type) throws ValidationException {
 
         if (type == null) {
@@ -172,10 +200,19 @@ public final class DataSorter {
 
     }
 
+    /**
+     * This method contains part of 'validateTypeDefinition' method.
+     * Validates QueryName of some TypeDefinition instance.
+     * @return false if validation fail
+     */
     private static boolean checkQueryName(String queryName) {
         return queryName != null && queryName.length() > 0 && checkString(queryName);
     }
 
+    /**
+     * This method contains part of 'checkQueryName' method.
+     * @return false if validation fail
+     */
     private static boolean checkString(String str) {
         String[] tmp = {" ", ",", "\"", "'", "\\", ".", "(", ")"};
 
