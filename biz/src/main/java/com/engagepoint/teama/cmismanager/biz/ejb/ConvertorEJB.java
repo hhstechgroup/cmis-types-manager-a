@@ -42,48 +42,80 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
     public static final Logger LOG = Logger.getLogger(ConvertorEJB.class);
 
     /**
-     * This method allows to read dataStreams from map, then validate and sort them.
-     * @param streamHashMap streamHashMap, where key is file name
-     * @return ResultSet, that contains statusReportList (if convertation or validation fails) and sorted by ParentId TypeDTO instances.
+     * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
+     * @param typeDTO TypeDTO instance
+     * @return stream
+     * @throws BaseException
      */
     @Override
-    public ResultSet readAndValidate(Map<String, InputStream> streamHashMap) {
+    public InputStream createJSONFromType(TypeDTO typeDTO) throws BaseException {
 
-        ArrayList<FileStatusReport> fileStatusList = new ArrayList<FileStatusReport>();
+        TypeDefinition typeDefinition = new TypeDefinitionWrapper(typeDTO);
+        InputStream inputStream;
 
-        HashMap<String, TypeDefinition> okTypeMap = new HashMap<String, TypeDefinition>();
+        try {
+            inputStream = JsonXMLConvertor.createJSONFromType(typeDefinition);
+        } catch (ConvertationException e) {
+            LOG.error(e.getMessage(), e);
+            throw new BaseException(e.getMessage(), e);
+        }
+        return inputStream;
+    }
 
-        for (String fileName : streamHashMap.keySet()) {
-            InputStream stream = streamHashMap.get(fileName);
-            if (fileName.endsWith(".xml")) {
+    /**
+     * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in JSON.
+     * @param parentTypeDTO TypeDTO instance
+     * @param path path
+     * @return stream
+     * @throws BaseException
+     */
+    @Override
+    public InputStream createJSONFromTypeIncludeChildren(TypeDTO parentTypeDTO, String path) throws BaseException {
+
+        List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
+        typeDTOList.add(parentTypeDTO);
+
+        if (!parentTypeDTO.getChildren().isEmpty()) {
+            typeDTOList.addAll( getTypeChildren( parentTypeDTO.getChildren() ) );
+        }
+
+        InputStream stream;
+        ZipOutputStream out;
+
+        try {
+            out = new ZipOutputStream(new FileOutputStream(new File(path)));
+
+            for (TypeDTO typeDTO : typeDTOList) {
+                OutputStream outputStream = new ByteArrayOutputStream();
+
                 try {
-                    TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
-                    okTypeMap.put(fileName, type);
-                } catch (ConvertationException e) {
+
+                    TypeUtils.writeToJSON(new TypeDefinitionWrapper(typeDTO), outputStream);
+                    out.putNextEntry(new ZipEntry(typeDTO.getDisplayName() + ".json"));
+                    out.write(((ByteArrayOutputStream) outputStream).toByteArray());
+                    out.closeEntry();
+
+                } catch (IOException e) {
                     LOG.error(e.getMessage(), e);
-                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 }
-            } else if (fileName.endsWith(".json")) {
-                try {
-                    TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
-                    okTypeMap.put(fileName, type);
-                } catch (ConvertationException e) {
-                    LOG.error(e.getMessage(), e);
-                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
-                }
-            } else {
-                fileStatusList.add(new FileStatusReport(fileName, "Wrong file format."));
             }
+
+            stream = new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            LOG.error(e.getMessage(), e);
+            throw new BaseException(e.getMessage(), e);
         }
 
-        List<TypeDefinition> query = DataSorter.validateAndSort(okTypeMap, fileStatusList);
-        List<TypeDTO> sortedTypeList = new ArrayList<TypeDTO>();
-
-        for (TypeDefinition typeDefinition : query) {
-            sortedTypeList.add(ObjectTypeReader.readTypeDefinition(typeDefinition));
+        try {
+            if( out != null) {
+                out.close();
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
         }
 
-        return new ResultSet(fileStatusList, sortedTypeList);
+        return stream;
+
     }
 
     /**
@@ -100,27 +132,6 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
 
         try {
             inputStream = JsonXMLConvertor.createXMLFromType(typeDefinition);
-        } catch (ConvertationException e) {
-            LOG.error(e.getMessage(), e);
-            throw new BaseException(e.getMessage(), e);
-        }
-        return inputStream;
-    }
-
-    /**
-     * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
-     * @param typeDTO TypeDTO instance
-     * @return stream
-     * @throws BaseException
-     */
-    @Override
-    public InputStream createJSONFromType(TypeDTO typeDTO) throws BaseException {
-
-        TypeDefinition typeDefinition = new TypeDefinitionWrapper(typeDTO);
-        InputStream inputStream;
-
-        try {
-            inputStream = JsonXMLConvertor.createJSONFromType(typeDefinition);
         } catch (ConvertationException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
@@ -186,59 +197,48 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
     }
 
     /**
-     * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in JSON.
-     * @param parentTypeDTO TypeDTO instance
-     * @param path path
-     * @return stream
-     * @throws BaseException
+     * This method allows to read dataStreams from map, then validate and sort them.
+     * @param streamHashMap streamHashMap, where key is file name
+     * @return ResultSet, that contains statusReportList (if convertation or validation fails) and sorted by ParentId TypeDTO instances.
      */
     @Override
-    public InputStream createJSONFromTypeIncludeChildren(TypeDTO parentTypeDTO, String path) throws BaseException {
+    public ResultSet readAndValidate(Map<String, InputStream> streamHashMap) {
 
-        List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
-        typeDTOList.add(parentTypeDTO);
+        ArrayList<FileStatusReport> fileStatusList = new ArrayList<FileStatusReport>();
 
-        if (!parentTypeDTO.getChildren().isEmpty()) {
-            typeDTOList.addAll( getTypeChildren( parentTypeDTO.getChildren() ) );
-        }
+        HashMap<String, TypeDefinition> okTypeMap = new HashMap<String, TypeDefinition>();
 
-        InputStream stream;
-        ZipOutputStream out;
-
-        try {
-            out = new ZipOutputStream(new FileOutputStream(new File(path)));
-
-            for (TypeDTO typeDTO : typeDTOList) {
-                OutputStream outputStream = new ByteArrayOutputStream();
-
+        for (String fileName : streamHashMap.keySet()) {
+            InputStream stream = streamHashMap.get(fileName);
+            if (fileName.endsWith(".xml")) {
                 try {
-
-                    TypeUtils.writeToJSON(new TypeDefinitionWrapper(typeDTO), outputStream);
-                    out.putNextEntry(new ZipEntry(typeDTO.getDisplayName() + ".json"));
-                    out.write(((ByteArrayOutputStream) outputStream).toByteArray());
-                    out.closeEntry();
-
-                } catch (IOException e) {
+                    TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
+                    okTypeMap.put(fileName, type);
+                } catch (ConvertationException e) {
                     LOG.error(e.getMessage(), e);
+                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 }
+            } else if (fileName.endsWith(".json")) {
+                try {
+                    TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
+                    okTypeMap.put(fileName, type);
+                } catch (ConvertationException e) {
+                    LOG.error(e.getMessage(), e);
+                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
+                }
+            } else {
+                fileStatusList.add(new FileStatusReport(fileName, "Wrong file format."));
             }
-
-            stream = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            LOG.error(e.getMessage(), e);
-            throw new BaseException(e.getMessage(), e);
         }
 
-        try {
-            if( out != null) {
-                out.close();
-            }
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
+        List<TypeDefinition> query = DataSorter.validateAndSort(okTypeMap, fileStatusList);
+        List<TypeDTO> sortedTypeList = new ArrayList<TypeDTO>();
+
+        for (TypeDefinition typeDefinition : query) {
+            sortedTypeList.add(ObjectTypeReader.readTypeDefinition(typeDefinition));
         }
 
-        return stream;
-
+        return new ResultSet(fileStatusList, sortedTypeList);
     }
 
     /**

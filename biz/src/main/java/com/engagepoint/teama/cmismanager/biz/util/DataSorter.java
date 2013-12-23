@@ -56,85 +56,6 @@ public final class DataSorter {
     }
 
     /**
-     * This method contains part of 'validateAndSort' method.
-     * It validates typeDefinitions from map. If two or more TypeDefinition instances have the same ID,
-     * only one will be add to returned typeDefinitionSet.
-     * @param typeDefinitionMap streamHashMap, where key is file name, and value is TypeDefinition instance.
-     * @param fileStatusList if some of TypeDefinition instances fails convertation or validation, method will put in
-     *                       this list new FileStatusReport instance, that contains file name and explanation.
-     * @return Set<TypeDefinition>, that contains TypeDTO instances with unique ID.
-     */
-    private static Set<TypeDefinition> validate(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
-
-        Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
-
-        for (String fileName : typeDefinitionMap.keySet()) {
-
-            TypeDefinition type = typeDefinitionMap.get(fileName);
-
-            try {
-                validateTypeDefinition(type);
-                if (!typeDefinitionTreeSet.add(type)) {
-                    fileStatusList.add(new FileStatusReport(fileName, SAME_ID_ERROR));
-                }
-            } catch (ValidationException e) {
-                LOG.error(e.getMessage(), e);
-                fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
-            }
-        }
-
-        return typeDefinitionTreeSet;
-    }
-
-    /**
-     * This method contains part of 'validateAndSort' method.
-     * It sorts typeDefinitionTreeSet by parentTypeID. Sort rule is simple: "There are set of TypeDefinition instances:
-     * type1, type2 ... If type1 have parentTypeID, that equals type2 ID, at first we must create type2, then type1 ".
-     * @param typeDefinitionTreeSet that contains TypeDTO instances with unique ID
-     * @return Map<String, List<TypeDefinition>> , where keys ara parentTypeIDs
-     */
-    private static Map<String, List<TypeDefinition>> sort(Set<TypeDefinition> typeDefinitionTreeSet) {
-
-        Map<String, List<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, List<TypeDefinition>>();
-
-        for (TypeDefinition type : typeDefinitionTreeSet) {
-            if (sortedByIdTypeMap.containsKey(type.getParentTypeId())) {
-
-                List<TypeDefinition> children = sortedByIdTypeMap.get(type.getParentTypeId());
-                children.add(type);
-
-            } else {
-                ArrayList<TypeDefinition> children = new ArrayList<TypeDefinition>();
-
-                children.add(type);
-                sortedByIdTypeMap.put(type.getParentTypeId(), children);
-            }
-        }
-
-        for (TypeDefinition type : typeDefinitionTreeSet) {
-
-            if (sortedByIdTypeMap.containsKey(type.getId())) {
-                List<TypeDefinition> temp = sortedByIdTypeMap.get(type.getParentTypeId());
-
-                if (!temp.isEmpty()) {
-                    temp.addAll(sortedByIdTypeMap.get(type.getId()));
-                    sortedByIdTypeMap.put(type.getId(), temp);
-                }
-
-            }
-
-        }
-
-        for (TypeDefinition type : typeDefinitionTreeSet) {
-            if (sortedByIdTypeMap.containsKey(type.getId())) {
-                sortedByIdTypeMap.remove(type.getId());
-            }
-        }
-
-        return sortedByIdTypeMap;
-    }
-
-    /**
      * This method validates TypeDefinition instance.
      * @throws ValidationException
      */
@@ -238,4 +159,84 @@ public final class DataSorter {
 
         return true;
     }
+
+    /**
+     * This method contains part of 'validateAndSort' method.
+     * It sorts typeDefinitionTreeSet by parentTypeID. Sort rule is simple: "There are set of TypeDefinition instances:
+     * type1, type2 ... If type1 have parentTypeID, that equals type2 ID, at first we must create type2, then type1 ".
+     * @param typeDefinitionTreeSet that contains TypeDTO instances with unique ID
+     * @return Map<String, List<TypeDefinition>> , where keys ara parentTypeIDs
+     */
+    private static Map<String, List<TypeDefinition>> sort(Set<TypeDefinition> typeDefinitionTreeSet) {
+
+        Map<String, List<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, List<TypeDefinition>>();
+
+        for (TypeDefinition type : typeDefinitionTreeSet) {
+            if (sortedByIdTypeMap.containsKey(type.getParentTypeId())) {
+
+                List<TypeDefinition> children = sortedByIdTypeMap.get(type.getParentTypeId());
+                children.add(type);
+
+            } else {
+                ArrayList<TypeDefinition> children = new ArrayList<TypeDefinition>();
+
+                children.add(type);
+                sortedByIdTypeMap.put(type.getParentTypeId(), children);
+            }
+        }
+
+        for (TypeDefinition type : typeDefinitionTreeSet) {
+
+            if (sortedByIdTypeMap.containsKey(type.getId())) {
+                List<TypeDefinition> temp = sortedByIdTypeMap.get(type.getParentTypeId());
+
+                if (!temp.isEmpty()) {
+                    temp.addAll(sortedByIdTypeMap.get(type.getId()));
+                    sortedByIdTypeMap.put(type.getId(), temp);
+                }
+
+            }
+
+        }
+
+        for (TypeDefinition type : typeDefinitionTreeSet) {
+            if (sortedByIdTypeMap.containsKey(type.getId())) {
+                sortedByIdTypeMap.remove(type.getId());
+            }
+        }
+
+        return sortedByIdTypeMap;
+    }
+
+    /**
+     * This method contains part of 'validateAndSort' method.
+     * It validates typeDefinitions from map. If two or more TypeDefinition instances have the same ID,
+     * only one will be add to returned typeDefinitionSet.
+     * @param typeDefinitionMap streamHashMap, where key is file name, and value is TypeDefinition instance.
+     * @param fileStatusList if some of TypeDefinition instances fails convertation or validation, method will put in
+     *                       this list new FileStatusReport instance, that contains file name and explanation.
+     * @return Set<TypeDefinition>, that contains TypeDTO instances with unique ID.
+     */
+    private static Set<TypeDefinition> validate(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
+
+        Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
+
+        for (String fileName : typeDefinitionMap.keySet()) {
+
+            TypeDefinition type = typeDefinitionMap.get(fileName);
+
+            try {
+                validateTypeDefinition(type);
+                if (!typeDefinitionTreeSet.add(type)) {
+                    fileStatusList.add(new FileStatusReport(fileName, SAME_ID_ERROR));
+                }
+            } catch (ValidationException e) {
+                LOG.error(e.getMessage(), e);
+                fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
+            }
+        }
+
+        return typeDefinitionTreeSet;
+    }
+
 }

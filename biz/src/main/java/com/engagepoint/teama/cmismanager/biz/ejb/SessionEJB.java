@@ -37,26 +37,25 @@ public class SessionEJB {
     public static final Logger LOG = Logger.getLogger(SessionEJB.class);
 
     /**
-     * Get session from pool by users sessionID
+     * Remove sessionID from idToRepoMap. If no one use this session at this moment, this method will close it.
      * @param sessionID every user must have unique session ID
-     * @return session
      * @throws ConnectionException
      */
-    public Session getSession(String sessionID) throws ConnectionException {
-
-        Session returnedSession;
+    public synchronized void closeSession(String sessionID) throws ConnectionException {
 
         if (! idToRepoMap.containsKey(sessionID)) {
             throw new ConnectionException("No such session");
         } else {
-            returnedSession = repoToSessionMap.get( idToRepoMap.get(sessionID) );
+
+            RepositoryInfo repositoryInfo = idToRepoMap.remove(sessionID);
+
+            if (! idToRepoMap.containsValue(repositoryInfo)) {
+                Session session = repoToSessionMap.remove(repositoryInfo);
+                session.getBinding().close();
+            }
+
         }
 
-        if (returnedSession == null) {
-            throw new ConnectionException("Session was close");
-        }
-
-        return returnedSession;
     }
 
     /**
@@ -85,25 +84,26 @@ public class SessionEJB {
     }
 
     /**
-     * Remove sessionID from idToRepoMap. If no one use this session at this moment, this method will close it.
+     * Get session from pool by users sessionID
      * @param sessionID every user must have unique session ID
+     * @return session
      * @throws ConnectionException
      */
-    public synchronized void closeSession(String sessionID) throws ConnectionException {
+    public Session getSession(String sessionID) throws ConnectionException {
+
+        Session returnedSession;
 
         if (! idToRepoMap.containsKey(sessionID)) {
             throw new ConnectionException("No such session");
         } else {
-
-            RepositoryInfo repositoryInfo = idToRepoMap.remove(sessionID);
-
-            if (! idToRepoMap.containsValue(repositoryInfo)) {
-                Session session = repoToSessionMap.remove(repositoryInfo);
-                session.getBinding().close();
-            }
-
+            returnedSession = repoToSessionMap.get( idToRepoMap.get(sessionID) );
         }
 
+        if (returnedSession == null) {
+            throw new ConnectionException("Session was close");
+        }
+
+        return returnedSession;
     }
 
     /**

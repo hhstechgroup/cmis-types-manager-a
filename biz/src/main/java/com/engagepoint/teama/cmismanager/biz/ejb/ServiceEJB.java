@@ -46,46 +46,6 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     private SessionEJB sessionEJB;
 
     /**
-     * This method allows us to check does user can connect without creating session. Returns array of repositories ID,
-     * if user with current username, password and url can create session with some repository.
-     * @param username username
-     * @param password password
-     * @param url url
-     * @return array of repositories
-     * @throws com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException
-     */
-    @Override
-    public String[] getRepoList(String username, String password, String url) throws ConnectionException {
-        SessionFactory factory = SessionFactoryImpl.newInstance();
-        Map<String, String> parameter = new HashMap<String, String>();
-
-        parameter.put(SessionParameter.USER, username);
-        parameter.put(SessionParameter.PASSWORD, password);
-
-        parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
-        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-        List<Repository> list;
-
-        try {
-            list = factory.getRepositories(parameter);
-        } catch (CmisBaseException e) {
-            throw new ConnectionException(e.getMessage(), e);
-        }
-
-        if (list.isEmpty()) {
-            throw new ConnectionException("no connection");
-        }
-
-        List<String> array = new ArrayList<String>();
-
-        for (Repository repo : list) {
-            array.add(repo.getId());
-        }
-
-        return array.toArray(new String[1]);
-    }
-
-    /**
      * This method allows us to bind current user with session. If two or more users use same repository in same tame
      * and have same username and password, SessionEJB create only one session and share it.
      * Use this method only once at start!
@@ -105,6 +65,109 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
         }
 
         sessionEJB.createSession(username, password, url, sessionID, repositoryName);
+    }
+
+    /**
+     * Create new type in repository.
+     * @param sessionID every user must have unique session ID
+     * @param newType some TypeDTO instance
+     * @return new instance if created, null if not
+     * @throws ModificationException
+     * @throws ConnectionException
+     * @throws BaseException
+     */
+    @Override
+    public TypeDTO createType(TypeDTO newType, String sessionID) throws BaseException {
+        TypeDTO returnedTypeDTO;
+        Session session = sessionEJB.getSession(sessionID);
+
+        try {
+            TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
+            ObjectType createdType = session.createType(typeDefinitionWrapper);
+            returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
+        } catch (CmisObjectNotFoundException ex) {
+            throw new ModificationException(ex.getMessage(), ex);
+        } catch (CmisInvalidArgumentException ex) {
+            throw new ModificationException(ex.getMessage(), ex);
+        } catch (CmisPermissionDeniedException ex) {
+            throw new ConnectionException(ex.getMessage(), ex);
+        } catch (CmisBaseException cbe) {
+            throw new BaseException(cbe.getMessage(), cbe);
+        }
+
+        return returnedTypeDTO;
+    }
+
+    /**
+     * Try to create many types at once.
+     * @param typeDTOList list of sorted TypeDTO instances
+     * @param sessionID every user must have unique session ID
+     * @throws BaseException
+     * @see ConvertorEJB
+     * @return list of instances FileStatusReport
+     */
+    @Override
+    public List<FileStatusReport> createTypes(List<TypeDTO> typeDTOList, String sessionID) throws BaseException {
+
+        if (typeDTOList == null) {
+            throw new BaseException("No data");
+        }
+
+        Session session = sessionEJB.getSession(sessionID);
+        List<FileStatusReport> fileStatusReportList = new ArrayList<FileStatusReport>();
+
+        TypeDefinition returnedTypeDefinition;
+
+        for (TypeDTO type : typeDTOList) {
+
+            try {
+                returnedTypeDefinition = session.createType(new TypeDefinitionWrapper(type));
+                if (returnedTypeDefinition != null) {
+                    fileStatusReportList.add(new FileStatusReport(type.getId(), "in repo"));
+                } else {
+                    fileStatusReportList.add(new FileStatusReport(type.getId(), "can not create"));
+                }
+            } catch (CmisBaseException ex) {
+                LOG.error(ex.getMessage(), ex);
+                fileStatusReportList.add(new FileStatusReport(type.getId(), "can not create"));
+            }
+        }
+
+        return fileStatusReportList;
+    }
+
+    /**
+     * Delete type in repository. If type have children, this method must delete them too..
+     * @param sessionID every user must have unique session ID
+     * @param deletedType some TypeDTO instance
+     * @throws ModificationException
+     * @throws ConnectionException
+     * @throws BaseException
+     */
+    @Override
+    public void deleteType(TypeDTO deletedType, String sessionID) throws BaseException {
+
+        Session session = sessionEJB.getSession(sessionID);
+
+        try {
+
+            List<Tree<ObjectType>> list = session.getTypeDescendants(deletedType.getId(), -1, false);
+
+            if (list != null && !list.isEmpty()) {
+                deleteTree(list, session);
+            }
+
+            session.deleteType(deletedType.getId());
+
+        } catch (CmisInvalidArgumentException cp) {
+            throw new ModificationException(cp.getMessage(), cp);
+        } catch (CmisPermissionDeniedException cp) {
+            throw new ConnectionException(cp.getMessage(), cp);
+        } catch (CmisBaseException c) {
+            throw new BaseException(c.getMessage(), c);
+        }
+
+
     }
 
     /**
@@ -145,61 +208,43 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     }
 
     /**
-     * Create new type in repository.
-     * @param sessionID every user must have unique session ID
-     * @param newType some TypeDTO instance
-     * @return new instance if created, null if not
-     * @throws ModificationException
-     * @throws ConnectionException
-     * @throws BaseException
+     * This method allows us to check does user can connect without creating session. Returns array of repositories ID,
+     * if user with current username, password and url can create session with some repository.
+     * @param username username
+     * @param password password
+     * @param url url
+     * @return array of repositories
+     * @throws com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException
      */
     @Override
-    public TypeDTO createType(TypeDTO newType, String sessionID) throws BaseException {
-        TypeDTO returnedTypeDTO;
-        Session session = sessionEJB.getSession(sessionID);
+    public String[] getRepoList(String username, String password, String url) throws ConnectionException {
+        SessionFactory factory = SessionFactoryImpl.newInstance();
+        Map<String, String> parameter = new HashMap<String, String>();
+
+        parameter.put(SessionParameter.USER, username);
+        parameter.put(SessionParameter.PASSWORD, password);
+
+        parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
+        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+        List<Repository> list;
 
         try {
-            TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
-            ObjectType createdType = session.createType(typeDefinitionWrapper);
-            returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
-        } catch (CmisObjectNotFoundException ex) {
-            throw new ModificationException(ex.getMessage(), ex);
-        } catch (CmisInvalidArgumentException ex) {
-            throw new ModificationException(ex.getMessage(), ex);
-        } catch (CmisPermissionDeniedException ex) {
-            throw new ConnectionException(ex.getMessage(), ex);
-        } catch (CmisBaseException cbe) {
-            throw new BaseException(cbe.getMessage(), cbe);
+            list = factory.getRepositories(parameter);
+        } catch (CmisBaseException e) {
+            throw new ConnectionException(e.getMessage(), e);
         }
 
-        return returnedTypeDTO;
-    }
-
-    /**
-     * Get type by ID from repository.
-     * @param sessionID every user must have unique session ID
-     * @param id some TypeDTO instance ID
-     * @return new instance if created, null if not
-     * @throws ModificationException
-     * @throws ConnectionException
-     * @throws BaseException
-     */
-    private ObjectType getTypeById(String id, String sessionID) throws BaseException {
-
-        ObjectType returnedType;
-        Session session = sessionEJB.getSession(sessionID);
-
-        try {
-            returnedType = session.getTypeDefinition(id);
-        } catch (CmisObjectNotFoundException cp) {
-            throw new ModificationException(cp.getMessage(), cp);
-        } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage(), cp);
-        } catch (CmisBaseException cbe) {
-            throw new BaseException(cbe.getMessage(), cbe);
+        if (list.isEmpty()) {
+            throw new ConnectionException("no connection");
         }
 
-        return returnedType;
+        List<String> array = new ArrayList<String>();
+
+        for (Repository repo : list) {
+            array.add(repo.getId());
+        }
+
+        return array.toArray(new String[1]);
     }
 
     /**
@@ -232,40 +277,6 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     }
 
     /**
-     * Delete type in repository. If type have children, this method must delete them too..
-     * @param sessionID every user must have unique session ID
-     * @param deletedType some TypeDTO instance
-     * @throws ModificationException
-     * @throws ConnectionException
-     * @throws BaseException
-     */
-    @Override
-    public void deleteType(TypeDTO deletedType, String sessionID) throws BaseException {
-
-        Session session = sessionEJB.getSession(sessionID);
-
-        try {
-
-            List<Tree<ObjectType>> list = session.getTypeDescendants(deletedType.getId(), -1, false);
-
-            if (list != null && !list.isEmpty()) {
-                deleteTree(list, session);
-            }
-
-            session.deleteType(deletedType.getId());
-
-        } catch (CmisInvalidArgumentException cp) {
-            throw new ModificationException(cp.getMessage(), cp);
-        } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage(), cp);
-        } catch (CmisBaseException c) {
-            throw new BaseException(c.getMessage(), c);
-        }
-
-
-    }
-
-    /**
      * Util method, that allows delete types and their children.
      * @param list list of Tree<ObjectType>
      * @param session users session
@@ -283,41 +294,30 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     }
 
     /**
-     * Try to create many types at once.
-     * @param typeDTOList list of sorted TypeDTO instances
+     * Get type by ID from repository.
      * @param sessionID every user must have unique session ID
+     * @param id some TypeDTO instance ID
+     * @return new instance if created, null if not
+     * @throws ModificationException
+     * @throws ConnectionException
      * @throws BaseException
-     * @see ConvertorEJB
-     * @return list of instances FileStatusReport
      */
-    @Override
-    public List<FileStatusReport> createTypes(List<TypeDTO> typeDTOList, String sessionID) throws BaseException {
+    private ObjectType getTypeById(String id, String sessionID) throws BaseException {
 
-        if (typeDTOList == null) {
-            throw new BaseException("No data");
-        }
-
+        ObjectType returnedType;
         Session session = sessionEJB.getSession(sessionID);
-        List<FileStatusReport> fileStatusReportList = new ArrayList<FileStatusReport>();
 
-        TypeDefinition returnedTypeDefinition;
-
-        for (TypeDTO type : typeDTOList) {
-
-            try {
-                returnedTypeDefinition = session.createType(new TypeDefinitionWrapper(type));
-                if (returnedTypeDefinition != null) {
-                    fileStatusReportList.add(new FileStatusReport(type.getId(), "in repo"));
-                } else {
-                    fileStatusReportList.add(new FileStatusReport(type.getId(), "can not create"));
-                }
-            } catch (CmisBaseException ex) {
-                LOG.error(ex.getMessage(), ex);
-                fileStatusReportList.add(new FileStatusReport(type.getId(), "can not create"));
-            }
+        try {
+            returnedType = session.getTypeDefinition(id);
+        } catch (CmisObjectNotFoundException cp) {
+            throw new ModificationException(cp.getMessage(), cp);
+        } catch (CmisPermissionDeniedException cp) {
+            throw new ConnectionException(cp.getMessage(), cp);
+        } catch (CmisBaseException cbe) {
+            throw new BaseException(cbe.getMessage(), cbe);
         }
 
-        return fileStatusReportList;
+        return returnedType;
     }
 
 }
