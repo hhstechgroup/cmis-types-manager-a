@@ -98,11 +98,13 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
     @Override
     public void connect(String username, String password, String url, String sessionID, String repositoryName) throws ConnectionException {
 
-        if (url == null || url.isEmpty() || repositoryName == null || repositoryName.isEmpty()) {
-            throw new NullPointerException();
-        } else {
-            sessionEJB.createSession(username, password, url, sessionID, repositoryName);
+        if (url == null || url.isEmpty() ) {
+            throw new IllegalArgumentException("url must be set");
+        } else if(repositoryName == null || repositoryName.isEmpty()) {
+            throw new IllegalArgumentException("repository ID must be set");
         }
+
+        sessionEJB.createSession(username, password, url, sessionID, repositoryName);
     }
 
     /**

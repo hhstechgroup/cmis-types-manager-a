@@ -21,6 +21,11 @@ xsi:type="cmisTypeDocumentDefinitionType">
 <controllableACL>true</controllableACL>
 <versionable>false</versionable>
 <contentStreamAllowed>allowed</contentStreamAllowed>
+<typeMutability>
+<create>true</create>
+<update>false</update>
+<delete>false</delete>
+</typeMutability>
 <propertyIntegerDefinition>
 <id>my-int</id>
 <localName>my-int</localName>

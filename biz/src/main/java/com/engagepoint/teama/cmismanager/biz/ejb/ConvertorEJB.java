@@ -1,5 +1,6 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
+import com.engagepoint.teama.cmismanager.common.exceptions.ConvertationException;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.util.ResultSet;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
@@ -58,7 +59,7 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
                 try {
                     TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
                     okTypeMap.put(fileName, type);
-                } catch (XMLStreamException e) {
+                } catch (ConvertationException e) {
                     LOG.error(e.getMessage(), e);
                     fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 }
@@ -66,10 +67,7 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
                 try {
                     TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
                     okTypeMap.put(fileName, type);
-                } catch (IOException e) {
-                    LOG.error(e.getMessage(), e);
-                    fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
-                } catch (JSONParseException e) {
+                } catch (ConvertationException e) {
                     LOG.error(e.getMessage(), e);
                     fileStatusList.add(new FileStatusReport(fileName, e.getMessage()));
                 }
@@ -102,7 +100,7 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
 
         try {
             inputStream = JsonXMLConvertor.createXMLFromType(typeDefinition);
-        } catch (XMLStreamException e) {
+        } catch (ConvertationException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
         }
@@ -123,7 +121,7 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
 
         try {
             inputStream = JsonXMLConvertor.createJSONFromType(typeDefinition);
-        } catch (IOException e) {
+        } catch (ConvertationException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
         }
@@ -148,9 +146,10 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
         }
 
         InputStream stream;
+        ZipOutputStream out;
 
         try {
-            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(new File(path)));
+            out = new ZipOutputStream(new FileOutputStream(new File(path)));
 
             for (TypeDTO typeDTO : typeDTOList) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -169,16 +168,18 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
                 }
             }
 
-            try {
-                out.close();
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
-
             stream = new FileInputStream(path);
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
+        }
+
+        try {
+            if( out != null) {
+                out.close();
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
         }
 
         return stream;
@@ -202,9 +203,10 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
         }
 
         InputStream stream;
+        ZipOutputStream out;
 
         try {
-            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(new File(path)));
+            out = new ZipOutputStream(new FileOutputStream(new File(path)));
 
             for (TypeDTO typeDTO : typeDTOList) {
                 OutputStream outputStream = new ByteArrayOutputStream();
@@ -221,16 +223,18 @@ public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
                 }
             }
 
-            try {
-                out.close();
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
-
             stream = new FileInputStream(path);
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
+        }
+
+        try {
+            if( out != null) {
+                out.close();
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
         }
 
         return stream;

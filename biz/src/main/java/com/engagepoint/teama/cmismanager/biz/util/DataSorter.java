@@ -20,7 +20,9 @@ public final class DataSorter {
 
     public static final String SAME_ID_ERROR = "Same ID";
 
-    private DataSorter() {}
+    private DataSorter() {
+
+    }
 
     /**
      * This method validates typeDefinitions from map, then sort them.

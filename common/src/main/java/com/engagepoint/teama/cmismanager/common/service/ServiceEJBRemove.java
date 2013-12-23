@@ -67,6 +67,7 @@ public interface ServiceEJBRemove {
      * @param sessionID every user must have unique session ID
      * @param updatedType some TypeDTO instance
      * @return new instance if created, null if not
+     * @deprecated throws exception with 'not supported'
      * @throws com.engagepoint.teama.cmismanager.common.exceptions.ModificationException
      * @throws ConnectionException
      * @throws BaseException

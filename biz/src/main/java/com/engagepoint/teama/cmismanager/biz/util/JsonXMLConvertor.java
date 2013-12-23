@@ -1,5 +1,6 @@
 package com.engagepoint.teama.cmismanager.biz.util;
 
+import com.engagepoint.teama.cmismanager.common.exceptions.ConvertationException;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
@@ -17,13 +18,18 @@ public final class JsonXMLConvertor {
 
     public static final Logger LOG = Logger.getLogger(JsonXMLConvertor.class);
 
-    private JsonXMLConvertor () {}
+    private JsonXMLConvertor () {
 
-    public static TypeDefinition createTypeFromXML(InputStream fileStream) throws XMLStreamException {
+    }
+
+    public static TypeDefinition createTypeFromXML(InputStream fileStream) throws ConvertationException {
         TypeDefinition type;
 
         try {
             type = TypeUtils.readFromXML(fileStream);
+        } catch (XMLStreamException e) {
+            LOG.error(e.getMessage(), e);
+            throw new ConvertationException(e.getMessage(), e);
         } finally {
             try {
                 fileStream.close();
@@ -34,11 +40,17 @@ public final class JsonXMLConvertor {
         return type;
     }
 
-    public static TypeDefinition createTypeFromJSON(InputStream fileStream) throws IOException, JSONParseException {
+    public static TypeDefinition createTypeFromJSON(InputStream fileStream) throws ConvertationException {
         TypeDefinition type;
 
         try {
             type = TypeUtils.readFromJSON(fileStream);
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+            throw new ConvertationException(e.getMessage(), e);
+        } catch (JSONParseException e) {
+            LOG.error(e.getMessage(), e);
+            throw new ConvertationException(e.getMessage(), e);
         } finally {
             try {
                 fileStream.close();
@@ -50,13 +62,16 @@ public final class JsonXMLConvertor {
         return type;
     }
 
-    public static InputStream createXMLFromType(TypeDefinition parentType) throws XMLStreamException {
+    public static InputStream createXMLFromType(TypeDefinition parentType) throws ConvertationException {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ByteArrayInputStream byteArrayInputStream;
         try {
             TypeUtils.writeToXML(parentType, outputStream);
             byteArrayInputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (XMLStreamException e) {
+            LOG.error(e.getMessage(), e);
+            throw new ConvertationException(e.getMessage(), e);
         } finally {
             try {
                 outputStream.close();
@@ -68,13 +83,16 @@ public final class JsonXMLConvertor {
         return byteArrayInputStream;
     }
 
-    public static InputStream createJSONFromType(TypeDefinition parentType) throws IOException {
+    public static InputStream createJSONFromType(TypeDefinition parentType) throws ConvertationException {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ByteArrayInputStream byteArrayInputStream;
         try {
             TypeUtils.writeToJSON(parentType, outputStream);
             byteArrayInputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+            throw new ConvertationException(e.getMessage(), e);
         } finally {
             try {
                 outputStream.close();

@@ -16,7 +16,9 @@ import java.util.Iterator;
 
 public final class ObjectTypeReader {
 
-    private ObjectTypeReader() {}
+    private ObjectTypeReader() {
+
+    }
 
     public static TypeDTO readIgnoreChildren(ObjectType objType) {
 
