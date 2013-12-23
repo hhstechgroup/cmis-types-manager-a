@@ -2,7 +2,7 @@
 Scenario: user creates type
 
 When the user opens the default page
-And the user fills 'url' field with 'http://lab18:8080/chemistry-opencmis-server-inmemory-0.10.0/atom11'
+And the user fills 'url' field with 'http://localhost:8080/chemistry-opencmis-server-inmemory-0.10.0/'
 And press 'Get repo list' button
 And press 'Login' button
 
@@ -18,9 +18,6 @@ And the user fills 'mainForm:description' field with 'just for testing'
 And the user fills 'mainForm:queryName' field with 'one'
 And the user fills 'mainForm:localName' field with 'two'
 And the user fills 'mainForm:localNamespace' field with 'three'
-And press 'Next' button
-
-And clicks on element by './/*[@id='mainForm:form:treeMultiple:0']/span/span[3]'
 And press 'Next' button
 
 And press 'Add metadata' button
@@ -44,7 +41,6 @@ And the user fills 'mainForm:displayName' field with 'UpdatedTestType'
 And the user fills 'mainForm:description' field with 'just for testing'
 And the user fills 'mainForm:queryName' field with 'one'
 And the user fills 'mainForm:localName' field with 'two'
-And press 'Next' button
 And press 'Next' button
 And clicks on element with id/name/className 'mainForm:addType'
 Then wait for element 'mainForm:tree:1_0:lblNode' is visible
