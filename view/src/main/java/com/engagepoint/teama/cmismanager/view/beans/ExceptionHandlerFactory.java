@@ -1,4 +1,4 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.view.beans;
 
 public class ExceptionHandlerFactory extends javax.faces.context.ExceptionHandlerFactory {
     private final javax.faces.context.ExceptionHandlerFactory parent;

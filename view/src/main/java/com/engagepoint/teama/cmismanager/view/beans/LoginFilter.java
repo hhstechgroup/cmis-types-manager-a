@@ -1,10 +1,4 @@
-package com.engagepoint.teama.cmismanager;
-
-import java.io.IOException;
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+package com.engagepoint.teama.cmismanager.view.beans;
 
 @WebFilter(filterName = "Filter", urlPatterns = {"*.xhtml"})
 public class LoginFilter implements Filter {

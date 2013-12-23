@@ -1,4 +1,4 @@
-package com.engagepoint.teama.cmismanager;
+package com.engagepoint.teama.cmismanager.view.beans;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
