@@ -24,6 +24,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
+import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -35,6 +36,8 @@ import java.util.Map;
 
 @Stateless
 public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
+
+    public static final Logger LOG = Logger.getLogger(ServiceEJB.class);
 
     /**
      * This EJB handle clients sessions
@@ -307,6 +310,7 @@ public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
                     fileStatusReportList.add(new FileStatusReport(type.getId(), "can not create"));
                 }
             } catch (CmisBaseException ex) {
+                LOG.error(ex.getMessage(), ex);
                 fileStatusReportList.add(new FileStatusReport(type.getId(), "can not create"));
             }
         }
