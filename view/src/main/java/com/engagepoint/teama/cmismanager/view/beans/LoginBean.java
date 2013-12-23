@@ -2,7 +2,7 @@ package com.engagepoint.teama.cmismanager.view.beans;
 
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
-import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemove;
+import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
@@ -36,14 +36,14 @@ public class LoginBean implements Serializable {
     private String chosenRepo;
     private String[] availableReposList;
 
-    @EJB(beanInterface = ServiceEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
-    private ServiceEJBRemove service;
+    @EJB(beanInterface = ServiceEJBRemote.class, name = "java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
+    private ServiceEJBRemote service;
 
-    public ServiceEJBRemove getService() {
+    public ServiceEJBRemote getService() {
         return service;
     }
 
-    public void setService(ServiceEJBRemove service) {
+    public void setService(ServiceEJBRemote service) {
         this.service = service;
     }
 

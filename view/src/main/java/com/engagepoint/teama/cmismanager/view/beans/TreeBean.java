@@ -1,12 +1,11 @@
 package com.engagepoint.teama.cmismanager.view.beans;
 
-import com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ModificationException;
 import com.engagepoint.teama.cmismanager.common.model.PropertyRow;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
-import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemove;
+import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote;
 import org.apache.log4j.Logger;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -39,8 +38,8 @@ public class TreeBean implements Serializable {
     private boolean treeRender = true;
     private List<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
 
-   @EJB(beanInterface = ServiceEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
-    private ServiceEJBRemove service;
+   @EJB(beanInterface = ServiceEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
+    private ServiceEJBRemote service;
 
     private String mutability = null;
     private PropertyRow propertyRow1 = new PropertyRow();
@@ -94,11 +93,11 @@ public class TreeBean implements Serializable {
         this.loginBean = loginBean;
     }
 
-    public ServiceEJBRemove getService() {
+    public ServiceEJBRemote getService() {
         return service;
     }
 
-    public void setService(ServiceEJB service) {
+    public void setService(ServiceEJBRemote service) {
         this.service = service;
     }
 

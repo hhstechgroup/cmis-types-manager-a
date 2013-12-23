@@ -7,8 +7,6 @@ import java.io.Serializable;
 @SessionScoped
 public class ErrorBean implements Serializable {
 
-    private String errorMessage;
-    private String errorVisibility;
 
     public String getErrorVisibility() {
         return errorVisibility;
@@ -30,4 +28,8 @@ public class ErrorBean implements Serializable {
         errorVisibility = "false";
         errorMessage = null;
     }
+
+    private String errorMessage;
+    private String errorVisibility;
+
 }

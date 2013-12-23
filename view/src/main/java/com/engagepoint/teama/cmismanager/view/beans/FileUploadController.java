@@ -1,10 +1,10 @@
 package com.engagepoint.teama.cmismanager.view.beans;
 
+import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote;
+import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.util.ResultSet;
-import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemove;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
-import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemove;
 import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -34,11 +34,11 @@ public class FileUploadController {
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
 
-    @EJB(beanInterface = ServiceEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
-    private ServiceEJBRemove service;
+    @EJB(beanInterface = ServiceEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
+    private ServiceEJBRemote service;
 
-    @EJB(beanInterface = ConvertorEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ConvertorEJB")
-    private ConvertorEJBRemove convertor;
+    @EJB(beanInterface = ConvertorEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ConvertorEJB")
+    private ConvertorEJBRemote convertor;
 
     private ResultSet validationResultSet;
 
