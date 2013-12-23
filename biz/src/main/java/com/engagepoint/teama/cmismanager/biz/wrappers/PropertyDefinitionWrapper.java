@@ -15,6 +15,7 @@ import java.util.List;
 public class PropertyDefinitionWrapper implements PropertyDefinition, Serializable {
 
     private PropertyRow row;
+    private List<CmisExtensionElement> cmisExtensionElements;
 
     public PropertyDefinitionWrapper(PropertyRow row) {
         this.row = row;
@@ -102,12 +103,11 @@ public class PropertyDefinitionWrapper implements PropertyDefinition, Serializab
 
     @Override
     public List<CmisExtensionElement> getExtensions() {
-        return new ArrayList<CmisExtensionElement>();
+        return cmisExtensionElements;
     }
 
     @Override
     public void setExtensions(List<CmisExtensionElement> cmisExtensionElements) {
-        //todo complete method,  this code is just for sonar
-        return;
+        this.cmisExtensionElements = cmisExtensionElements;
     }
 }

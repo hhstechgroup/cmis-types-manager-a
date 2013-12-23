@@ -10,39 +10,35 @@ import java.util.List;
 
 public class TypeMutabilityWrapper implements Serializable, TypeMutability {
 
-    private boolean create;
-    private boolean update;
-    private boolean delete;
+    private TypeDTO typeDTO;
+    private List<CmisExtensionElement> cmisExtensionElements;
 
     public TypeMutabilityWrapper(TypeDTO typeDTO) {
-        create = typeDTO.isMutabilityCanCreate();
-        update = typeDTO.isMutabilityCanUpdate();
-        delete = typeDTO.isMutabilityCanDelete();
+        this.typeDTO = typeDTO;
     }
 
     @Override
     public Boolean canCreate() {
-        return create;
+        return typeDTO.isMutabilityCanCreate();
     }
 
     @Override
     public Boolean canUpdate() {
-        return update;
+        return typeDTO.isMutabilityCanUpdate();
     }
 
     @Override
     public Boolean canDelete() {
-        return delete;
+        return typeDTO.isMutabilityCanDelete();
     }
 
     @Override
     public List<CmisExtensionElement> getExtensions() {
-        return Collections.emptyList();
+        return cmisExtensionElements;
     }
 
     @Override
     public void setExtensions(List<CmisExtensionElement> cmisExtensionElements) {
-        //todo complete method, todo this code is just for sonar
-        return;
+        this.cmisExtensionElements = cmisExtensionElements;
     }
 }

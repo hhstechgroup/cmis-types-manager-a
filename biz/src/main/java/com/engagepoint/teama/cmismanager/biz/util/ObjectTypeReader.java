@@ -28,6 +28,54 @@ public final class ObjectTypeReader {
         return dto;
     }
 
+    public static TypeDTO readTree(Tree<ObjectType> objectTypeTree) {
+        ObjectType objectType = objectTypeTree.getItem();
+        return ObjectTypeReader.readWithChildren(objectType);
+    }
+
+    public static TypeDTO readTypeDefinition(TypeDefinition typeDefinition) {
+        TypeDTO dto = new TypeDTO();
+
+        dto.setBaseTypeId(BaseTypeEnum.fromValue(typeDefinition.getBaseTypeId().value()));
+        dto.setParentTypeId(typeDefinition.getParentTypeId());
+
+        dto.setMutabilityCanCreate(typeDefinition.getTypeMutability().canCreate());
+        dto.setMutabilityCanDelete(typeDefinition.getTypeMutability().canDelete());
+        dto.setMutabilityCanUpdate(typeDefinition.getTypeMutability().canUpdate());
+
+        dto.setId(typeDefinition.getId());
+        dto.setLocalName(typeDefinition.getLocalName());
+        dto.setLocalNamespace(typeDefinition.getLocalNamespace());
+        dto.setQueryName(typeDefinition.getQueryName());
+        dto.setDisplayName(typeDefinition.getDisplayName());
+        dto.setDescription(typeDefinition.getDescription());
+
+        dto.setCreatable(typeDefinition.isCreatable());
+        dto.setFileable(typeDefinition.isFileable());
+        dto.setQueryable(typeDefinition.isQueryable());
+
+        dto.setIncludedInSupertypeQuery(typeDefinition.isIncludedInSupertypeQuery());
+        dto.setFulltextIndexed(typeDefinition.isFulltextIndexed());
+        dto.setControllableAcl(typeDefinition.isControllableAcl());
+        dto.setControllablePolicy(typeDefinition.isControllablePolicy());
+
+        return dto;
+    }
+
+    public static TypeDTO readWithChildren(ObjectType objectType) {
+        TypeDTO root = ObjectTypeReader.readIgnoreChildren(objectType);
+
+        Iterator i = objectType.getChildren().iterator();
+        List<TypeDTO> children = new ArrayList<TypeDTO>();
+        while (i.hasNext()) {
+            ObjectType child = (ObjectType) i.next();
+            children.add(readWithChildren(child));
+        }
+        root.setChildren(children);
+
+        return root;
+    }
+
     private static List<PropertyRow> readProperties(ObjectType objType) {
         List<PropertyRow> propertyList = new ArrayList<PropertyRow>();
         Map<String, PropertyDefinition<?>> propertyDefinitionMap = new HashMap<String, PropertyDefinition<?>>();
@@ -66,53 +114,5 @@ public final class ObjectTypeReader {
         }
 
         return propertyRow;
-    }
-
-    public static TypeDTO readTree(Tree<ObjectType> objectTypeTree) {
-        ObjectType objectType = objectTypeTree.getItem();
-        return ObjectTypeReader.readWithChildren(objectType);
-    }
-
-    public static TypeDTO readWithChildren(ObjectType objectType) {
-        TypeDTO root = ObjectTypeReader.readIgnoreChildren(objectType);
-
-        Iterator i = objectType.getChildren().iterator();
-        List<TypeDTO> children = new ArrayList<TypeDTO>();
-        while (i.hasNext()) {
-            ObjectType child = (ObjectType) i.next();
-            children.add(readWithChildren(child));
-        }
-        root.setChildren(children);
-
-        return root;
-    }
-
-    public static TypeDTO readTypeDefinition(TypeDefinition typeDefinition) {
-        TypeDTO dto = new TypeDTO();
-
-        dto.setBaseTypeId(BaseTypeEnum.fromValue(typeDefinition.getBaseTypeId().value()));
-        dto.setParentTypeId(typeDefinition.getParentTypeId());
-
-        dto.setMutabilityCanCreate(typeDefinition.getTypeMutability().canCreate());
-        dto.setMutabilityCanDelete(typeDefinition.getTypeMutability().canDelete());
-        dto.setMutabilityCanUpdate(typeDefinition.getTypeMutability().canUpdate());
-
-        dto.setId(typeDefinition.getId());
-        dto.setLocalName(typeDefinition.getLocalName());
-        dto.setLocalNamespace(typeDefinition.getLocalNamespace());
-        dto.setQueryName(typeDefinition.getQueryName());
-        dto.setDisplayName(typeDefinition.getDisplayName());
-        dto.setDescription(typeDefinition.getDescription());
-
-        dto.setCreatable(typeDefinition.isCreatable());
-        dto.setFileable(typeDefinition.isFileable());
-        dto.setQueryable(typeDefinition.isQueryable());
-
-        dto.setIncludedInSupertypeQuery(typeDefinition.isIncludedInSupertypeQuery());
-        dto.setFulltextIndexed(typeDefinition.isFulltextIndexed());
-        dto.setControllableAcl(typeDefinition.isControllableAcl());
-        dto.setControllablePolicy(typeDefinition.isControllablePolicy());
-
-        return dto;
     }
 }

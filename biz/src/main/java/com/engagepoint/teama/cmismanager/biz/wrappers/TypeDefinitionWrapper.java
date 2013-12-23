@@ -32,7 +32,7 @@ public class TypeDefinitionWrapper implements Serializable, TypeDefinition {
 
     private String parentTypeId;
     private BaseTypeId baseTypeId;
-    private List<CmisExtensionElement> extensions = null;
+    private List<CmisExtensionElement> extensions;
     private TypeMutability typeMutability;
 
     private Map<String, PropertyDefinition<?>> propertyDefinitionMap = new IdentityHashMap<String, PropertyDefinition<?>>();
