@@ -1,12 +1,12 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
+import com.engagepoint.teama.cmismanager.common.service.ServiceEJBLocal;
 import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ModificationException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
-import com.engagepoint.teama.cmismanager.common.service.ServiceEJBLocal;
 import com.engagepoint.teama.cmismanager.biz.util.ObjectTypeReader;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 
