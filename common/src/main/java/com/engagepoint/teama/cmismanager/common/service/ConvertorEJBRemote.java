@@ -6,8 +6,10 @@ import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
 import java.io.InputStream;
 import java.util.Map;
+import javax.ejb.Remote;
 
-public interface ConvertorEJBRemove {
+@Remote
+public interface ConvertorEJBRemote {
 
     /**
      * This method allows to read dataStreams from map, then validate and sort them.

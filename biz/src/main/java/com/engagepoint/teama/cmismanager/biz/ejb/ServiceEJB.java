@@ -1,12 +1,12 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
+import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ModificationException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.common.service.ServiceEJBLocal;
-import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemove;
 import com.engagepoint.teama.cmismanager.biz.util.ObjectTypeReader;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 @Stateless
-public class ServiceEJB implements ServiceEJBRemove, ServiceEJBLocal {
+public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal {
 
     public static final Logger LOG = Logger.getLogger(ServiceEJB.class);
 

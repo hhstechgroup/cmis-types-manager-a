@@ -1,6 +1,6 @@
 package com.engagepoint.teama.cmismanager.view.beans;
 
-import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemove;
+import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
@@ -39,8 +39,8 @@ public class FileDownloadController {
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
 
-    @EJB(beanInterface = ConvertorEJBRemove.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ConvertorEJB")
-    private ConvertorEJBRemove convertor;
+    @EJB(beanInterface = ConvertorEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ConvertorEJB")
+    private ConvertorEJBRemote convertor;
 
     private InputStream downloadedFileInputStream;
 

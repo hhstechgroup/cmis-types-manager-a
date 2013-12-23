@@ -4,9 +4,11 @@ import com.engagepoint.teama.cmismanager.common.util.ResultSet;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
+import javax.ejb.Local;
 import java.io.InputStream;
 import java.util.Map;
 
+@Local
 public interface ConvertorEJBLocal {
 
     /**

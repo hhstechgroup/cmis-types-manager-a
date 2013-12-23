@@ -1,12 +1,12 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
 import com.engagepoint.teama.cmismanager.common.exceptions.ConvertationException;
+import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.util.ResultSet;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBLocal;
-import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemove;
 import com.engagepoint.teama.cmismanager.biz.util.DataSorter;
 import com.engagepoint.teama.cmismanager.biz.util.JsonXMLConvertor;
 import com.engagepoint.teama.cmismanager.biz.util.ObjectTypeReader;
@@ -14,7 +14,6 @@ import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
-import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,7 +36,7 @@ import javax.ejb.Stateless;
 import javax.xml.stream.XMLStreamException;
 
 @Stateless
-public class ConvertorEJB implements ConvertorEJBRemove, ConvertorEJBLocal {
+public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal {
 
     public static final Logger LOG = Logger.getLogger(ConvertorEJB.class);
 

@@ -16,6 +16,7 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
         this.wrapped = wrapped;
     }
 
+
     @Override
     public javax.faces.context.ExceptionHandler getWrapped() {
         return this.wrapped;
