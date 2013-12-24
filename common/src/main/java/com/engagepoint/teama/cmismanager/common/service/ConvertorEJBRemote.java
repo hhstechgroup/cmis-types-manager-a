@@ -17,7 +17,7 @@ public interface ConvertorEJBRemote extends Serializable {
      * @param streamHashMap streamHashMap, where key is file name
      * @return ResultSet, that contains statusReportList (if convertation or validation fails) and sorted by ParentId TypeDTO instances.
      */
-    ResultSet readAndValidate(Map<String, InputStream> streamHashMap);
+    ResultSet readAndValidate(Map<String, byte[]> streamHashMap);
 
     /**
      * Convert TypeDTO instance in stream, that contains TypeDefinition in XML.

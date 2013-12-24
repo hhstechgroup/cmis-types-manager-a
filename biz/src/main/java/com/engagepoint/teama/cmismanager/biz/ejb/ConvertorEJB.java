@@ -143,14 +143,14 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
      * @return ResultSet, that contains statusReportList (if convertation or validation fails) and sorted by ParentId TypeDTO instances.
      */
     @Override
-    public ResultSet readAndValidate(Map<String, InputStream> streamHashMap) {
+    public ResultSet readAndValidate(Map<String, byte[]> streamHashMap) {
 
         ArrayList<FileStatusReport> fileStatusList = new ArrayList<FileStatusReport>();
 
         HashMap<String, TypeDefinition> okTypeMap = new HashMap<String, TypeDefinition>();
 
         for (String fileName : streamHashMap.keySet()) {
-            InputStream stream = streamHashMap.get(fileName);
+            InputStream stream = new ByteArrayInputStream(streamHashMap.get(fileName));
             if (fileName.endsWith(".xml")) {
                 try {
                     TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);

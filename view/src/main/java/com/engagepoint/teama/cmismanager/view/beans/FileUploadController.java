@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class FileUploadController {
     private String show = "false";
     @ManagedProperty(value = "#{treeBean}")
     private TreeBean treeBean;
-    private Map<String, InputStream> fileMap = new HashMap<String, InputStream>();
+    private Map<String, byte[]> fileMap = new HashMap<String, byte[]>();
     private List<FileStatusReport> fileStatus = new ArrayList<FileStatusReport>();
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
@@ -96,13 +97,7 @@ public class FileUploadController {
         show = "true";
         String fileName = file.getFileName();
         msgLbl = file.getFileName() + " ";
-        InputStream generatedFileInputStream = null;
-        try {
-            generatedFileInputStream = file.getInputstream();
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-        }
-        fileMap.put(fileName, generatedFileInputStream);
+        fileMap.put(fileName, file.getContents());
     }
 
     public void hideMsg() {
