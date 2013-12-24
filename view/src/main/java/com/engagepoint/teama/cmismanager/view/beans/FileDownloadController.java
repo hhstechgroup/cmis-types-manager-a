@@ -1,17 +1,11 @@
 package com.engagepoint.teama.cmismanager.view.beans;
 
-import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
-
+import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote;
 import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-
-import java.io.*;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
@@ -19,6 +13,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.io.*;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @ManagedBean
 @SessionScoped
@@ -41,7 +39,7 @@ public class FileDownloadController {
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
 
-    @EJB(beanInterface = ConvertorEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ConvertorEJB")
+    @EJB(lookup = "java:global/ear-1.0-SNAPSHOT/biz-1.0-SNAPSHOT/ConvertorEJB!com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote")
     private ConvertorEJBRemote convertor;
 
     private InputStream downloadedFileInputStream;

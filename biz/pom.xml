@@ -10,17 +10,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>biz</artifactId>
-    <packaging>jar</packaging>
+    <packaging>ejb</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.chemistry.opencmis</groupId>
             <artifactId>chemistry-opencmis-client-impl</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.chemistry.opencmis</groupId>
+            <artifactId>chemistry-opencmis-client-api</artifactId>
+            <version>0.10.0</version>
         </dependency>
         <dependency>
             <groupId>com.engagepoint.teamA</groupId>
             <artifactId>common</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -32,5 +39,24 @@
             <version>3.2</version>
         </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <configuration>
+                    <ejbVersion>3.1</ejbVersion>
+                    <generateClient>true</generateClient>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                    <clientIncludes>
+                        <clientInclude>com/engagepoint/teama/cmismanager/biz/service/*</clientInclude>
+                    </clientIncludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -38,7 +38,7 @@ public class TreeBean implements Serializable {
     private boolean treeRender = true;
     private List<PropertyRow> propertyRows = new ArrayList<PropertyRow>();
 
-   @EJB(beanInterface = ServiceEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
+    @EJB(lookup = "java:global/ear-1.0-SNAPSHOT/biz-1.0-SNAPSHOT/ServiceEJB!com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote")
     private ServiceEJBRemote service;
 
     private String mutability = null;

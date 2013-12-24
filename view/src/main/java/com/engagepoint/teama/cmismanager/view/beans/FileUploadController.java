@@ -34,10 +34,10 @@ public class FileUploadController {
     @ManagedProperty(value = "#{error}")
     private ErrorBean errorBean;
 
-    @EJB(beanInterface = ServiceEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB")
+    @EJB(lookup = "java:global/ear-1.0-SNAPSHOT/biz-1.0-SNAPSHOT/ServiceEJB!com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote")
     private ServiceEJBRemote service;
 
-    @EJB(beanInterface = ConvertorEJBRemote.class, name="java:global/MultiMVNEAR/biz/com.engagepoint.teama.cmismanager.biz.ejb.ConvertorEJB")
+    @EJB(lookup = "java:global/ear-1.0-SNAPSHOT/biz-1.0-SNAPSHOT/ConvertorEJB!com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote")
     private ConvertorEJBRemote convertor;
 
     private ResultSet validationResultSet;
