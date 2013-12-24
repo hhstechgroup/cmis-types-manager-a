@@ -22,27 +22,6 @@ public final class JsonXMLConvertor {
 
     }
 
-    public static InputStream createJSONFromType(TypeDefinition parentType) throws ConvertationException {
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ByteArrayInputStream byteArrayInputStream;
-        try {
-            TypeUtils.writeToJSON(parentType, outputStream);
-            byteArrayInputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-            throw new ConvertationException(e.getMessage(), e);
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
-        }
-
-        return byteArrayInputStream;
-    }
-
     public static TypeDefinition createTypeFromJSON(InputStream fileStream) throws ConvertationException {
         TypeDefinition type;
 
@@ -83,13 +62,33 @@ public final class JsonXMLConvertor {
         return type;
     }
 
-    public static InputStream createXMLFromType(TypeDefinition parentType) throws ConvertationException {
+    public static byte [] getJSONFromTypeInByteArray(TypeDefinition parentType) throws ConvertationException {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ByteArrayInputStream byteArrayInputStream;
+        byte [] returnedByeArray;
+        try {
+            TypeUtils.writeToJSON(parentType, outputStream);
+            returnedByeArray = outputStream.toByteArray();
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+            throw new ConvertationException(e.getMessage(), e);
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        }
+        return returnedByeArray  ;
+    }
+
+    public static byte [] getXMLFromTypeInByteArray(TypeDefinition parentType) throws ConvertationException {
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte [] returnedByeArray;
         try {
             TypeUtils.writeToXML(parentType, outputStream);
-            byteArrayInputStream = new ByteArrayInputStream(outputStream.toByteArray());
+            returnedByeArray = outputStream.toByteArray();
         } catch (XMLStreamException e) {
             LOG.error(e.getMessage(), e);
             throw new ConvertationException(e.getMessage(), e);
@@ -100,8 +99,6 @@ public final class JsonXMLConvertor {
                 LOG.error(e.getMessage(), e);
             }
         }
-
-        return byteArrayInputStream;
+        return returnedByeArray  ;
     }
-
 }

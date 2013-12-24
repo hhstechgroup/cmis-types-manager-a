@@ -6,10 +6,11 @@ import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
 import javax.ejb.Remote;
+import java.io.Serializable;
 import java.util.List;
 
 @Remote
-public interface ServiceEJBRemote {
+public interface ServiceEJBRemote extends Serializable {
 
     /**
      * This method allows us to check does user can connect without creating session. Returns array of repositories ID,

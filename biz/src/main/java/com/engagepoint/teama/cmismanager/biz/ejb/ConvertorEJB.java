@@ -15,14 +15,7 @@ import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,43 +26,44 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.log4j.Logger;
 import javax.ejb.Stateless;
-import javax.xml.stream.XMLStreamException;
 
 @Stateless
-public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal {
+public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Serializable {
 
     public static final Logger LOG = Logger.getLogger(ConvertorEJB.class);
 
     /**
      * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
+     *
+     *
      * @param typeDTO TypeDTO instance
      * @return stream
      * @throws BaseException
      */
     @Override
-    public InputStream createJSONFromType(TypeDTO typeDTO) throws BaseException {
+    public byte[] createJSONFromType(TypeDTO typeDTO) throws BaseException {
 
         TypeDefinition typeDefinition = new TypeDefinitionWrapper(typeDTO);
-        InputStream inputStream;
+        byte [] returnedByteArray;
 
         try {
-            inputStream = JsonXMLConvertor.createJSONFromType(typeDefinition);
+            returnedByteArray = JsonXMLConvertor.getJSONFromTypeInByteArray(typeDefinition);
         } catch (ConvertationException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
         }
-        return inputStream;
+
+        return returnedByteArray;
     }
 
     /**
      * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in JSON.
      * @param parentTypeDTO TypeDTO instance
-     * @param path path
      * @return stream
      * @throws BaseException
      */
     @Override
-    public InputStream createJSONFromTypeIncludeChildren(TypeDTO parentTypeDTO, String path) throws BaseException {
+    public Map<String, byte[]> createJSONFromTypeIncludeChildren(TypeDTO parentTypeDTO) throws BaseException {
 
         List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
         typeDTOList.add(parentTypeDTO);
@@ -78,43 +72,18 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal {
             typeDTOList.addAll( getTypeChildren( parentTypeDTO.getChildren() ) );
         }
 
-        InputStream stream;
-        ZipOutputStream out;
+        Map<String, byte[]> map = new HashMap<String, byte[]>();
 
-        try {
-            out = new ZipOutputStream(new FileOutputStream(new File(path)));
-
-            for (TypeDTO typeDTO : typeDTOList) {
-                OutputStream outputStream = new ByteArrayOutputStream();
-
-                try {
-
-                    TypeUtils.writeToJSON(new TypeDefinitionWrapper(typeDTO), outputStream);
-                    out.putNextEntry(new ZipEntry(typeDTO.getDisplayName() + ".json"));
-                    out.write(((ByteArrayOutputStream) outputStream).toByteArray());
-                    out.closeEntry();
-
-                } catch (IOException e) {
-                    LOG.error(e.getMessage(), e);
-                }
+        for (TypeDTO typeDTO : typeDTOList) {
+            try {
+                byte [] b = JsonXMLConvertor.getXMLFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
+                map.put(typeDTO.getDisplayName() + ".json", b);
+            } catch (ConvertationException e) {
+                LOG.error(e.getMessage(), e);
             }
-
-            stream = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            LOG.error(e.getMessage(), e);
-            throw new BaseException(e.getMessage(), e);
         }
 
-        try {
-            if( out != null) {
-                out.close();
-            }
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-        }
-
-        return stream;
-
+        return map;
     }
 
     /**
@@ -124,13 +93,13 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal {
      * @throws BaseException
      */
     @Override
-    public InputStream createXMLFromType(TypeDTO typeDTO) throws BaseException {
+    public byte[] createXMLFromType(TypeDTO typeDTO) throws BaseException {
 
         TypeDefinition typeDefinition = new TypeDefinitionWrapper(typeDTO);
-        InputStream inputStream;
+        byte[] inputStream;
 
         try {
-            inputStream = JsonXMLConvertor.createXMLFromType(typeDefinition);
+            inputStream = JsonXMLConvertor.getXMLFromTypeInByteArray(typeDefinition);
         } catch (ConvertationException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
@@ -141,12 +110,11 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal {
     /**
      * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in XML.
      * @param parentTypeDTO TypeDTO instance
-     * @param path path
      * @return stream
      * @throws BaseException
      */
     @Override
-    public InputStream createXMLFromTypeIncludeChildren(TypeDTO parentTypeDTO, String path) throws BaseException {
+    public Map<String, byte[]> createXMLFromTypeIncludeChildren(TypeDTO parentTypeDTO) throws BaseException {
 
         List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
         typeDTOList.add(parentTypeDTO);
@@ -155,44 +123,18 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal {
             typeDTOList.addAll( getTypeChildren( parentTypeDTO.getChildren() ) );
         }
 
-        InputStream stream;
-        ZipOutputStream out;
+        Map<String, byte[]> map = new HashMap<String, byte[]>();
 
-        try {
-            out = new ZipOutputStream(new FileOutputStream(new File(path)));
-
-            for (TypeDTO typeDTO : typeDTOList) {
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-                try {
-
-                    TypeUtils.writeToXML(new TypeDefinitionWrapper(typeDTO), outputStream);
-                    out.putNextEntry(new ZipEntry(typeDTO.getDisplayName() + ".xml"));
-                    out.write( outputStream.toByteArray() );
-                    out.closeEntry();
-
-                } catch (XMLStreamException e) {
-                    LOG.error(e.getMessage(), e);
-                } catch (IOException e) {
-                    LOG.error(e.getMessage(), e);
-                }
+        for (TypeDTO typeDTO : typeDTOList) {
+            try {
+                byte [] b = JsonXMLConvertor.getXMLFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
+                map.put(typeDTO.getDisplayName() + ".xml", b);
+            } catch (ConvertationException e) {
+                LOG.error(e.getMessage(), e);
             }
-
-            stream = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            LOG.error(e.getMessage(), e);
-            throw new BaseException(e.getMessage(), e);
         }
 
-        try {
-            if( out != null) {
-                out.close();
-            }
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-        }
-
-        return stream;
+        return map;
     }
 
     /**
@@ -260,5 +202,4 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal {
 
         return listOfChildren;
     }
-
 }

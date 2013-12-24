@@ -8,8 +8,10 @@ import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
-import java.io.InputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
@@ -79,16 +81,24 @@ public class FileDownloadController {
         try {
 
             if (type.equals(XML)) {
-               downloadedFileInputStream = convertor.createXMLFromType(currentType);
+                downloadedFileInputStream = new ByteArrayInputStream(
+                        convertor.createXMLFromType(currentType)
+                );
             } else if (type.equals(JSON)) {
-               downloadedFileInputStream = convertor.createJSONFromType(currentType);
+                downloadedFileInputStream = new ByteArrayInputStream(
+                        convertor.createJSONFromType(currentType)
+                );
             } else {
-                String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + TYPES_ZIP;
 
                 if (type.equals(XML_ALL)) {
-                    downloadedFileInputStream = convertor.createXMLFromTypeIncludeChildren(currentType, path);
+                    downloadedFileInputStream = createZipFile(
+                            convertor.createXMLFromTypeIncludeChildren(currentType)
+                    );
+
                 } else if (type.equals(JSON_ALL)) {
-                    downloadedFileInputStream = convertor.createJSONFromTypeIncludeChildren(currentType, path);
+                    downloadedFileInputStream = createZipFile(
+                            convertor.createJSONFromTypeIncludeChildren(currentType)
+                    );
                 }
             }
 
@@ -115,6 +125,43 @@ public class FileDownloadController {
             errorBean.setErrorMessage(e.getMessage());
             errorBean.setErrorVisibility(TRUE);
         }
+    }
+
+    public InputStream createZipFile(Map<String, byte[]> map) {
+
+        InputStream returnedInputStream = null;
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + TYPES_ZIP;
+        ZipOutputStream out = null;
+
+        try {
+            out = new ZipOutputStream(new FileOutputStream(new File(path)));
+
+            for (String fileName : map.keySet()) {
+                try {
+                    out.putNextEntry(new ZipEntry(fileName));
+                    out.write(map.get(fileName));
+                    out.closeEntry();
+
+                } catch (IOException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
+
+            returnedInputStream = new FileInputStream(path);
+
+        } catch (FileNotFoundException e) {
+            LOG.error(e.getMessage(), e);
+        }
+
+        try {
+            if( out != null) {
+                out.close();
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
+
+        return returnedInputStream;
     }
 
     public String getType() {

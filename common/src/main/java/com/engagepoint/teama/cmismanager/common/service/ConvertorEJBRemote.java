@@ -5,11 +5,12 @@ import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Map;
 import javax.ejb.Remote;
 
 @Remote
-public interface ConvertorEJBRemote {
+public interface ConvertorEJBRemote extends Serializable {
 
     /**
      * This method allows to read dataStreams from map, then validate and sort them.
@@ -24,31 +25,34 @@ public interface ConvertorEJBRemote {
      * @return stream
      * @throws BaseException
      */
-    InputStream createXMLFromType(TypeDTO typeDTO)  throws BaseException;
+    byte[] createXMLFromType(TypeDTO typeDTO)  throws BaseException;
 
     /**
      * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
+     *
      * @param typeDTO TypeDTO instance
      * @return stream
      * @throws BaseException
      */
-    InputStream createJSONFromType(TypeDTO typeDTO) throws BaseException;
+    byte[] createJSONFromType(TypeDTO typeDTO) throws BaseException;
 
     /**
      * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in XML.
+     *
+     *
+     *
      * @param typeDTO TypeDTO instance
-     * @param path path
      * @return stream
      * @throws BaseException
      */
-    InputStream createXMLFromTypeIncludeChildren(TypeDTO typeDTO, String path)  throws BaseException;
+    Map<String, byte[]> createXMLFromTypeIncludeChildren(TypeDTO typeDTO)  throws BaseException;
 
     /**
      * Convert TypeDTO instance and its children in ZIP stream, that contains TypeDefinition list in JSON.
+     *
      * @param typeDTO TypeDTO instance
-     * @param path path
      * @return stream
      * @throws BaseException
      */
-    InputStream createJSONFromTypeIncludeChildren(TypeDTO typeDTO, String path) throws BaseException;
+    Map<String, byte[]> createJSONFromTypeIncludeChildren(TypeDTO typeDTO) throws BaseException;
 }

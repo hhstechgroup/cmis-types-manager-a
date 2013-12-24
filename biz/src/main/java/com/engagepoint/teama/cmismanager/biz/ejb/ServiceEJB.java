@@ -29,13 +29,14 @@ import org.apache.log4j.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Stateless
-public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal {
+public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializable {
 
     public static final Logger LOG = Logger.getLogger(ServiceEJB.class);
 

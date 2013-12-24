@@ -1,6 +1,8 @@
 package com.engagepoint.teama.cmismanager.common.model;
 
-public enum BaseTypeEnum {
+import java.io.Serializable;
+
+public enum BaseTypeEnum implements Serializable {
 
     CMIS_DOCUMENT("cmis:document"),
     CMIS_FOLDER("cmis:folder"),

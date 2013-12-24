@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
 @LocalBean
-public class SessionEJB {
+public class SessionEJB implements Serializable {
 
     /**
      * This map binds unique userID with repository. Different application users can use the same repository

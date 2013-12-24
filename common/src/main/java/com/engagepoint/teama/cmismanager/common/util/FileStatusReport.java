@@ -1,6 +1,8 @@
 package com.engagepoint.teama.cmismanager.common.util;
 
-public class FileStatusReport {
+import java.io.Serializable;
+
+public class FileStatusReport implements Serializable {
 
     private String name;
     private String status;

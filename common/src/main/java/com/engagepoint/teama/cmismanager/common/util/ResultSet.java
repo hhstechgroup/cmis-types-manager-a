@@ -2,9 +2,10 @@ package com.engagepoint.teama.cmismanager.common.util;
 
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ResultSet {
+public class ResultSet implements Serializable {
 
     private List<FileStatusReport> statusReportList;
     private List<TypeDTO> sortedTypeList;
