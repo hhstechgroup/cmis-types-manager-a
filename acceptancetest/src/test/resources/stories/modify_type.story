@@ -1,5 +1,5 @@
 
-Scenario: user creates type
+Scenario: 3,5 User creates type
 
 When the user opens the default page
 And the user fills 'url' field with 'http://localhost:8080/chemistry-opencmis-server-inmemory-0.10.0/'
@@ -29,7 +29,7 @@ And the user fills 'queryname' field with 'twoMeta'
 And clicks on element with id/name/className 'add'
 And press 'Create' button
 
-Scenario: user updates type
+Scenario: 4. User updates type
 When the user opens the default page
 And clicks on element by './/*[@id='leftMenuForm:updateTypeSection']/a'
 And clicks on element by './/*[@id='leftMenuForm:historyItem']'
@@ -42,10 +42,18 @@ And the user fills 'mainForm:description' field with 'just for testing'
 And the user fills 'mainForm:queryName' field with 'one'
 And the user fills 'mainForm:localName' field with 'two'
 And press 'Next' button
+
 And clicks on element with id/name/className 'mainForm:addType'
 Then wait for element 'mainForm:tree:1_0:lblNode' is visible
 
-Scenario: user delete type
+Scenario: 6,7 User delete type
+When the user opens the default page
+
+And clicks on element by './/*[@id='leftMenuForm:updateTypeSection']/a'
+And clicks on element by './/*[@id='leftMenuForm:placeholdersItem']'
+And clicks on element by './/*[@id='deleteBtn']'
+Then the text 'You haven't chosen type' should be in the page source
+
 When the user opens the default page
 And clicks on element by './/*[@id='leftMenuForm:updateTypeSection']/a'
 And clicks on element by './/*[@id='leftMenuForm:placeholdersItem']'

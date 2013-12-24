@@ -1,5 +1,5 @@
 
-Scenario: import
+Scenario: 9,11 import
 When the user opens the default page
 And the user fills 'url' field with 'http://localhost:8080/chemistry-opencmis-server-inmemory-0.10.0/'
 And press 'Get repo list' button
