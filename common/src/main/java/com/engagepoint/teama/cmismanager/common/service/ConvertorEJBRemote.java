@@ -4,7 +4,6 @@ import com.engagepoint.teama.cmismanager.common.util.ResultSet;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Map;
 import javax.ejb.Remote;

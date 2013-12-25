@@ -1,6 +1,7 @@
 package com.engagepoint.teama.cmismanager.view.beans;
 
-import javax.faces.bean.*;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 
 @ManagedBean(name = "error")

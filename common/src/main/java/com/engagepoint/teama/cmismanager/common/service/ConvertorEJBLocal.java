@@ -5,8 +5,6 @@ import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 
 import javax.ejb.Local;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.util.Map;
 
 @Local

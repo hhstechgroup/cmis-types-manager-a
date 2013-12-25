@@ -3,6 +3,7 @@ package com.engagepoint.teama.cmismanager.view.beans;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote;
+
 import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -13,7 +14,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import java.io.*;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.IOException;
+
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
