@@ -1,28 +1,27 @@
-package com.engagepoint.teama.cmismanager.biz.util;
+package com.engagepoint.teama.cmismanager.biz.ejb;
 
 import com.engagepoint.teama.cmismanager.common.exceptions.ConvertationException;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
 
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.xml.stream.XMLStreamException;
 
 import java.io.InputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 
 import org.apache.log4j.Logger;
 
-public final class JsonXMLConvertor {
+@Stateless
+@LocalBean
+public class JsonXMLConvertor {
 
     public static final Logger LOG = Logger.getLogger(JsonXMLConvertor.class);
 
-    private JsonXMLConvertor () {
-
-    }
-
-    public static TypeDefinition createTypeFromJSON(InputStream fileStream) throws ConvertationException {
+    public TypeDefinition createTypeFromJSON(InputStream fileStream) throws ConvertationException {
         TypeDefinition type;
 
         try {
@@ -44,7 +43,7 @@ public final class JsonXMLConvertor {
         return type;
     }
 
-    public static TypeDefinition createTypeFromXML(InputStream fileStream) throws ConvertationException {
+    public TypeDefinition createTypeFromXML(InputStream fileStream) throws ConvertationException {
         TypeDefinition type;
 
         try {
@@ -62,7 +61,7 @@ public final class JsonXMLConvertor {
         return type;
     }
 
-    public static byte [] getJSONFromTypeInByteArray(TypeDefinition parentType) throws ConvertationException {
+    public byte [] getJSONFromTypeInByteArray(TypeDefinition parentType) throws ConvertationException {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte [] returnedByeArray;
@@ -82,7 +81,7 @@ public final class JsonXMLConvertor {
         return returnedByeArray  ;
     }
 
-    public static byte [] getXMLFromTypeInByteArray(TypeDefinition parentType) throws ConvertationException {
+    public byte [] getXMLFromTypeInByteArray(TypeDefinition parentType) throws ConvertationException {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte [] returnedByeArray;

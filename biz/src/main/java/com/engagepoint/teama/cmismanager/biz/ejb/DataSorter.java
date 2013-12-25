@@ -1,10 +1,13 @@
-package com.engagepoint.teama.cmismanager.biz.util;
+package com.engagepoint.teama.cmismanager.biz.ejb;
 
+import com.engagepoint.teama.cmismanager.biz.util.TypesIdentityComparator;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.exceptions.ValidationException;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.log4j.Logger;
 
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import java.util.Set;
 import java.util.Map;
 import java.util.List;
@@ -13,16 +16,14 @@ import java.util.TreeSet;
 import java.util.HashMap;
 import java.util.Collection;
 
-public final class DataSorter {
+@Stateless
+@LocalBean
+public class DataSorter {
 
     public static final Logger LOG = Logger.getLogger(DataSorter.class);
     public static final String FILES = " files.";
 
     public static final String SAME_ID_ERROR = "Same ID";
-
-    private DataSorter() {
-
-    }
 
     /**
      * This method validates typeDefinitions from map, then sort them.
@@ -32,7 +33,7 @@ public final class DataSorter {
      *                       this list new FileStatusReport instance, that contains file name and explanation.
      * @return List<TypeDefinition>, that contains sorted by ParentId TypeDTO instances.
      */
-    public static List<TypeDefinition> validateAndSort(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
+    public List<TypeDefinition> validateAndSort(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
 
         Set<TypeDefinition> typeDefinitionTreeSet = validate(typeDefinitionMap, fileStatusList);
 
@@ -59,7 +60,7 @@ public final class DataSorter {
      * This method validates TypeDefinition instance.
      * @throws ValidationException
      */
-    public static void validateTypeDefinition(TypeDefinition type) throws ValidationException {
+    public void validateTypeDefinition(TypeDefinition type) throws ValidationException {
 
         if (type == null) {
             throw new IllegalArgumentException("Type is null!");
@@ -140,7 +141,7 @@ public final class DataSorter {
      * Validates QueryName of some TypeDefinition instance.
      * @return false if validation fail
      */
-    private static boolean checkQueryName(String queryName) {
+    private boolean checkQueryName(String queryName) {
         return queryName != null && queryName.length() > 0 && checkString(queryName);
     }
 
@@ -148,7 +149,7 @@ public final class DataSorter {
      * This method contains part of 'checkQueryName' method.
      * @return false if validation fail
      */
-    private static boolean checkString(String str) {
+    private boolean checkString(String str) {
         String[] tmp = {" ", ",", "\"", "'", "\\", ".", "(", ")"};
 
         for (int i = 0; i < tmp.length; ++i) {
@@ -167,7 +168,7 @@ public final class DataSorter {
      * @param typeDefinitionTreeSet that contains TypeDTO instances with unique ID
      * @return Map<String, List<TypeDefinition>> , where keys ara parentTypeIDs
      */
-    private static Map<String, List<TypeDefinition>> sort(Set<TypeDefinition> typeDefinitionTreeSet) {
+    private Map<String, List<TypeDefinition>> sort(Set<TypeDefinition> typeDefinitionTreeSet) {
 
         Map<String, List<TypeDefinition>> sortedByIdTypeMap = new HashMap<String, List<TypeDefinition>>();
 
@@ -217,7 +218,7 @@ public final class DataSorter {
      *                       this list new FileStatusReport instance, that contains file name and explanation.
      * @return Set<TypeDefinition>, that contains TypeDTO instances with unique ID.
      */
-    private static Set<TypeDefinition> validate(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
+    private Set<TypeDefinition> validate(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
 
         Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
 

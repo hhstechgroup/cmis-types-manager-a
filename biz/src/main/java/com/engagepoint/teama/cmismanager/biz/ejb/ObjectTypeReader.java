@@ -1,4 +1,4 @@
-package com.engagepoint.teama.cmismanager.biz.util;
+package com.engagepoint.teama.cmismanager.biz.ejb;
 
 import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;
 import com.engagepoint.teama.cmismanager.common.model.PropertyRow;
@@ -8,32 +8,32 @@ import org.apache.chemistry.opencmis.client.api.Tree;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public final class ObjectTypeReader {
+@Stateless
+@LocalBean
+public class ObjectTypeReader {
 
-    private ObjectTypeReader() {
-
-    }
-
-    public static TypeDTO readIgnoreChildren(ObjectType objType) {
+    public TypeDTO readIgnoreChildren(ObjectType objType) {
 
         TypeDTO dto = readTypeDefinition(objType);
-        dto.setPropertyRows((ArrayList) ObjectTypeReader.readProperties(objType));
+        dto.setPropertyRows((ArrayList) this.readProperties(objType));
 
         return dto;
     }
 
-    public static TypeDTO readTree(Tree<ObjectType> objectTypeTree) {
+    public TypeDTO readTree(Tree<ObjectType> objectTypeTree) {
         ObjectType objectType = objectTypeTree.getItem();
-        return ObjectTypeReader.readWithChildren(objectType);
+        return this.readWithChildren(objectType);
     }
 
-    public static TypeDTO readTypeDefinition(TypeDefinition typeDefinition) {
+    public TypeDTO readTypeDefinition(TypeDefinition typeDefinition) {
         TypeDTO dto = new TypeDTO();
 
         dto.setBaseTypeId(BaseTypeEnum.fromValue(typeDefinition.getBaseTypeId().value()));
@@ -62,8 +62,8 @@ public final class ObjectTypeReader {
         return dto;
     }
 
-    public static TypeDTO readWithChildren(ObjectType objectType) {
-        TypeDTO root = ObjectTypeReader.readIgnoreChildren(objectType);
+    public TypeDTO readWithChildren(ObjectType objectType) {
+        TypeDTO root = this.readIgnoreChildren(objectType);
 
         Iterator i = objectType.getChildren().iterator();
         List<TypeDTO> children = new ArrayList<TypeDTO>();
@@ -76,21 +76,21 @@ public final class ObjectTypeReader {
         return root;
     }
 
-    private static List<PropertyRow> readProperties(ObjectType objType) {
+    private List<PropertyRow> readProperties(ObjectType objType) {
         List<PropertyRow> propertyList = new ArrayList<PropertyRow>();
         Map<String, PropertyDefinition<?>> propertyDefinitionMap = new HashMap<String, PropertyDefinition<?>>();
         propertyDefinitionMap.putAll(objType.getPropertyDefinitions());
 
         for (PropertyDefinition propertyDefinition : propertyDefinitionMap.values()) {
 
-            PropertyRow propertyRow = ObjectTypeReader.readPropertyRow(propertyDefinition);
+            PropertyRow propertyRow = this.readPropertyRow(propertyDefinition);
             propertyList.add(propertyRow);
         }
 
         return propertyList;
     }
 
-    private static PropertyRow readPropertyRow(PropertyDefinition definition) {
+    private PropertyRow readPropertyRow(PropertyDefinition definition) {
         PropertyRow propertyRow = new PropertyRow();
         propertyRow.setDisplayName(definition.getDisplayName());
         propertyRow.setId(definition.getId());

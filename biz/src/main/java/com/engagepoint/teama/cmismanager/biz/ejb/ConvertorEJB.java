@@ -7,12 +7,8 @@ import com.engagepoint.teama.cmismanager.common.util.ResultSet;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBLocal;
-import com.engagepoint.teama.cmismanager.biz.util.DataSorter;
-import com.engagepoint.teama.cmismanager.biz.util.JsonXMLConvertor;
-import com.engagepoint.teama.cmismanager.biz.util.ObjectTypeReader;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 
-import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
 import java.io.*;
@@ -21,16 +17,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.apache.log4j.Logger;
+
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
 public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Serializable {
 
     public static final Logger LOG = Logger.getLogger(ConvertorEJB.class);
+    @EJB private DataSorter dataSorter;
+    @EJB private JsonXMLConvertor jsonXMLConvertor;
+    @EJB private ObjectTypeReader objectTypeReader;
 
     /**
      * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
@@ -47,7 +46,7 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
         byte [] returnedByteArray;
 
         try {
-            returnedByteArray = JsonXMLConvertor.getJSONFromTypeInByteArray(typeDefinition);
+            returnedByteArray = jsonXMLConvertor.getJSONFromTypeInByteArray(typeDefinition);
         } catch (ConvertationException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
@@ -76,7 +75,7 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
 
         for (TypeDTO typeDTO : typeDTOList) {
             try {
-                byte [] b = JsonXMLConvertor.getXMLFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
+                byte [] b = jsonXMLConvertor.getXMLFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
                 map.put(typeDTO.getDisplayName() + ".json", b);
             } catch (ConvertationException e) {
                 LOG.error(e.getMessage(), e);
@@ -99,7 +98,7 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
         byte[] inputStream;
 
         try {
-            inputStream = JsonXMLConvertor.getXMLFromTypeInByteArray(typeDefinition);
+            inputStream = jsonXMLConvertor.getXMLFromTypeInByteArray(typeDefinition);
         } catch (ConvertationException e) {
             LOG.error(e.getMessage(), e);
             throw new BaseException(e.getMessage(), e);
@@ -127,7 +126,7 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
 
         for (TypeDTO typeDTO : typeDTOList) {
             try {
-                byte [] b = JsonXMLConvertor.getXMLFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
+                byte [] b = jsonXMLConvertor.getXMLFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
                 map.put(typeDTO.getDisplayName() + ".xml", b);
             } catch (ConvertationException e) {
                 LOG.error(e.getMessage(), e);
@@ -153,7 +152,7 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
             InputStream stream = new ByteArrayInputStream(streamHashMap.get(fileName));
             if (fileName.endsWith(".xml")) {
                 try {
-                    TypeDefinition type = JsonXMLConvertor.createTypeFromXML(stream);
+                    TypeDefinition type = jsonXMLConvertor.createTypeFromXML(stream);
                     okTypeMap.put(fileName, type);
                 } catch (ConvertationException e) {
                     LOG.error(e.getMessage(), e);
@@ -161,7 +160,7 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
                 }
             } else if (fileName.endsWith(".json")) {
                 try {
-                    TypeDefinition type = JsonXMLConvertor.createTypeFromJSON(stream);
+                    TypeDefinition type = jsonXMLConvertor.createTypeFromJSON(stream);
                     okTypeMap.put(fileName, type);
                 } catch (ConvertationException e) {
                     LOG.error(e.getMessage(), e);
@@ -172,11 +171,11 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
             }
         }
 
-        List<TypeDefinition> query = DataSorter.validateAndSort(okTypeMap, fileStatusList);
+        List<TypeDefinition> query = dataSorter.validateAndSort(okTypeMap, fileStatusList);
         List<TypeDTO> sortedTypeList = new ArrayList<TypeDTO>();
 
         for (TypeDefinition typeDefinition : query) {
-            sortedTypeList.add(ObjectTypeReader.readTypeDefinition(typeDefinition));
+            sortedTypeList.add(objectTypeReader.readTypeDefinition(typeDefinition));
         }
 
         return new ResultSet(fileStatusList, sortedTypeList);

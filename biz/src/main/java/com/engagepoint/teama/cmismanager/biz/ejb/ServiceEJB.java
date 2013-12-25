@@ -7,7 +7,6 @@ import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ModificationException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
-import com.engagepoint.teama.cmismanager.biz.util.ObjectTypeReader;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 
 
@@ -39,6 +38,7 @@ import java.util.Map;
 public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializable {
 
     public static final Logger LOG = Logger.getLogger(ServiceEJB.class);
+    @EJB private ObjectTypeReader objectTypeReader;
 
     /**
      * This EJB handle clients sessions
@@ -85,7 +85,7 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
         try {
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(newType);
             ObjectType createdType = session.createType(typeDefinitionWrapper);
-            returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(createdType);
+            returnedTypeDTO = objectTypeReader.readIgnoreChildren(createdType);
         } catch (CmisObjectNotFoundException ex) {
             throw new ModificationException(ex.getMessage(), ex);
         } catch (CmisInvalidArgumentException ex) {
@@ -198,7 +198,7 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
             List<TypeDTO> typeList = new ArrayList<TypeDTO>();
             List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
             for (Tree<ObjectType> tree : list) {
-                typeList.add(ObjectTypeReader.readTree(tree));
+                typeList.add(objectTypeReader.readTree(tree));
             }
             return typeList;
         } catch (CmisPermissionDeniedException cp) {
@@ -267,7 +267,7 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
         try {
             TypeDefinitionWrapper typeDefinitionWrapper = new TypeDefinitionWrapper(updatedType);
             ObjectType newType = session.updateType(typeDefinitionWrapper);
-            returnedTypeDTO = ObjectTypeReader.readIgnoreChildren(newType);
+            returnedTypeDTO = objectTypeReader.readIgnoreChildren(newType);
         } catch (CmisPermissionDeniedException cp) {
             throw new ConnectionException(cp.getMessage(), cp);
         } catch (CmisBaseException cbe) {
