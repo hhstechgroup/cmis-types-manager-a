@@ -5,6 +5,10 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:uib="http://engagepoint.com/uib">
 
+    <uib:gridColumn column="4"><p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
+                                                styleClass="secondary"
+                                                update=":fullPropertyForm"
+                                                oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/></uib:gridColumn>
 
     <uib:dataTable id="allProperties" var="property"
                    rows="30"
@@ -20,24 +24,18 @@
             <h:outputText value="#{property.description}"/>
         </p:column>
         <p:column headerText="Full Info">
-
-        <p:commandButton title="Full Info" id="fullInfo" value="Info"
-                             actionListener="#{treeBean.passProperty(property)}"
-                             update=":fullPropertyForm"
-                             oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
-        </p:commandButton>
+         <p:commandLink title="Full Info" id="fullInfo"
+                        actionListener="#{treeBean.passProperty(property)}"
+                        update=":fullPropertyForm"
+                        oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
+            <uib:icon id="one" value='page-details' alt='page-details' title='Full info'/>
+         </p:commandLink>
 
         </p:column>
     </uib:dataTable>
-    <uib:gridContainer>
-        <uib:gridRow fluid="true">
-            <uib:gridColumn column="4"><p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
-                                                        update=":fullPropertyForm"
-                                                        oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/></uib:gridColumn>
-            <uib:gridColumn column="4"> <p:commandButton title="Create type" id="addType" value="Create"
+  <p:commandButton title="Create type" id="addType" value="Done"
                                                          action="/show/index?faces-redirect=true"
-                                                         actionListener="#{treeBean.addType}"/></uib:gridColumn>
-        </uib:gridRow>
-    </uib:gridContainer>
+                                                         actionListener="#{treeBean.addType}"/>
+
 
 </ui:composition>

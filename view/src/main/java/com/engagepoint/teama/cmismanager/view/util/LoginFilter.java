@@ -27,7 +27,7 @@ public class LoginFilter implements Filter {
             chain.doFilter(request, response);
         } else {
 
-            req.getRequestDispatcher("/login.xhtml").forward(request, response);
+            req.getRequestDispatcher("/settings.xhtml").forward(request, response);
         }
     }
 

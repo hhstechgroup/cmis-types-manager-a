@@ -24,7 +24,7 @@ public class LoginBean implements Serializable {
     public static final String ERROR_PAGE_REDIRECT = "/error?faces-redirect=true";
     public static final String SESSION_ID = "sessionID";
     public static final String INDEX_PAGE_REDIRECT = "/show/index?faces-redirect=true";
-    public static final String LOGIN_PAGE_REDIRECT = "/login?faces-redirect=true";
+    public static final String LOGIN_PAGE_REDIRECT = "/settings?faces-redirect=true";
 
     private String username;
     private String password;
@@ -94,8 +94,13 @@ public class LoginBean implements Serializable {
     public String doLogin() {
         String page;
         try {
+
+            UUID uuid = UUID.randomUUID();
+            sessionID = uuid.toString();
             service.connect(username, password, url, sessionID, chosenRepo);
             page = INDEX_PAGE_REDIRECT;
+            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            httpSession.setAttribute(SESSION_ID, sessionID);
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
             sessionID = null;
@@ -107,12 +112,6 @@ public class LoginBean implements Serializable {
     public String getRepoList() {
 
         try {
-            UUID uuid = UUID.randomUUID();
-            sessionID = uuid.toString();
-
-            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            httpSession.setAttribute(SESSION_ID, sessionID);
-
             availableReposList = service.getRepoList(username, password, url);
             chosenRepo = availableReposList[0];
 
@@ -145,4 +144,5 @@ public class LoginBean implements Serializable {
 
         return LOGIN_PAGE_REDIRECT;
     }
+
 }
