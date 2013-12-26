@@ -10,7 +10,7 @@
                                                 update=":fullPropertyForm"
                                                 oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/></uib:gridColumn>
 
-    <p:dataTable id="allProperties" var="property"
+    <uib:dataTable id="allProperties" var="property"
                    rows="7"
                    paginator="true"
                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -34,7 +34,7 @@
          </p:commandLink>
 
         </p:column>
-    </p:dataTable>
+    </uib:dataTable>
   <p:commandButton title="Create type" id="addType" value="Done"
                                                          action="/show/index?faces-redirect=true"
                                                          actionListener="#{treeBean.addType}"/>
