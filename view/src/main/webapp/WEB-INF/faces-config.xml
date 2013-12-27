@@ -16,4 +16,5 @@
             com.engagepoint.teama.cmismanager.view.util.ExceptionHandlerFactory
         </exception-handler-factory>
     </factory>
+
 </faces-config>

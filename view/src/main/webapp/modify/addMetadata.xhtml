@@ -10,22 +10,23 @@
                                                 update=":fullPropertyForm"
                                                 oncomplete="jQuery('#addMetadataModal').modal('show');return false;"/></uib:gridColumn>
 
-    <uib:dataTable id="allProperties" var="property"
+    <p:dataTable id="allProperties" var="property"
                    rows="7"
                    paginator="true"
+
                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                    value="#{treeBean.currentDTO.propertyList}" selection="#{treeBean.propertyRows}">
         <f:attribute name="propRow" value="#{property}"/>
-        <p:column headerText="ID">
+        <p:column headerText="ID" width="230">
             <h:outputText id="prop_id" value="#{property.id}" var="id"/>
         </p:column>
-        <p:column headerText="Display Name">
+        <p:column headerText="Display Name" width="230">
             <h:outputText value="#{property.displayName}"/>
         </p:column>
-        <p:column headerText="Description">
+        <p:column headerText="Description" width="230">
             <h:outputText value="#{property.description}"/>
         </p:column>
-        <p:column headerText="Full Info">
+        <p:column headerText="Full Info" width="30">
          <p:commandLink title="Full Info" id="fullInfo"
                         actionListener="#{treeBean.passProperty(property)}"
                         update=":fullPropertyForm"
@@ -34,7 +35,7 @@
          </p:commandLink>
 
         </p:column>
-    </uib:dataTable>
+    </p:dataTable>
   <p:commandButton title="Create type" id="addType" value="Done"
                                                          action="/show/index?faces-redirect=true"
                                                          actionListener="#{treeBean.addType}"/>

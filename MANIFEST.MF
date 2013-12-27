@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Archiver-Version: Plexus Archiver
 Created-By: Apache Maven
-Built-By: katerina.gluschenko
+Built-By: ivan.yakubenko
 Build-Jdk: 1.6.0_24
 Class-Path: chemistry-opencmis-client-impl-0.10.0.jar chemistry-opencm
  is-commons-api-0.10.0.jar chemistry-opencmis-commons-impl-0.10.0.jar 
