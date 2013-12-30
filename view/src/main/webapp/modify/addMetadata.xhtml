@@ -5,64 +5,68 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:uib="http://engagepoint.com/uib">
 
-    <uib:dataTable id="allNewProperties" var="property"
-                   rows="5" paginator="true"
+    <uib:gridColumn column="4">
+        <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
+                         styleClass="secondary" update=":fullPropertyForm"
+                         action="#{createBean.clearNewPropertyRow}" oncomplete="addMetadataDialog.show()"/>
+    </uib:gridColumn>
+
+
+    <uib:dataTable id="allNewProperties" var="property" rows="3" paginator="true"
+                   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                    value="#{createBean.newTypeDTO.propertyList}" selection="#{createBean.propertyRowList}">
+
         <f:attribute name="propRow" value="#{property}"/>
-        <p:column headerText="ID">
+        <p:column headerText="ID" width="230">
             <h:outputText id="prop_id" value="#{property.id}" var="id"/>
         </p:column>
-        <p:column headerText="Display Name">
+        <p:column headerText="Display Name" width="230">
             <h:outputText value="#{property.displayName}"/>
         </p:column>
-        <p:column headerText="Description">
+        <p:column headerText="Description" width="230">
             <h:outputText value="#{property.description}"/>
         </p:column>
-        <p:column headerText="Full Info">
+        <p:column headerText="Full Info" width="30">
 
-            <p:commandButton title="Full Info" id="fullInfo" value="Info" styleClass="secondary"
-                             actionListener="#{createBean.setNewPropertyRowCreate(property)}"
-                             update=":fullPropertyForm"
-                             oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
-            </p:commandButton>
+            <p:commandLink title="Full Info" id="fullInfo"
+                           actionListener="#{createBean.setNewPropertyRowCreate(property)}"
+                           update=":fullPropertyForm"
+                           oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
+                <uib:icon id="one" value='page-details' alt='page-details' title='Full info'/>
+            </p:commandLink>
 
         </p:column>
     </uib:dataTable>
 
-    <uib:dataTable id="allProperties" var="property"
-                   rows="5" paginator="true"
+    <uib:dataTable id="allProperties" var="property" rows="5" paginator="true"
+                   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                    value="#{createBean.currentDTO.propertyList}" selection="#{createBean.propertyRowList}">
         <f:attribute name="propRow" value="#{property}"/>
-        <p:column headerText="ID">
+        <p:column headerText="ID" width="230">
             <h:outputText id="prop_id" value="#{property.id}" var="id"/>
         </p:column>
-        <p:column headerText="Display Name">
+        <p:column headerText="Display Name" width="230">
             <h:outputText value="#{property.displayName}"/>
         </p:column>
-        <p:column headerText="Description">
+        <p:column headerText="Description" width="230">
             <h:outputText value="#{property.description}"/>
         </p:column>
-        <p:column headerText="Full Info">
+        <p:column headerText="Full Info" width="30">
 
-            <p:commandButton title="Full Info" id="fullInfo" value="Info" styleClass="secondary"
-                             actionListener="#{createBean.setNewPropertyRowCreate(property)}"
-                             update=":fullPropertyForm"
-                             oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
-            </p:commandButton>
+            <p:commandLink title="Full Info" id="fullInfo"
+                           actionListener="#{createBean.setNewPropertyRowCreate(property)}"
+                           update=":fullPropertyForm"
+                           oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
+                <uib:icon id="one" value='page-details' alt='page-details' title='Full info'/>
+            </p:commandLink>
 
         </p:column>
     </uib:dataTable>
 
-    <uib:gridContainer>
-        <uib:gridRow fluid="true">
-            <uib:gridColumn column="4"> <p:commandButton title="Create type" id="addType" value="Create"
-                                                         action="/show/index?faces-redirect=true"
-                                                         actionListener="#{treeBean.createType(createBean.newTypeDTO)}"/></uib:gridColumn>
-            <uib:gridColumn column="4">
-                <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
-                                 update=":addMetadata" action="#{createBean.clearNewPropertyRow}" oncomplete="addMetadataDialog.show()"/>
-            </uib:gridColumn>
-        </uib:gridRow>
-    </uib:gridContainer>
+     <p:commandButton title="Create type" id="addType" value="Done"
+                      action="/show/index?faces-redirect=true"
+                      actionListener="#{treeBean.createType(createBean.newTypeDTO)}"/>
+
+
 
 </ui:composition>
