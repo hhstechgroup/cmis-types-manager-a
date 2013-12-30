@@ -81,6 +81,12 @@
                 <version>0.9.222</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.8.4</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
