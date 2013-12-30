@@ -8,9 +8,8 @@
             dynamic="true"
             selectionMode="single"
             selection="#{treeBean.selected}">
-        <p:ajax event="select" listener="#{treeBean.onNodeSelect}"
-                update=":testForm"
-                oncomplete="mytab.select(0)"/>
+        <p:ajax event="select" listener="#{showBean.giveMeSelectedWhenShow}"
+                update=":testForm" oncomplete="mytab.select(0)"/>
 
         <p:treeNode id="treeNode" >
             <h:outputText value="#{node}" id="lblNode"/>

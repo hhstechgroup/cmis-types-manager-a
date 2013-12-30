@@ -2,22 +2,22 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                >
+        >
 
 
 
-        <p:tree value="#{treeBean.root}"
-                var="node"
-                id="tree"
-                dynamic="true"
-                selectionMode="single"
-                selection="#{treeBean.selected}">
-            <p:ajax event="select" listener="#{treeBean.onNodeSelect}"
-                    update=":fullPropertyForm, :mainForm"  />
+    <p:tree value="#{treeBean.root}"
+            var="node"
+            id="tree"
+            dynamic="true"
+            selectionMode="single"
+            selection="#{treeBean.selected}">
+        <p:ajax event="select" listener="#{createBean.giveMeSelectedWhenCreate}"
+                update=":fullPropertyForm, :mainForm"/>
 
-            <p:treeNode id="treeNode">
-                <h:outputText value="#{node}" id="lblNode"/>
-            </p:treeNode>
-        </p:tree>
+        <p:treeNode id="treeNode">
+            <h:outputText value="#{node}" id="lblNode"/>
+        </p:treeNode>
+    </p:tree>
 
 </ui:composition>

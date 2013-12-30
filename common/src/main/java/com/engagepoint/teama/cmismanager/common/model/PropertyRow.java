@@ -3,7 +3,7 @@ package com.engagepoint.teama.cmismanager.common.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class PropertyRow implements Serializable {
+public class PropertyRow implements Serializable, Cloneable {
 
     private String id;
     private String localName;
@@ -19,10 +19,11 @@ public class PropertyRow implements Serializable {
     private boolean openChoice;
 
     //enum
-    private String propertyType;
-    private String cardinality;
-    private String updatability;
+    private PropertyTypeEnum propertyType = PropertyTypeEnum.STRING;
+    private CardinalityEnum cardinality = CardinalityEnum.SINGLE;
+    private UpdatabilityEnum updatability = UpdatabilityEnum.READWRITE;
 
+    //not use
     private List choiseList;
     private List defaultValue;
     private List extensions;
@@ -139,27 +140,27 @@ public class PropertyRow implements Serializable {
         this.openChoice = openChoice;
     }
 
-    public String getPropertyType() {
+    public PropertyTypeEnum getPropertyType() {
         return propertyType;
     }
 
-    public void setPropertyType(String propertyType) {
+    public void setPropertyType(PropertyTypeEnum propertyType) {
         this.propertyType = propertyType;
     }
 
-    public String getCardinality() {
+    public CardinalityEnum getCardinality() {
         return cardinality;
     }
 
-    public void setCardinality(String cardinality) {
+    public void setCardinality(CardinalityEnum cardinality) {
         this.cardinality = cardinality;
     }
 
-    public String getUpdatability() {
+    public UpdatabilityEnum getUpdatability() {
         return updatability;
     }
 
-    public void setUpdatability(String updatability) {
+    public void setUpdatability(UpdatabilityEnum updatability) {
         this.updatability = updatability;
     }
 

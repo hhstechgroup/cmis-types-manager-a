@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class TypeDTO implements Serializable {
+public class TypeDTO implements Serializable, Cloneable {
 
 
     private BaseTypeEnum baseTypeId;
@@ -216,4 +216,5 @@ public class TypeDTO implements Serializable {
     public String toString() {
         return displayName;
     }
+
 }

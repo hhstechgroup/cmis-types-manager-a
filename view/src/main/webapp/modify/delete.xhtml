@@ -6,33 +6,52 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="../template.xhtml">
     <ui:define name="mainContent">
-        <uib:infoblock id="uib-norification-warn" visible="#{treeBean.errorVisible}" type="notification"
-                       styleClass="ui-messages-warn">
-            <p>#{treeBean.errorMessage}</p>
+
+        <uib:infoblock id="ui-messages-error" visible="#{error.errorVisibility}" type="notification"
+                       styleClass="ui-messages-error">
+            <p>#{error.errorMessage}</p>
+            <p:commandButton value="OK" styleClass="secondary small" icon="ui-icon-edit"
+                             action="#{error.hideInfoBlock}"
+                             update="ui-messages-error"/>
         </uib:infoblock>
 
         <h2>Delete Type</h2>
         <uib:gridContainer>
             <uib:gridRow fluid="true">
                 <uib:gridColumn column="12">
-                    <ui:include src="../show/tree.xhtml"/>
+
+                    <h:form id="treeForm">
+                        <p:tree id="tree"
+                                value="#{treeBean.root}"
+                                var="node"
+                                dynamic="true"
+                                selectionMode="single"
+                                selection="#{treeBean.selected}">
+                            <p:ajax event="select" listener="#{deleteBean.giveMeSelectedWhenDelete}"
+                                    update=":treeForm"/>
+
+                            <p:treeNode id="treeNode">
+                                <h:outputText value="#{node}" id="lblNode"/>
+                            </p:treeNode>
+                        </p:tree>
+                    </h:form>
                 </uib:gridColumn>
             </uib:gridRow>
         </uib:gridContainer>
 
-        <uib:modal id="dialogDelete" prependId="false" header="Delete #{treeBean.currentDTO.displayName}">
-            <h:outputText value="#{treeBean.errorDialogMsg}"/>
+        <uib:modal id="dialogDelete" prependId="false" header="Delete #{deleteBean.currentDTO.displayName}">
+            <h:outputText value="#{deleteBean.errorDialogMsg}"/>
             <f:facet name="footer">
                 <p:commandButton title="Cancel" id="cancelButton" mode="client" value="Cancel"
                                  styleClass="secondary"
                                  oncomplete="jQuery('#dialogDelete').modal('hide');return false;"/>
                 <p:commandButton id='dltbtn' title="Delete" mode="client" value="Continue"
-                                 rendered="#{treeBean.disableDeleteBtn}"
+                                 rendered="#{deleteBean.disableDeleteBtn}"
                                  oncomplete="jQuery('#dialogDelete').modal('hide');return false;"
-                                 actionListener="#{treeBean.deleteType}" update=":treeForm"/>
+                                 actionListener="#{treeBean.deleteType(deleteBean.currentDTO)}" update=":treeForm"/>
             </f:facet>
         </uib:modal>
-        <p:commandButton id="deleteBtn" value="Delete" actionListener="#{treeBean.deleteConditions}"
+        <p:commandButton id="deleteBtn" value="Delete" actionListener="#{deleteBean.deleteConditions}"
                          oncomplete="jQuery('#dialogDelete').modal('show');
                                                              return false;" update=":dialogDelete"/>
     </ui:define>

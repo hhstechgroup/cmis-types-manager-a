@@ -12,13 +12,13 @@
             dynamic="true"
             selectionMode="single"
             selection="#{treeBean.selected}">
-        <p:ajax event="select" listener="#{treeBean.onNodeSelectUpdate}"
-                update=":fullPropertyForm, :mainForm"  />
+        <p:ajax event="select" listener="#{updateBean.giveMeSelectedWhenUpdate}"
+                update=":updatePropertyForm, :mainForm"/>
 
         <p:treeNode id="treeNode">
             <h:outputText value="#{node}" id="lblNode"/>
         </p:treeNode>
     </p:tree>
-    <h:inputHidden value="#{treeBean.mutability}" required="true"/>
+    <h:inputHidden value="#{updateBean.canUpdate}" required="true"/>
 
 </ui:composition>

@@ -1,8 +1,6 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
-import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;
-import com.engagepoint.teama.cmismanager.common.model.PropertyRow;
-import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
+import com.engagepoint.teama.cmismanager.common.model.*;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Tree;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -19,6 +17,8 @@ import java.util.Iterator;
 @Stateless
 @LocalBean
 public class ObjectTypeReader {
+
+    public static final String EMPTY_STRING = "";
 
     public TypeDTO readIgnoreChildren(ObjectType objType) {
 
@@ -37,7 +37,10 @@ public class ObjectTypeReader {
         TypeDTO dto = new TypeDTO();
 
         dto.setBaseTypeId(BaseTypeEnum.fromValue(typeDefinition.getBaseTypeId().value()));
-        dto.setParentTypeId(typeDefinition.getParentTypeId());
+
+        //base types have 'null' parent type ID
+        dto.setParentTypeId(
+                typeDefinition.getParentTypeId() == null ? EMPTY_STRING : typeDefinition.getParentTypeId());
 
         dto.setMutabilityCanCreate(typeDefinition.getTypeMutability().canCreate());
         dto.setMutabilityCanDelete(typeDefinition.getTypeMutability().canDelete());
@@ -95,13 +98,21 @@ public class ObjectTypeReader {
         propertyRow.setDisplayName(definition.getDisplayName());
         propertyRow.setId(definition.getId());
         propertyRow.setDescription(definition.getDescription());
-        propertyRow.setLocalNamespace(definition.getLocalNamespace());
+
+        //some types have 'null'
+        propertyRow.setLocalNamespace(
+                definition.getLocalNamespace() == null ?
+                        EMPTY_STRING : definition.getLocalNamespace());
+
         propertyRow.setLocalName(definition.getLocalName());
         propertyRow.setQueryName(definition.getDisplayName());
 
-        propertyRow.setCardinality(definition.getCardinality().value());
-        propertyRow.setUpdatability(definition.getUpdatability().value());
-        propertyRow.setPropertyType(definition.getPropertyType().value());
+        propertyRow.setCardinality(
+                CardinalityEnum.fromValue(definition.getCardinality().value()));
+        propertyRow.setUpdatability(
+                UpdatabilityEnum.fromValue(definition.getUpdatability().value()));
+        propertyRow.setPropertyType(
+                PropertyTypeEnum.fromValue(definition.getPropertyType().value()));
 
         propertyRow.setQueryable(definition.isQueryable());
         propertyRow.setOrderable(definition.isOrderable());

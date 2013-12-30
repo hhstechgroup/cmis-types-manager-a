@@ -33,8 +33,6 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
 
     /**
      * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
-     *
-     *
      * @param typeDTO TypeDTO instance
      * @return stream
      * @throws BaseException

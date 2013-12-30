@@ -4,11 +4,11 @@
         xmlns:h="http://java.sun.com/jsf/html"
         template="../template.xhtml"
         xmlns:uib="http://engagepoint.com/uib"
-        id="allPropertiesForm" prependId="false" rendered="#{treeBean.attributesVisible}">
+        id="allPropertiesForm" prependId="false" rendered="#{showBean.attributesVisible}">
 
     <uib:dataTable id="allProperties" var="property"
                    rows="30"
-                   value="#{treeBean.currentDTO.propertyList}" selection="#{treeBean.propertyRows}">
+                   value="#{showBean.currentDTO.propertyRows}" selection="#{showBean.propertyRowList}">
         <f:attribute name="propRow" value="#{property}"/>
         <p:column headerText="ID">
             <h:outputText id="prop_id" value="#{property.id}" var="id"/>
@@ -22,7 +22,7 @@
         <p:column headerText="Full Info">
 
             <p:commandButton title="Full Info" id="fullInfo" value="Info"
-                             actionListener="#{treeBean.passProperty(property)}"
+                             actionListener="#{showBean.setNewPropertyRowShow(property)}"
                              update=":fullPropertyForm"
                              oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
             </p:commandButton>

@@ -3,9 +3,9 @@
         xmlns:h="http://java.sun.com/jsf/html"
         template="../template.xhtml"
         xmlns:uib="http://engagepoint.com/uib"
-        id="Add" prependId="false" styleClass="mar30" rendered="#{treeBean.attributesVisible}">
+        id="Add" prependId="false" styleClass="mar30" rendered="#{showBean.attributesVisible}">
 
-<h2>Atributes for #{treeBean.currentDTO.displayName}</h2>
+<h2>Atributes for #{showBean.currentDTO.displayName}</h2>
 
 <uib:gridContainer>
 
@@ -16,7 +16,7 @@
     </uib:gridColumn>
     <uib:gridColumn column="8">
         <uib:input id="displayName" placeholder="Input value:" disabled="true"
-                   value="#{treeBean.currentDTO.displayName}" required="true"/>
+                   value="#{showBean.currentDTO.displayName}" required="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -28,7 +28,7 @@
     </uib:gridColumn>
     <uib:gridColumn column="8">
         <uib:input id="id" disabled="true"
-                   value="#{treeBean.currentDTO.id}" required="true"/>
+                   value="#{showBean.currentDTO.id}" required="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -40,7 +40,7 @@
     </uib:gridColumn>
     <uib:gridColumn column="8">
         <uib:input id="description" disabled="true"
-                   value="#{treeBean.currentDTO.description}" required="true"/>
+                   value="#{showBean.currentDTO.description}" required="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -52,7 +52,7 @@
     </uib:gridColumn>
     <uib:gridColumn column="8">
         <uib:input id="queryName" disabled="true"
-                   value="#{treeBean.currentDTO.queryName}" required="true"/>
+                   value="#{showBean.currentDTO.queryName}" required="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -64,7 +64,7 @@
     </uib:gridColumn>
     <uib:gridColumn column="8">
         <uib:input id="localName" disabled="true"
-                   value="#{treeBean.currentDTO.localName}" required="true"/>
+                   value="#{showBean.currentDTO.localName}" required="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -75,7 +75,7 @@
         <p:outputLabel value="Parent"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="parentId" value="#{treeBean.currentDTO.parentTypeId}" disabled="true"/>
+        <uib:input id="parentId" value="#{showBean.currentDTO.parentTypeId}" disabled="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -86,7 +86,7 @@
         <p:outputLabel value="Base type"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <uib:input id="baseTypeId" value="#{treeBean.currentDTO.baseTypeId}" disabled="true"/>
+        <uib:input id="baseTypeId" value="#{showBean.currentDTO.baseTypeId}" disabled="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -98,7 +98,7 @@
     </uib:gridColumn>
     <uib:gridColumn column="8">
         <uib:input id="localNamespace" disabled="true"
-                   value="#{treeBean.currentDTO.localNamespace}" required="true"/>
+                   value="#{showBean.currentDTO.localNamespace}" required="true"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -109,7 +109,7 @@
         <p:outputLabel value="Creatable"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <p:selectBooleanCheckbox id="creatable" disabled="true" value="#{treeBean.currentDTO.creatable}"/>
+        <p:selectBooleanCheckbox id="creatable" disabled="true" value="#{showBean.currentDTO.creatable}"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -120,7 +120,7 @@
         <p:outputLabel value="Fileable"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <p:selectBooleanCheckbox id="fileable" disabled="true" value="#{treeBean.currentDTO.fileable}"/>
+        <p:selectBooleanCheckbox id="fileable" disabled="true" value="#{showBean.currentDTO.fileable}"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -131,7 +131,7 @@
         <p:outputLabel value="Queryable"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <p:selectBooleanCheckbox id="queryable" disabled="true" value="#{treeBean.currentDTO.queryable}"/>
+        <p:selectBooleanCheckbox id="queryable" disabled="true" value="#{showBean.currentDTO.queryable}"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -143,7 +143,7 @@
     </uib:gridColumn>
     <uib:gridColumn column="8">
         <p:selectBooleanCheckbox id="includedInSupertypeQuery" disabled="true"
-                                 value="#{treeBean.currentDTO.includedInSupertypeQuery}"/>
+                                 value="#{showBean.currentDTO.includedInSupertypeQuery}"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -154,7 +154,7 @@
         <p:outputLabel value="Full text indexed"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <p:selectBooleanCheckbox id="fulltextIndexed" disabled="true" value="#{treeBean.currentDTO.fulltextIndexed}"/>
+        <p:selectBooleanCheckbox id="fulltextIndexed" disabled="true" value="#{showBean.currentDTO.fulltextIndexed}"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -165,7 +165,7 @@
         <p:outputLabel value="ACL controllable"/>
     </uib:gridColumn>
     <uib:gridColumn column="8">
-        <p:selectBooleanCheckbox id="controllableAcl" disabled="true" value="#{treeBean.currentDTO.controllableAcl}"/>
+        <p:selectBooleanCheckbox id="controllableAcl" disabled="true" value="#{showBean.currentDTO.controllableAcl}"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -178,7 +178,7 @@
 
     <uib:gridColumn column="8">
         <p:selectBooleanCheckbox id="controllablePolicy" disabled="true"
-                                 value="#{treeBean.currentDTO.controllablePolicy}"/>
+                                 value="#{showBean.currentDTO.controllablePolicy}"/>
     </uib:gridColumn>
 
 </uib:gridRow>
@@ -203,7 +203,7 @@
                 </uib:gridColumn>
                 <uib:gridColumn column="8">
                     <p:selectBooleanCheckbox id="mutabilityCanCreate" disabled="true"
-                                             value="#{treeBean.currentDTO.mutabilityCanCreate}"/>
+                                             value="#{showBean.currentDTO.mutabilityCanCreate}"/>
                 </uib:gridColumn>
             </uib:gridRow>
 
@@ -213,7 +213,7 @@
                 </uib:gridColumn>
                 <uib:gridColumn column="8">
                     <p:selectBooleanCheckbox id="mutabilityCanDelete" disabled="true"
-                                             value="#{treeBean.currentDTO.mutabilityCanDelete}"/>
+                                             value="#{showBean.currentDTO.mutabilityCanDelete}"/>
                 </uib:gridColumn>
             </uib:gridRow>
 
@@ -223,7 +223,7 @@
                 </uib:gridColumn>
                 <uib:gridColumn column="8">
                     <p:selectBooleanCheckbox id="mutabilityCanUpdate" disabled="true"
-                                             value="#{treeBean.currentDTO.mutabilityCanUpdate}"/>
+                                             value="#{showBean.currentDTO.mutabilityCanUpdate}"/>
                 </uib:gridColumn>
             </uib:gridRow>
 

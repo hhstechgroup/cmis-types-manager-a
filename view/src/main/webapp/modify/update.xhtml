@@ -11,6 +11,7 @@
 
 <ui:define name="mainContent">
     <h2>Update type</h2>
+
     <uib:gridContainer>
 
         <uib:gridRow>
@@ -18,21 +19,19 @@
                 <h:form id="mainForm">
                     <p:wizard id="tab" dynamic="true">
 
-                        <p:tab id="tab1" title="Chose node" >
-                           <!--h3>Chose tree node:</h3-->
+                        <p:tab id="tab1" title="Select type" >
                             <h:panelGrid columns="2" cellpadding="10">
                                 <ui:include src="/modify/showTreeUpdate.xhtml"/>
+                                <h:inputHidden id="typeUpdateAbility" value="#{updateBean.canUpdate}" required="true"/>
                             </h:panelGrid>
                         </p:tab>
                         <p:tab id="tab2" title="Attributes" >
-                            <!--h3>Update attributes</h3-->
                             <h:panelGrid id="grid" columns="2" cellpadding="10">
                                 <ui:include src="/modify/updateAttributes.xhtml"/>
                             </h:panelGrid>
                         </p:tab>
 
                         <p:tab id="tab3" title="Metadata">
-                            <!--h3>Edit type metadata and add new one</h3-->
                             <h:panelGrid columns="1" cellpadding="10">
                                 <ui:include src="/modify/updateMetadata.xhtml"/>
                             </h:panelGrid>
@@ -47,142 +46,164 @@
 
     </uib:gridContainer>
 
-
-    <h:form  id="fullPropertyForm" prependId="false">
-        <uib:modal id="fullPropertyModal" header="Property update">
-            <p:panelGrid columns="2" id="fullPropertyGrid" cellpadding="10">
+    <h:form id="updatePropertyForm" prependId="false">
+        <p:dialog id="updatePropertyModal" widgetVar="updatePropertyDialog" modal="true" header="Update property"
+                  draggable="false" resizable="false" width="200">
+            <p:panelGrid columns="2">
 
                 <h:outputText value="ID: "/>
-                <p:inputText value="#{treeBean.propertyRow1.id}"/>
+                <p:inputText id="idUpdate" value="#{updateBean.newPropertyRow.id}"/>
 
                 <h:outputText value="Local Name: "/>
-                <h:inputText value="#{treeBean.propertyRow1.localName}"/>
+                <p:inputText id="localnameUpdate" value="#{updateBean.newPropertyRow.localName}"/>
 
                 <h:outputText value="Local Namespace: "/>
-                <h:inputText value="#{treeBean.propertyRow1.localNamespace}"/>
+                <p:inputText id="localnamespaceUpdate" value="#{updateBean.newPropertyRow.localNamespace}"/>
 
                 <h:outputText value="Display Name: "/>
-                <h:inputText value="#{treeBean.propertyRow1.displayName}"/>
+                <p:inputText id="displaynameUpdate" value="#{updateBean.newPropertyRow.displayName}"/>
 
                 <h:outputText value="Query Name: "/>
-                <h:inputText value="#{treeBean.propertyRow1.queryName}"/>
+                <p:inputText id="querynameUpdate" value="#{updateBean.newPropertyRow.queryName}"/>
 
                 <h:outputText value="Description: "/>
-                <h:inputText value="#{treeBean.propertyRow1.description}"/>
+                <p:inputText id="descriptionUpdate" value="#{updateBean.newPropertyRow.description}"/>
 
                 <h:outputText value="Inherited: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.inherited}"/>
+                <p:selectBooleanCheckbox id="inheritedUpdate" value="#{updateBean.newPropertyRow.inherited}"/>
 
                 <h:outputText value="Required: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.required}"/>
+                <p:selectBooleanCheckbox id="requiredUpdate" value="#{updateBean.newPropertyRow.required}"/>
 
                 <h:outputText value="Queryable: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.queryable}"/>
+                <p:selectBooleanCheckbox id="queryableUpdate" value="#{updateBean.newPropertyRow.queryable}"/>
 
                 <h:outputText value="Orderable: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.orderable}"/>
+                <p:selectBooleanCheckbox id="orderableUpdate" value="#{updateBean.newPropertyRow.orderable}"/>
 
                 <h:outputText value="Open Choice: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.propertyRow1.openChoice}"/>
+                <p:selectBooleanCheckbox id="openChoiceUpdate" value="#{updateBean.newPropertyRow.openChoice}"/>
 
                 <h:outputText value="Property Type: "/>
-                <h:inputText value="#{treeBean.propertyRow1.propertyType}"/>
+                <p:selectOneMenu id="selectPropertyTypeUpdate" value="#{updateBean.newPropertyRow.propertyType}">
+                    <f:selectItems value="#{updateBean.propertyTypeEnums}"/>
+                </p:selectOneMenu>
 
                 <h:outputText value="Cardinality: "/>
-                <h:inputText value="#{treeBean.propertyRow1.cardinality}"/>
+                <p:selectOneMenu id="selectCardinalityUpdate" value="#{updateBean.newPropertyRow.cardinality}">
+                    <f:selectItems value="#{updateBean.cardinalityEnums}"/>
+                </p:selectOneMenu>
 
                 <h:outputText value="Updatability: "/>
-                <h:inputText value="#{treeBean.propertyRow1.updatability}"/>
+                <p:selectOneMenu id="selectUpdatabilityUpdate" value="#{updateBean.newPropertyRow.updatability}">
+                    <f:selectItems value="#{updateBean.updatabilityEnums}"/>
+                </p:selectOneMenu>
 
-                <h:outputText value="Choise List: "/>
-                <h:inputText value="#{treeBean.propertyRow1.choiseList}"/>
-
-                <h:outputText value="Default Value: "/>
-                <h:inputText value="#{treeBean.propertyRow1.defaultValue}"/>
-
-                <h:outputText value="Extensions: "/>
-                <h:inputText value="#{treeBean.propertyRow1.extensions}"/>
             </p:panelGrid>
+
             <f:facet name="footer">
 
-                <p:commandButton title="Cancel" mode="client" value="Cancel"
-                                 styleClass="secondary"
-                                 oncomplete="jQuery('#fullPropertyModal').modal('hide');
-                                         return false;"/>
+                <uib:gridContainer styleClass="pad">
+
+                    <uib:gridRow fluid="true">
+                        <uib:gridColumn column="6">
+                            <p:outputLabel value="" />
+                        </uib:gridColumn>
+                        <uib:gridColumn column="3">
+                            <p:commandButton id="cancelUpdate" title="Cancel" mode="client" value="Cancel"
+                                             styleClass="secondary" oncomplete="updatePropertyDialog.hide()" />
+                        </uib:gridColumn>
+                        <uib:gridColumn column="3">
+                            <p:commandButton id="addUpdate" title="Submit" mode="client" value="Add metadata"
+                                             oncomplete="updatePropertyDialog.hide()" update=":mainForm"
+                                             action="#{updateBean.submitChanges}" />
+                        </uib:gridColumn>
+                    </uib:gridRow>
+                </uib:gridContainer>
+
             </f:facet>
-        </uib:modal>
+
+        </p:dialog>
     </h:form>
 
-
     <h:form id="addMetadata" prependId="false">
-        <uib:modal id="addMetadataModal" header="Add metadata">
-            <p:panelGrid columns="2" id="metadataGrid" cellpadding="10">
+        <p:dialog id="addMetadataModal" widgetVar="addMetadataDialog" modal="true" header="Add metadata"
+                  draggable="false" resizable="false" width="200">
+            <p:panelGrid columns="2" id="metadataGrid">
 
                 <h:outputText value="ID: "/>
-                <p:inputText value="#{treeBean.newProperty.id}"/>
+                <p:inputText id="id" value="#{updateBean.newPropertyRow.id}"/>
 
                 <h:outputText value="Local Name: "/>
-                <p:inputText value="#{treeBean.newProperty.localName}"/>
+                <p:inputText id="localname" value="#{updateBean.newPropertyRow.localName}"/>
 
                 <h:outputText value="Local Namespace: "/>
-                <p:inputText value="#{treeBean.newProperty.localNamespace}"/>
+                <p:inputText id="localnamespace" value="#{updateBean.newPropertyRow.localNamespace}"/>
 
                 <h:outputText value="Display Name: "/>
-                <p:inputText value="#{treeBean.newProperty.displayName}"/>
+                <p:inputText id="displayname" value="#{updateBean.newPropertyRow.displayName}"/>
 
                 <h:outputText value="Query Name: "/>
-                <p:inputText value="#{treeBean.newProperty.queryName}"/>
+                <p:inputText id="queryname" value="#{updateBean.newPropertyRow.queryName}"/>
 
                 <h:outputText value="Description: "/>
-                <p:inputText value="#{treeBean.newProperty.description}"/>
+                <p:inputText value="#{updateBean.newPropertyRow.description}"/>
 
                 <h:outputText value="Inherited: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.newProperty.inherited}"/>
+                <p:selectBooleanCheckbox value="#{updateBean.newPropertyRow.inherited}"/>
 
                 <h:outputText value="Required: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.newProperty.required}"/>
+                <p:selectBooleanCheckbox value="#{updateBean.newPropertyRow.required}"/>
 
                 <h:outputText value="Queryable: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.newProperty.queryable}"/>
+                <p:selectBooleanCheckbox value="#{updateBean.newPropertyRow.queryable}"/>
 
                 <h:outputText value="Orderable: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.newProperty.orderable}"/>
+                <p:selectBooleanCheckbox value="#{updateBean.newPropertyRow.orderable}"/>
 
                 <h:outputText value="Open Choice: "/>
-                <h:selectBooleanCheckbox value="#{treeBean.newProperty.openChoice}"/>
+                <p:selectBooleanCheckbox value="#{updateBean.newPropertyRow.openChoice}"/>
 
                 <h:outputText value="Property Type: "/>
-                <p:inputText value="#{treeBean.newProperty.propertyType}"/>
+                <p:selectOneMenu id="selectPropertyType" value="#{updateBean.newPropertyRow.propertyType}">
+                    <f:selectItems value="#{updateBean.propertyTypeEnums}"/>
+                </p:selectOneMenu>
 
                 <h:outputText value="Cardinality: "/>
-                <p:inputText value="#{treeBean.newProperty.cardinality}"/>
+                <p:selectOneMenu id="selectCardinality" value="#{updateBean.newPropertyRow.cardinality}">
+                    <f:selectItems value="#{updateBean.cardinalityEnums}"/>
+                </p:selectOneMenu>
 
                 <h:outputText value="Updatability: "/>
-                <p:inputText value="#{treeBean.newProperty.updatability}"/>
+                <p:selectOneMenu id="selectUpdatability" value="#{updateBean.newPropertyRow.updatability}">
+                    <f:selectItems value="#{updateBean.updatabilityEnums}"/>
+                </p:selectOneMenu>
 
-                <h:outputText value="Choise List: "/>
-                <p:inputText value="#{treeBean.newProperty.choiseList}"/>
-
-                <h:outputText value="Default Value: "/>
-                <p:inputText value="#{treeBean.newProperty.defaultValue}"/>
-
-                <h:outputText value="Extensions: "/>
-                <p:inputText value="#{treeBean.newProperty.extensions}"/>
             </p:panelGrid>
+
             <f:facet name="footer">
 
-                <p:commandButton title="Cancel" mode="client" value="Cancel"
-                                 styleClass="secondary"
-                                 oncomplete="jQuery('#addMetadataModal').modal('hide');
-                                         return false;"
-                        />
-                <p:commandButton title="Add" mode="client" value="Add metadata"
-                                 styleClass="secondary"
-                                 oncomplete="jQuery('#addMetadataModal').modal('hide');
-                                 return false;" update=":mainForm"
-                                 action="#{treeBean.addMetadataUpdate}" />
+                <uib:gridContainer styleClass="pad">
+
+                    <uib:gridRow fluid="true">
+                        <uib:gridColumn column="6">
+                            <p:outputLabel value="" />
+                        </uib:gridColumn>
+                        <uib:gridColumn column="3">
+                            <p:commandButton title="Cancel" mode="client" value="Cancel"
+                                             styleClass="secondary" oncomplete="addMetadataDialog.hide()" />
+                        </uib:gridColumn>
+                        <uib:gridColumn column="3">
+                            <p:commandButton id="add" title="Add" mode="client" value="Add metadata"
+                                             oncomplete="addMetadataDialog.hide()" update=":mainForm"
+                                             action="#{updateBean.addProperty}" />
+                        </uib:gridColumn>
+                    </uib:gridRow>
+                </uib:gridContainer>
+
             </f:facet>
-        </uib:modal>
+
+        </p:dialog>
     </h:form>
 
 </ui:define>

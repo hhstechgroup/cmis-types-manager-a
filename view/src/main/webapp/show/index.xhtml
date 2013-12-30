@@ -18,23 +18,23 @@
         <uib:gridContainer id="testForm">
 
             <p:commandLink id="lbl" value="Back to tree"
-                           actionListener="#{treeBean.treeEnable}"
+                           actionListener="#{showBean.treeEnable}"
                            oncomplete="mytab.select(0);" update="testForm"
-                           rendered="#{!treeBean.treeRender}"/>
+                           rendered="#{!showBean.treeRender}"/>
 
             <p:tabView id="mainTab"
                        effect="slide" effectDuration="normal" widgetVar="mytab">
 
-                <p:tab id="tree" title="Tree" titleStyle="visibility: hidden;border: 0;" rendered="#{treeBean.treeRender}">
+                <p:tab id="tree" title="Tree" titleStyle="visibility: hidden;border: 0;" rendered="#{showBean.treeRender}">
                     <h2>Tree Type</h2>
                     <ui:include src="showTree.xhtml"/>
                 </p:tab>
 
-                <p:tab id="attributes" title="Attributes" rendered="#{!treeBean.treeRender}">
+                <p:tab id="attributes" title="Attributes" rendered="#{!showBean.treeRender}">
                     <ui:include src="add.xhtml"/>
                 </p:tab>
 
-                <p:tab id="metadata" title="Metadata" rendered="#{!treeBean.treeRender}">
+                <p:tab id="metadata" title="Metadata" rendered="#{!showBean.treeRender}">
                     <ui:include src="property.xhtml"/>
                 </p:tab>
 
@@ -46,55 +46,47 @@
                 <p:panelGrid columns="2" id="fullPropertyGrid">
 
                     <h:outputText value="ID: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.id}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.id}"/>
 
                     <h:outputText value="Local Name: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.localName}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.localName}"/>
 
                     <h:outputText value="Local Namespace: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.localNamespace}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.localNamespace}"/>
 
                     <h:outputText value="Display Name: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.displayName}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.displayName}"/>
 
                     <h:outputText value="Query Name: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.queryName}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.queryName}"/>
 
                     <h:outputText value="Description: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.description}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.description}"/>
 
                     <h:outputText value="Inherited: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.inherited}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.inherited}"/>
 
                     <h:outputText value="Required: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.required}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.required}"/>
 
                     <h:outputText value="Queryable: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.queryable}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.queryable}"/>
 
                     <h:outputText value="Orderable: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.orderable}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.orderable}"/>
 
                     <h:outputText value="Open Choice: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.openChoice}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.openChoice}"/>
 
                     <h:outputText value="Property Type: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.propertyType}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.propertyType}"/>
 
                     <h:outputText value="Cardinality: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.cardinality}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.cardinality}"/>
 
                     <h:outputText value="Updatability: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.updatability}"/>
+                    <h:outputText value="#{showBean.newPropertyRow.updatability}"/>
 
-                    <h:outputText value="Choise List: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.choiseList}"/>
-
-                    <h:outputText value="Default Value: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.defaultValue}"/>
-
-                    <h:outputText value="Extensions: "/>
-                    <h:outputText value="#{treeBean.propertyRow1.extensions}"/>
                 </p:panelGrid>
                 <f:facet name="footer">
                     <p:commandButton title="Cancel" mode="client" value="Cancel"
