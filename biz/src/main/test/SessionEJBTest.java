@@ -1,4 +1,6 @@
-import com.engagepoint.teama.cmismanager.biz.ejb.SessionEJB;
+package com.engagepoint.teama.cmismanager.biz.ejb;
+
+
 import org.junit.Before;
 import org.junit.Test;
 

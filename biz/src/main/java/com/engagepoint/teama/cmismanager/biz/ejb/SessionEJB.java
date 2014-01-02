@@ -1,8 +1,7 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
-import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
-
 import com.engagepoint.teama.cmismanager.biz.util.RepositoryInfo;
+import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
@@ -13,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,14 +26,24 @@ public class SessionEJB implements Serializable {
      * This map binds unique userID with repository. Different application users can use the same repository
      * (same username, password, url and repositoryName), and they will have one session for all.
      */
+
     private Map<String, RepositoryInfo> idToRepoMap = new ConcurrentHashMap<String, RepositoryInfo>();
 
+    private SessionFactory sessionFactory;
     /**
      * This map contains session pool.
      */
     private Map<RepositoryInfo, Session> repoToSessionMap = new ConcurrentHashMap<RepositoryInfo, Session>();
 
     public static final Logger LOG = Logger.getLogger(SessionEJB.class);
+
+    public SessionEJB(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public SessionEJB() {
+        this.sessionFactory = SessionFactoryImpl.newInstance();
+    }
 
     /**
      * Remove sessionID from idToRepoMap. If no one use this session at this moment, this method will close it.
@@ -119,18 +127,16 @@ public class SessionEJB implements Serializable {
 
         Session returnedSession;
 
-        SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
         parameter.put(SessionParameter.USER, username);
         parameter.put(SessionParameter.PASSWORD, password);
-
         parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         parameter.put(SessionParameter.REPOSITORY_ID, repositoryName);
 
         try {
-            returnedSession = factory.createSession(parameter);
+            returnedSession = sessionFactory.createSession(parameter);
 
             if (returnedSession == null) {
                 throw new ConnectionException("Can not create session");
@@ -143,4 +149,6 @@ public class SessionEJB implements Serializable {
 
         return returnedSession;
     }
+
+
 }
