@@ -1,6 +1,6 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
-import com.engagepoint.teama.cmismanager.biz.util.TypesIdentityComparator;
+import com.engagepoint.teama.cmismanager.biz.util.TypesComparator;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.exceptions.ValidationException;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
@@ -102,11 +102,6 @@ public class DataSorter {
 
         if (type.isQueryable() == null) {
             throw new ValidationException("Queryable flag must be set.");
-        } else if (type.isQueryable().booleanValue()) {
-            String tmp = type.getQueryName();
-            if (tmp == null || tmp.isEmpty()) {
-                throw new ValidationException("Queryable flag is set to TRUE, but the query name is not set.");
-            }
         }
 
         if (type.isControllablePolicy() == null) {
@@ -220,7 +215,7 @@ public class DataSorter {
      */
     private Set<TypeDefinition> validate(Map<String, TypeDefinition> typeDefinitionMap, List<FileStatusReport> fileStatusList) {
 
-        Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesIdentityComparator());
+        Set<TypeDefinition> typeDefinitionTreeSet = new TreeSet<TypeDefinition>(new TypesComparator());
 
         for (String fileName : typeDefinitionMap.keySet()) {
 

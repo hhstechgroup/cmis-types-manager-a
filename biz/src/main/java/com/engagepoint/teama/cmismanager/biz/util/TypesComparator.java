@@ -4,7 +4,7 @@ import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
 import java.util.Comparator;
 
-public class TypesIdentityComparator implements Comparator<TypeDefinition> {
+public class TypesComparator implements Comparator<TypeDefinition> {
 
     @Override
     public int compare(TypeDefinition o1, TypeDefinition o2) {
