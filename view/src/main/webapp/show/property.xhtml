@@ -21,11 +21,12 @@
         </p:column>
         <p:column headerText="Full Info">
 
-            <p:commandButton title="Full Info" id="fullInfo" value="Info"
+            <p:commandLink title="Full Info" id="fullInfo"
                              actionListener="#{showBean.setNewPropertyRowShow(property)}"
                              update=":fullPropertyForm"
                              oncomplete="jQuery('#fullPropertyModal').modal('show');return false;">
-            </p:commandButton>
+                <uib:icon id="icon" value='page-details' alt='page-details' title='Full info'/>
+            </p:commandLink>
 
         </p:column>
     </uib:dataTable>
