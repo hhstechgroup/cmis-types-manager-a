@@ -74,5 +74,30 @@ public class TypesIdentityComparatorTest {
         Assert.assertNotEquals(comparator.compare(wrapper1, wrapper2), 0);
     }
 
+    @Test ()
+    public void testCompareEqualsFalse2(){
+        TypeDTO typeDTO1 = new TypeDTO();
+        typeDTO1.setId("Test");
+        typeDTO1.setQueryName("Test");
+        typeDTO1.setDisplayName("Test");
+        typeDTO1.setParentTypeId("Test");
+        typeDTO1.setLocalName("Test");
+        typeDTO1.setBaseTypeId(BaseTypeEnum.CMIS_DOCUMENT);
+
+        TypeDTO typeDTO2 = new TypeDTO();
+        typeDTO2.setId("Test2");
+        typeDTO2.setQueryName("Test2");
+        typeDTO2.setDisplayName("Test2");
+        typeDTO2.setParentTypeId("Test");
+        typeDTO2.setLocalName("Test2");
+        typeDTO2.setBaseTypeId(BaseTypeEnum.CMIS_DOCUMENT);
+
+        TypeDefinitionWrapper wrapper1 = new TypeDefinitionWrapper(typeDTO1);
+        TypeDefinitionWrapper wrapper2 = new TypeDefinitionWrapper(typeDTO2);
+
+        Assert.assertNotEquals(comparator.compare(wrapper1, wrapper2), 0);
+    }
+
+
 
 }
