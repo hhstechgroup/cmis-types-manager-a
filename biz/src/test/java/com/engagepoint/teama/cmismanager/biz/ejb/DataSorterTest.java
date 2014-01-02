@@ -1,6 +1,6 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
-import com.engagepoint.teama.cmismanager.biz.erwr.DataSorter;
+import com.engagepoint.teama.cmismanager.biz.ejb.DataSorter;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 import com.engagepoint.teama.cmismanager.common.exceptions.ValidationException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
