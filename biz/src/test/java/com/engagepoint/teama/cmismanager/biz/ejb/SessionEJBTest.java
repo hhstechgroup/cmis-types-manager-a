@@ -34,6 +34,7 @@ public class SessionEJBTest {
                 return null;
             }
         };
+
         SessionFactory spy = spy(sessionFactory);
         SessionEJB sessionEJB = new SessionEJB(spy);
         Map<String, String> map = new HashMap<String, String>();
