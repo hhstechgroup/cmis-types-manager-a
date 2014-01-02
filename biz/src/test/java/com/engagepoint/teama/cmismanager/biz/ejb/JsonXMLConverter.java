@@ -1,6 +1,6 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
-import com.engagepoint.teama.cmismanager.biz.ejb.JsonXMLConvertor;
+
 import com.engagepoint.teama.cmismanager.common.exceptions.ConvertationException;
 import org.junit.BeforeClass;
 import org.junit.Test;
