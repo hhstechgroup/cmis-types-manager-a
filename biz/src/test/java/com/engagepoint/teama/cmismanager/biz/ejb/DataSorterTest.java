@@ -1,4 +1,6 @@
-import com.engagepoint.teama.cmismanager.biz.ejb.DataSorter;
+package com.engagepoint.teama.cmismanager.biz.ejb;
+
+import com.engagepoint.teama.cmismanager.biz.erwr.DataSorter;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 import com.engagepoint.teama.cmismanager.common.exceptions.ValidationException;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
@@ -7,6 +9,7 @@ import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
 import java.util.*;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +37,7 @@ public class DataSorterTest {
         List<TypeDefinition> result = dataSorter.validateAndSort(testMap, testList);
         List<TypeDefinition> basic = new ArrayList<TypeDefinition>();
 
-        assertTrue("OK", result.equals(basic));
+        Assert.assertTrue("OK", result.equals(basic));
     }
 
     @Test(expected = NullPointerException.class)

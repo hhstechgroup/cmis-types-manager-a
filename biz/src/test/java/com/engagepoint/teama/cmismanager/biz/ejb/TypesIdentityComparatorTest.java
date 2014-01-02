@@ -1,3 +1,5 @@
+package com.engagepoint.teama.cmismanager.biz.ejb;
+
 import com.engagepoint.teama.cmismanager.biz.util.TypesIdentityComparator;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;

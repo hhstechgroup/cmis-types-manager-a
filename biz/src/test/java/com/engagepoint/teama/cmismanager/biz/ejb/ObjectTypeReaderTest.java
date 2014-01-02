@@ -1,5 +1,4 @@
-import org.junit.BeforeClass;
-import org.junit.Test;
+package com.engagepoint.teama.cmismanager.biz.ejb;
 
 /**
  * Created with IntelliJ IDEA.
