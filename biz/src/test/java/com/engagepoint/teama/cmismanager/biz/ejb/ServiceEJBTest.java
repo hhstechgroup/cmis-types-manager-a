@@ -11,9 +11,14 @@ import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Repository;
 import org.apache.chemistry.opencmis.client.api.Session;
 
+import org.apache.chemistry.opencmis.client.api.SessionFactory;
+import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
+import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +29,7 @@ import static org.mockito.Mockito.*;
 
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -252,7 +255,7 @@ public class ServiceEJBTest {
 //    }
 
     @Test
-    public void testDeleteType(){
+    public void testDeleteType() {
         TypeDTO newTypeDTO = new TypeDTO();
 
         newTypeDTO.setId("Test");
@@ -301,20 +304,32 @@ public class ServiceEJBTest {
     }
 
     @Test
-    public void testGetAllTypes()  {
+    public void testGetAllTypes() {
         try {
             service.getAllTypes(sessionID);
             Session session = sessionEJBMock.getSession(sessionID);
             //session.getTypeDescendants(null, -1, true);
-           Mockito.verify(session).getTypeDescendants(null, -1, true);
+            Mockito.verify(session).getTypeDescendants(null, -1, true);
         } catch (BaseException e) {
             Assert.fail();
         }
     }
 
-    @Test
+    @Test(expected = ConnectionException.class)
     public void testGetRepoList() throws Exception {
 
+        SessionFactory factory = Mockito.mock(SessionFactory.class);
+        Map<String, String> parameter = new HashMap<String, String>();
+
+        parameter.put(SessionParameter.USER, USERNAME);
+        parameter.put(SessionParameter.PASSWORD, PASSWORD);
+
+        parameter.put(SessionParameter.ATOMPUB_URL, URL + "/atom11");
+        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+
+        when(factory.getRepositories(parameter)).thenReturn(new ArrayList<Repository>());
+
+        System.out.println(service.getRepoList(USERNAME, PASSWORD, URL)[0]);
     }
 
     @Test

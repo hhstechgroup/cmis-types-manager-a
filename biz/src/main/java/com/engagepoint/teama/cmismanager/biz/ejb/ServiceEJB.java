@@ -217,7 +217,6 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
         parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         List<Repository> list;
-
         try {
             list = factory.getRepositories(parameter);
         }catch(CmisBaseException e) {
@@ -292,22 +291,22 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
      * @throws ConnectionException
      * @throws BaseException
      */
-    private ObjectType getTypeById(String id, String sessionID) throws BaseException {
 
-        ObjectType returnedType;
-        Session session = sessionEJB.getSession(sessionID);
-
-        try {
-            returnedType = session.getTypeDefinition(id);
-        } catch (CmisObjectNotFoundException cp) {
-            throw new ModificationException(cp.getMessage(), cp);
-        } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage(), cp);
-        } catch (CmisBaseException cbe) {
-            throw new BaseException(cbe.getMessage(), cbe);
-        }
-
-        return returnedType;
-    }
+//    private ObjectType getTypeById(String id, String sessionID) throws BaseException {
+//        ObjectType returnedType;
+//        Session session = sessionEJB.getSession(sessionID);
+//
+//        try {
+//            returnedType = session.getTypeDefinition(id);
+//        } catch (CmisObjectNotFoundException cp) {
+//            throw new ModificationException(cp.getMessage(), cp);
+//        } catch (CmisPermissionDeniedException cp) {
+//            throw new ConnectionException(cp.getMessage(), cp);
+//        } catch (CmisBaseException cbe) {
+//            throw new BaseException(cbe.getMessage(), cbe);
+//        }
+//
+//        return returnedType;
+//    }
 
 }
