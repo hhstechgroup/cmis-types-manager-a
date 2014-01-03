@@ -156,4 +156,23 @@ public class TypeDefinitionWrapper implements Serializable, TypeDefinition {
     public void setExtensions(List<CmisExtensionElement> cmisExtensionElements) {
         extensions = cmisExtensionElements;
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + this.getId() + "LocalName: " + this.getLocalName();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof TypeDefinitionWrapper)) return false;
+        TypeDefinitionWrapper other = (TypeDefinitionWrapper) obj;
+        if (other.getId().equals(this.getId()) && other.getQueryName().equals(this.getQueryName())
+                && other.getDisplayName().equals(this.getDisplayName()) &&
+                other.getLocalName().equals(this.getLocalName())) {
+            return true;
+        } else
+            return false;
+    }
 }

@@ -215,7 +215,20 @@ public class TypeDTO implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        return displayName;
+        return "ID: " + this.getId() + "DisplayName: " + this.getDisplayName();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof TypeDTO)) return false;
+        TypeDTO other = (TypeDTO) obj;
+        if (other.getId().equals(this.getId()) && other.getQueryName().equals(this.getQueryName())
+                && other.getDisplayName().equals(this.getDisplayName()) &&
+                other.getLocalName().equals(this.getLocalName())) {
+            return true;
+        } else
+            return false;
+    }
 }
