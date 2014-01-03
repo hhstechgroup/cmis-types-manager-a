@@ -22,21 +22,18 @@ public class LoginBeanTest {
     @Before
     public void setUp() {
         httpSession = Mockito.mock(HttpSession.class);
-
         serviceEJBRemote = Mockito.mock(ServiceEJBRemote.class);
 
 
     }
 
     @Test
-      public void testDoLogin(){
-
+    public void testDoLogin(){
         LoginBean loginBean = new LoginBean();
         LoginBean spyBean = Mockito.spy(loginBean);
         Mockito.doReturn(httpSession).when(spyBean).getHttpSessionTrue();
         spyBean.setService(serviceEJBRemote);
         spyBean.doLogin();
-
     }
 
     @Test
@@ -47,6 +44,8 @@ public class LoginBeanTest {
         spyBean.setService(serviceEJBRemote);
         spyBean.doLogout();
     }
+
+
 
 }
 
