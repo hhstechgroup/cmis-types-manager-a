@@ -363,7 +363,9 @@ public class SessionEJBTest {
         map.put(SessionParameter.PASSWORD, "password");
         map.put(SessionParameter.ATOMPUB_URL, "url" + "/atom11");
         map.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-        map.put(SessionParameter.REPOSITORY_ID, "repoID");Session session = new Session() {
+        map.put(SessionParameter.REPOSITORY_ID, "repoID");
+
+        Session session = new Session() {
             @Override
             public void clear() {
 
@@ -649,6 +651,7 @@ public class SessionEJBTest {
 
             }
         };
+
         Session sessionSpy = spy(session);
         when(spy.createSession(map)).thenReturn(sessionSpy);
         sessionEJB.createSession("user", "password", "url", "sessionId", "repoID");

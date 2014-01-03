@@ -38,13 +38,14 @@ import java.util.Map;
 public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializable {
 
     public static final Logger LOG = Logger.getLogger(ServiceEJB.class);
-    @EJB private ObjectTypeReader objectTypeReader;
+    @EJB
+    ObjectTypeReader objectTypeReader;
 
     /**
      * This EJB handle clients sessions
      */
     @EJB
-    private SessionEJB sessionEJB;
+    SessionEJB sessionEJB;
 
     /**
      * This method allows us to bind current user with session. If two or more users use same repository in same tame
@@ -57,14 +58,13 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
      * @throws ConnectionException
      */
     @Override
-    public void connect(String username, String password, String url, String sessionID, String repositoryName) throws ConnectionException {
-
+    public void connect(String username, String password, String url, String sessionID, String repositoryName)
+            throws ConnectionException {
         if (url == null || url.isEmpty() ) {
             throw new IllegalArgumentException("url must be set");
         } else if(repositoryName == null || repositoryName.isEmpty()) {
             throw new IllegalArgumentException("repository ID must be set");
         }
-
         sessionEJB.createSession(username, password, url, sessionID, repositoryName);
     }
 

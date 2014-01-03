@@ -55,16 +55,12 @@ public class SessionEJB implements Serializable {
         if (! idToRepoMap.containsKey(sessionID)) {
             throw new ConnectionException("No such session");
         } else {
-
             RepositoryInfo repositoryInfo = idToRepoMap.remove(sessionID);
-
             if (! idToRepoMap.containsValue(repositoryInfo)) {
                 Session session = repoToSessionMap.remove(repositoryInfo);
                 session.getBinding().close();
             }
-
         }
-
     }
 
     /**

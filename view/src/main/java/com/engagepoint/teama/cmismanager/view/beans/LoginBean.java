@@ -103,12 +103,13 @@ public class LoginBean implements Serializable {
     public String doLogin() {
         String page;
         try {
-
             UUID uuid = UUID.randomUUID();
             sessionID = uuid.toString();
+
             service.connect(username, password, url, sessionID, chosenRepo);
             page = INDEX_PAGE_REDIRECT;
-            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            HttpSession httpSession = (HttpSession)
+                    FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute(SESSION_ID, sessionID);
             logoutVisibility = true;
         } catch (BaseException e) {

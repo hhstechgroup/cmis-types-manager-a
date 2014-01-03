@@ -56,6 +56,7 @@ public class TypeDTO implements Serializable, Cloneable {
     ////////////////
 
     public TypeDTO() {
+
     }
 
     private List<TypeDTO> children = new ArrayList<TypeDTO>();
