@@ -39,8 +39,8 @@ public class TopMenuBarBean {
         UIViewRoot viewRoot = FacesContext.getCurrentInstance().getViewRoot();
         String viewId = viewRoot.getViewId();
         addMenuItem(viewId, "home", "/show/", "index.xhtml", "Home ");
-        addMenuItem(viewId, "settings","/", "settings.xhtml", "Settings");
-        addMenuItem(viewId, "logout", "/import_export/", "importExport.xhtml", "Logout");
+        addMenuItem(viewId, "settings","/dif/", "settings.xhtml", "Settings");
+        addMenuItem(viewId, "logout", "/about/", "about.xhtml", "About");
     }
 
     private void addMenuItem(String viewId, String mID, String rootView, String address, String label) {
@@ -51,14 +51,6 @@ public class TopMenuBarBean {
         }
         menuItem.setValue(label);
         menuItem.setUrl(rootView + address);
-
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
-                loginBean.doLogout();
-            }
-        });
-
 
         model.addMenuItem(menuItem);
     }

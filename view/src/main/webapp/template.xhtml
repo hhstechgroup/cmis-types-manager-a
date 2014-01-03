@@ -2,6 +2,7 @@
           xmlns:h="http://java.sun.com/jsf/html"
           xmlns:uib="http://engagepoint.com/uib"
           xmlns:ui="http://java.sun.com/jsf/facelets"
+          xmlns:p="http://primefaces.org/ui"
           markupType="html5"
           contentType="text/html"
           pageTitle="CMIS Type Manager"
@@ -14,9 +15,20 @@
                 <ui:include src="topmenubar.xhtml"/>
             </ui:insert>
         </uib:pageHeaderFacet>
+
         <uib:pageHeaderUtilityBarFacet>
-            <ui:insert name="utilityBar"/>
+            <uib:gridContainer rendered="true">
+                <uib:gridRow>
+                    <uib:gridColumn column="12" style="margin-top:5px" >
+                        <h:form styleClass="fl-right" id="logoutForm" >
+                            <p:commandButton id="logoutBtn"  styleClass="secondary" rendered="#{login.logoutVisibility}" action="#{login.doLogout}"
+                                             value="Logout"/>
+                        </h:form>
+                    </uib:gridColumn>
+                </uib:gridRow>
+            </uib:gridContainer>
         </uib:pageHeaderUtilityBarFacet>
+
         <uib:pageMenuFacet ajax="true">
             <ui:include src="/leftMenu.xhtml"/>
         </uib:pageMenuFacet>

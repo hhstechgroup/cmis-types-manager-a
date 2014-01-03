@@ -24,7 +24,7 @@ public class LoginBean implements Serializable {
     public static final String ERROR_PAGE_REDIRECT = "/error?faces-redirect=true";
     public static final String SESSION_ID = "sessionID";
     public static final String INDEX_PAGE_REDIRECT = "/show/index?faces-redirect=true";
-    public static final String LOGIN_PAGE_REDIRECT = "/settings?faces-redirect=true";
+    public static final String LOGIN_PAGE_REDIRECT = "/dif/settings?faces-redirect=true";
 
     private String username;
     private String password;
@@ -35,6 +35,15 @@ public class LoginBean implements Serializable {
     private String url;
     private String chosenRepo;
     private String[] availableReposList;
+    private boolean logoutVisibility = false;
+
+    public boolean isLogoutVisibility() {
+        return logoutVisibility;
+    }
+
+    public void setLogoutVisibility(boolean logoutVisibility) {
+        this.logoutVisibility = logoutVisibility;
+    }
 
     @EJB(lookup = "java:global/ear-1.0-SNAPSHOT/biz-1.0-SNAPSHOT/ServiceEJB!com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote")
     private ServiceEJBRemote service;
@@ -101,6 +110,7 @@ public class LoginBean implements Serializable {
             page = INDEX_PAGE_REDIRECT;
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute(SESSION_ID, sessionID);
+            logoutVisibility = true;
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
             sessionID = null;
@@ -141,6 +151,7 @@ public class LoginBean implements Serializable {
         availableReposList = null;
         chosenRepo = null;
         sessionID = null;
+        logoutVisibility = false;
 
         return LOGIN_PAGE_REDIRECT;
     }
