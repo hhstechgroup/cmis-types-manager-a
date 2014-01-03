@@ -1,6 +1,7 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
 
+import com.engagepoint.teama.cmismanager.biz.ejb.SessionEJB;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.SessionParameter;

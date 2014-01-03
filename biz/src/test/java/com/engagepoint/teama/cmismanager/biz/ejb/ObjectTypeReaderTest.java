@@ -1,12 +1,9 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
-import com.engagepoint.teama.cmismanager.biz.wrappers.PropertyDefinitionWrapper;
-import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.TypeMutability;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.Cardinality;
@@ -16,7 +13,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

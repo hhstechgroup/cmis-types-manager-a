@@ -1,17 +1,9 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
-
 import com.engagepoint.teama.cmismanager.common.exceptions.ConvertationException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * Created with IntelliJ IDEA.
- * User: aleksandr.davidiuk
- * Date: 12/30/13
- * Time: 3:19 PM
- * To change this template use File | Settings | File Templates.
- */
 public class JsonXMLConverter {
     static JsonXMLConvertor jsonXMLConvertor;
 

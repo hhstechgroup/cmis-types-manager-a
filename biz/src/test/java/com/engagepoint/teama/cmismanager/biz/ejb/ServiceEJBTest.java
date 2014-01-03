@@ -1,6 +1,9 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 //package com.engagepoint.teama.cmismanager.biz.ejb;
 
+import com.engagepoint.teama.cmismanager.biz.ejb.ObjectTypeReader;
+import com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB;
+import com.engagepoint.teama.cmismanager.biz.ejb.SessionEJB;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;
