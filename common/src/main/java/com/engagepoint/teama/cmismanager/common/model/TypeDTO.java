@@ -215,7 +215,7 @@ public class TypeDTO implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        return "ID: " + this.getId() + "DisplayName: " + this.getDisplayName();
+        return displayName;
     }
 
     @Override
