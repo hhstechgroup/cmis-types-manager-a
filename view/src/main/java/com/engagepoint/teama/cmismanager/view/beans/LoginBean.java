@@ -103,13 +103,12 @@ public class LoginBean implements Serializable {
     public String doLogin() {
         String page;
         try {
+
             UUID uuid = UUID.randomUUID();
             sessionID = uuid.toString();
-
             service.connect(username, password, url, sessionID, chosenRepo);
             page = INDEX_PAGE_REDIRECT;
-            HttpSession httpSession = (HttpSession)
-                    FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            HttpSession httpSession = getHttpSessionTrue();
             httpSession.setAttribute(SESSION_ID, sessionID);
             logoutVisibility = true;
         } catch (BaseException e) {
@@ -118,6 +117,14 @@ public class LoginBean implements Serializable {
             page = ERROR_PAGE_REDIRECT;
         }
         return page;
+    }
+    public HttpSession getHttpSessionTrue(){
+        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        return httpSession;
+    }
+    public HttpSession getHttpSessionFalse(){
+        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        return httpSession;
     }
 
     public String getRepoList() {
@@ -137,7 +144,7 @@ public class LoginBean implements Serializable {
     }
 
     public String doLogout() {
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        HttpSession session = getHttpSessionFalse();
         session.invalidate();
 
         try {

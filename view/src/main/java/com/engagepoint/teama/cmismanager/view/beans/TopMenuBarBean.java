@@ -33,8 +33,7 @@ public class TopMenuBarBean {
     }
 
     @PostConstruct
-
-    public void initModel() {
+       public void initModel() {
         model = new DefaultMenuModel();
         UIViewRoot viewRoot = FacesContext.getCurrentInstance().getViewRoot();
         String viewId = viewRoot.getViewId();
