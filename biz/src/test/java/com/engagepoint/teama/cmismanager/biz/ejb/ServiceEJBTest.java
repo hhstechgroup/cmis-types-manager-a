@@ -4,21 +4,32 @@ package com.engagepoint.teama.cmismanager.biz.ejb;
 import com.engagepoint.teama.cmismanager.biz.ejb.ObjectTypeReader;
 import com.engagepoint.teama.cmismanager.biz.ejb.ServiceEJB;
 import com.engagepoint.teama.cmismanager.biz.ejb.SessionEJB;
+import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
+import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Repository;
 import org.apache.chemistry.opencmis.client.api.Session;
 
+import org.apache.chemistry.opencmis.client.api.SessionFactory;
+import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
+import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
 import static org.mockito.Mockito.*;
+
 import org.mockito.MockitoAnnotations;
 
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,26 +50,52 @@ public class ServiceEJBTest {
     Session sessionMock;
     @Mock
     ObjectTypeReader objectTypeReader;
+    @Mock
     ServiceEJB service;
+
     String sessionID;
+
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        //SessionEJB sessionEJBMock = Mockito.mock(SessionEJB.class);
-
+//        TypeDTO type = new TypeDTO();
+//
+//        type.setId("Test");
+//        type.setLocalName("Test");
+//        type.setLocalNamespace("Test");
+//        type.setDisplayName("Test");
+//        type.setQueryName("Test");
+//        type.setDescription("Test");
+//
+//        type.setParentTypeId("Test");
+//        type.setBaseTypeId(BaseTypeEnum.CMIS_DOCUMENT);
+//
+//        type.setCreatable(true);
+//        type.setFileable(true);
+//        type.setQueryable(true);
+//
+//        type.setIncludedInSupertypeQuery(true);
+//        type.setControllableAcl(true);
+//        type.setControllablePolicy(true);
+//        type.setFulltextIndexed(true);
+//
+//        type.setMutabilityCanCreate(true);
+//        type.setMutabilityCanDelete(true);
+//        type.setMutabilityCanUpdate(true);
         UUID uuid = UUID.randomUUID();
         sessionID = uuid.toString();
         service = new ServiceEJB();
         service.sessionEJB = this.sessionEJBMock;
-        service.objectTypeReader=this.objectTypeReader;
+        service.objectTypeReader = this.objectTypeReader;
         try {
+
             when(sessionEJBMock.getSession(sessionID)).thenReturn(sessionMock);
         } catch (ConnectionException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+            e.printStackTrace();
 
-        //test.when(test.getUniqueId()).thenReturn(43);
+        }
+        //when(service.createType(new TypeDefinitionWrapper(type))).thenReturn(type);
     }
 
     @Test
@@ -71,9 +108,11 @@ public class ServiceEJBTest {
         }
 
     }
+
     @Test(expected = IllegalArgumentException.class)
     public void testConnectNullURL() {
         try {
+
             service.connect(USERNAME, PASSWORD, null, sessionID, REPOSITORY_NAME);
         } catch (ConnectionException e) {
             Assert.fail();
@@ -82,7 +121,7 @@ public class ServiceEJBTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testConnectNullRepoName() {
-        try{
+        try {
             service.connect(USERNAME, PASSWORD, URL, sessionID, null);
         } catch (ConnectionException e) {
             Assert.fail();
@@ -90,7 +129,7 @@ public class ServiceEJBTest {
     }
 
     @Test
-    public void testCreateType(){
+    public void testCreateType() {
         final String ID = "Test";
         TypeDTO newTypeDTO = new TypeDTO();
 
@@ -117,40 +156,180 @@ public class ServiceEJBTest {
         newTypeDTO.setMutabilityCanDelete(true);
         newTypeDTO.setMutabilityCanUpdate(true);
 
-
         try {
             TypeDTO returned = service.createType(newTypeDTO, sessionID);
-          //  returned.getId();
-            //Assert.assertEquals(ID,);
+            Session session = sessionEJBMock.getSession(sessionID);
+            TypeDefinitionWrapper typeDefinitionWrapper =
+                    new TypeDefinitionWrapper(newTypeDTO);
+            Mockito.verify(session).createType(typeDefinitionWrapper);
+            //Assert.assertEquals(ID,returned.getId());
         } catch (BaseException e) {
             Assert.fail();
         }
-
     }
 
     @Test
-    public void testCreateTypes() throws Exception {
+    public void testCreateTypes() {
+        final int SIZE = 3;
+        List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
+        for (int i = 0; i < SIZE; i++) {
+            TypeDTO newTypeDTO = new TypeDTO();
 
+            newTypeDTO.setId("Test" + i);
+            newTypeDTO.setLocalName("Test" + i);
+            newTypeDTO.setLocalNamespace("Test" + i);
+            newTypeDTO.setDisplayName("Test" + i);
+            newTypeDTO.setQueryName("Test" + i);
+            newTypeDTO.setDescription("Test" + i);
+
+            newTypeDTO.setParentTypeId("Test" + i);
+            newTypeDTO.setBaseTypeId(BaseTypeEnum.CMIS_DOCUMENT);
+
+            newTypeDTO.setCreatable(true);
+            newTypeDTO.setFileable(true);
+            newTypeDTO.setQueryable(true);
+
+            newTypeDTO.setIncludedInSupertypeQuery(true);
+            newTypeDTO.setControllableAcl(true);
+            newTypeDTO.setControllablePolicy(true);
+            newTypeDTO.setFulltextIndexed(true);
+
+            newTypeDTO.setMutabilityCanCreate(true);
+            newTypeDTO.setMutabilityCanDelete(true);
+            newTypeDTO.setMutabilityCanUpdate(true);
+            typeDTOList.add(newTypeDTO);
+        }
+        List<FileStatusReport> report = null;
+        try {
+            report = service.createTypes(typeDTOList, sessionID);
+        } catch (BaseException e) {
+            Assert.fail();
+        }
+        Assert.assertEquals(SIZE, report.size());
+    }
+
+    @Test(expected = BaseException.class)
+    public void testCreateTypesBaseException() throws BaseException {
+        service.createTypes(null, sessionID);
+    }
+
+//    @Test
+//    public void testCreateTypesBaseExceptionWithMock() {
+//        List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
+//
+//        TypeDTO newTypeDTO = new TypeDTO();
+//
+//        newTypeDTO.setId("Test");
+//        newTypeDTO.setLocalName("Test");
+//        newTypeDTO.setLocalNamespace("Test");
+//        newTypeDTO.setDisplayName("Test");
+//        newTypeDTO.setQueryName("Test");
+//        newTypeDTO.setDescription("Test");
+//
+//        newTypeDTO.setParentTypeId("Test");
+//        newTypeDTO.setBaseTypeId(BaseTypeEnum.CMIS_DOCUMENT);
+//
+//        newTypeDTO.setCreatable(true);
+//        newTypeDTO.setFileable(true);
+//        newTypeDTO.setQueryable(true);
+//
+//        newTypeDTO.setIncludedInSupertypeQuery(true);
+//        newTypeDTO.setControllableAcl(true);
+//        newTypeDTO.setControllablePolicy(true);
+//        newTypeDTO.setFulltextIndexed(true);
+//
+//        newTypeDTO.setMutabilityCanCreate(true);
+//        newTypeDTO.setMutabilityCanDelete(true);
+//        newTypeDTO.setMutabilityCanUpdate(true);
+//        typeDTOList.add(newTypeDTO);
+//
+//        List<FileStatusReport> report = null;
+//        try{
+//            Session session = sessionEJBMock.getSession(sessionID);
+//            //session.createType();
+//            when(session.createType(new TypeDefinitionWrapper(newTypeDTO))).thenReturn( new ObjectType());
+//            service.createTypes(typeDTOList, sessionID);
+//        }catch (BaseException e){
+//            Assert.fail();
+//        }
+//    }
+
+    @Test
+    public void testDeleteType() {
+        TypeDTO newTypeDTO = new TypeDTO();
+
+        newTypeDTO.setId("Test");
+        newTypeDTO.setLocalName("Test");
+        newTypeDTO.setLocalNamespace("Test");
+        newTypeDTO.setDisplayName("Test");
+        newTypeDTO.setQueryName("Test");
+        newTypeDTO.setDescription("Test");
+
+        newTypeDTO.setParentTypeId("Test");
+        newTypeDTO.setBaseTypeId(BaseTypeEnum.CMIS_DOCUMENT);
+
+        newTypeDTO.setCreatable(true);
+        newTypeDTO.setFileable(true);
+        newTypeDTO.setQueryable(true);
+
+        newTypeDTO.setIncludedInSupertypeQuery(true);
+        newTypeDTO.setControllableAcl(true);
+        newTypeDTO.setControllablePolicy(true);
+        newTypeDTO.setFulltextIndexed(true);
+
+        newTypeDTO.setMutabilityCanCreate(true);
+        newTypeDTO.setMutabilityCanDelete(true);
+        newTypeDTO.setMutabilityCanUpdate(true);
+
+        Session session = null;
+        try {
+            session = sessionEJBMock.getSession(sessionID);
+            service.deleteType(newTypeDTO, sessionID);
+        } catch (ConnectionException e) {
+            Assert.fail();
+        } catch (BaseException e) {
+            Assert.fail();
+        }
+        Mockito.verify(session).deleteType(newTypeDTO.getId());
     }
 
     @Test
-    public void testDeleteType() throws Exception {
-
+    public void testDisconnect() {
+        try {
+            service.disconnect(sessionID);
+            Mockito.verify(sessionEJBMock).closeSession(sessionID);
+        } catch (ConnectionException e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testDisconnect() throws Exception {
-
+    public void testGetAllTypes() {
+        try {
+            service.getAllTypes(sessionID);
+            Session session = sessionEJBMock.getSession(sessionID);
+            //session.getTypeDescendants(null, -1, true);
+            Mockito.verify(session).getTypeDescendants(null, -1, true);
+        } catch (BaseException e) {
+            Assert.fail();
+        }
     }
 
-    @Test
-    public void testGetAllTypes() throws Exception {
-
-    }
-
-    @Test
+    @Test(expected = ConnectionException.class)
     public void testGetRepoList() throws Exception {
 
+        SessionFactory factory = Mockito.mock(SessionFactory.class);
+        Map<String, String> parameter = new HashMap<String, String>();
+
+        parameter.put(SessionParameter.USER, USERNAME);
+        parameter.put(SessionParameter.PASSWORD, PASSWORD);
+
+        parameter.put(SessionParameter.ATOMPUB_URL, URL + "/atom11");
+        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+
+        when(factory.getRepositories(parameter)).thenReturn(new ArrayList<Repository>());
+
+        System.out.println(service.getRepoList(USERNAME, PASSWORD, URL)[0]);
     }
 
     @Test

@@ -9,7 +9,6 @@ import com.engagepoint.teama.cmismanager.common.exceptions.ModificationException
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
 
-
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Repository;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -44,6 +43,7 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
     /**
      * This EJB handle clients sessions
      */
+
     @EJB
     SessionEJB sessionEJB;
 
@@ -133,7 +133,6 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
                 fileStatusReportList.add(new FileStatusReport(type.getId(), "can not create"));
             }
         }
-
         return fileStatusReportList;
     }
 
@@ -147,19 +146,13 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
      */
     @Override
     public void deleteType(TypeDTO deletedType, String sessionID) throws BaseException {
-
         Session session = sessionEJB.getSession(sessionID);
-
         try {
-
             List<Tree<ObjectType>> list = session.getTypeDescendants(deletedType.getId(), -1, false);
-
             if (list != null && !list.isEmpty()) {
                 deleteTree(list, session);
             }
-
             session.deleteType(deletedType.getId());
-
         } catch (CmisInvalidArgumentException cp) {
             throw new ModificationException(cp.getMessage(), cp);
         } catch (CmisPermissionDeniedException cp) {
@@ -167,8 +160,6 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
         } catch (CmisBaseException c) {
             throw new BaseException(c.getMessage(), c);
         }
-
-
     }
 
     /**
@@ -191,9 +182,7 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
      */
     @Override
     public List<TypeDTO> getAllTypes(String sessionID) throws BaseException {
-
         Session session = sessionEJB.getSession(sessionID);
-
         try {
             List<TypeDTO> typeList = new ArrayList<TypeDTO>();
             List<Tree<ObjectType>> list = session.getTypeDescendants(null, -1, true);
@@ -228,20 +217,19 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
         parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         List<Repository> list;
-
         try {
             list = factory.getRepositories(parameter);
-        } catch (CmisBaseException e) {
+        }catch(CmisBaseException e) {
             throw new ConnectionException(e.getMessage(), e);
         }
 
-        if (list.isEmpty()) {
+        if (list.isEmpty()){
             throw new ConnectionException("no connection");
         }
 
         List<String> array = new ArrayList<String>();
 
-        for (Repository repo : list) {
+        for (Repository repo : list){
             array.add(repo.getId());
         }
 
@@ -303,22 +291,22 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
      * @throws ConnectionException
      * @throws BaseException
      */
-    private ObjectType getTypeById(String id, String sessionID) throws BaseException {
 
-        ObjectType returnedType;
-        Session session = sessionEJB.getSession(sessionID);
-
-        try {
-            returnedType = session.getTypeDefinition(id);
-        } catch (CmisObjectNotFoundException cp) {
-            throw new ModificationException(cp.getMessage(), cp);
-        } catch (CmisPermissionDeniedException cp) {
-            throw new ConnectionException(cp.getMessage(), cp);
-        } catch (CmisBaseException cbe) {
-            throw new BaseException(cbe.getMessage(), cbe);
-        }
-
-        return returnedType;
-    }
+//    private ObjectType getTypeById(String id, String sessionID) throws BaseException {
+//        ObjectType returnedType;
+//        Session session = sessionEJB.getSession(sessionID);
+//
+//        try {
+//            returnedType = session.getTypeDefinition(id);
+//        } catch (CmisObjectNotFoundException cp) {
+//            throw new ModificationException(cp.getMessage(), cp);
+//        } catch (CmisPermissionDeniedException cp) {
+//            throw new ConnectionException(cp.getMessage(), cp);
+//        } catch (CmisBaseException cbe) {
+//            throw new BaseException(cbe.getMessage(), cbe);
+//        }
+//
+//        return returnedType;
+//    }
 
 }
