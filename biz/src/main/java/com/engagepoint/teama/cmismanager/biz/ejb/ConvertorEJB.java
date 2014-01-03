@@ -1,35 +1,33 @@
 package com.engagepoint.teama.cmismanager.biz.ejb;
 
+import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
+import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConvertationException;
+import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
+import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBLocal;
 import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBRemote;
 import com.engagepoint.teama.cmismanager.common.util.FileStatusReport;
 import com.engagepoint.teama.cmismanager.common.util.ResultSet;
-import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
-import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
-import com.engagepoint.teama.cmismanager.common.service.ConvertorEJBLocal;
-import com.engagepoint.teama.cmismanager.biz.wrappers.TypeDefinitionWrapper;
-
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+import org.apache.log4j.Logger;
 
-import java.io.*;
-
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 @Stateless
 public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Serializable {
 
     public static final Logger LOG = Logger.getLogger(ConvertorEJB.class);
-    @EJB private DataSorter dataSorter;
-    @EJB private JsonXMLConvertor jsonXMLConvertor;
-    @EJB private ObjectTypeReader objectTypeReader;
+    @EJB DataSorter dataSorter;
+    @EJB JsonXMLConvertor jsonXMLConvertor;
+    @EJB ObjectTypeReader objectTypeReader;
 
     /**
      * Convert TypeDTO instance in stream, that contains TypeDefinition in JSON.
@@ -73,7 +71,7 @@ public class ConvertorEJB implements ConvertorEJBRemote, ConvertorEJBLocal, Seri
 
         for (TypeDTO typeDTO : typeDTOList) {
             try {
-                byte [] b = jsonXMLConvertor.getXMLFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
+                byte [] b = jsonXMLConvertor.getJSONFromTypeInByteArray(new TypeDefinitionWrapper(typeDTO));
                 map.put(typeDTO.getDisplayName() + ".json", b);
             } catch (ConvertationException e) {
                 LOG.error(e.getMessage(), e);

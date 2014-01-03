@@ -29,7 +29,7 @@ public class SessionEJB implements Serializable {
 
     private Map<String, RepositoryInfo> idToRepoMap = new ConcurrentHashMap<String, RepositoryInfo>();
 
-    private SessionFactory sessionFactory;
+    SessionFactory sessionFactory= SessionFactoryImpl.newInstance();
     /**
      * This map contains session pool.
      */
@@ -37,13 +37,6 @@ public class SessionEJB implements Serializable {
 
     public static final Logger LOG = Logger.getLogger(SessionEJB.class);
 
-    public SessionEJB(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public SessionEJB() {
-        this.sessionFactory = SessionFactoryImpl.newInstance();
-    }
 
     /**
      * Remove sessionID from idToRepoMap. If no one use this session at this moment, this method will close it.
