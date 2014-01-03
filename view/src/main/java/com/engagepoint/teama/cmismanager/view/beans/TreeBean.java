@@ -32,10 +32,10 @@ public class TreeBean implements Serializable {
     public static final String ERROR_PAGE = "/error";
 
     //move to import/export bean
-    private TypeDTO currentDTO = null;
+    private TypeDTO currentDTO;
 
     private TreeNode root;
-    private TreeNode selected = null;
+    private TreeNode selected;
 
     private TreeNode rootUpdate;
 
@@ -134,7 +134,7 @@ public class TreeBean implements Serializable {
             list = service.getAllTypes(sessionID);
             root = new DefaultTreeNode(ROOT, null);
             render(list, root);
-            //          newDTO = new TypeDTO();
+            // newDTO = new TypeDTO();
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
             errorBean.setErrorMessage(e.getMessage());
