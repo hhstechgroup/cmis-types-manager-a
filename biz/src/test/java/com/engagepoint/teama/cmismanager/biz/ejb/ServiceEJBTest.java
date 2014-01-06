@@ -89,7 +89,6 @@ public class ServiceEJBTest {
         service.sessionEJB = this.sessionEJBMock;
         service.objectTypeReader = this.objectTypeReader;
         try {
-
             when(sessionEJBMock.getSession(sessionID)).thenReturn(sessionMock);
         } catch (ConnectionException e) {
             e.printStackTrace();
