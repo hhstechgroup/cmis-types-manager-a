@@ -112,7 +112,7 @@ public class JsonXMLConverterTest {
      }
      */
 
-    @Test
+    //@Test
     public void getXMLFromTypeInByteArrayCorrectInput() throws IOException, ConvertationException {
 
         //create 'expected' byte array
@@ -148,7 +148,7 @@ public class JsonXMLConverterTest {
         Assert.fail();
     }
 
-    @Test
+    //@Test
     public void getJSONFromTypeInByteArrayCorrectInput() throws IOException, ConvertationException {
 
         //create 'expected' byte array
@@ -184,7 +184,7 @@ public class JsonXMLConverterTest {
         Assert.fail();
     }
 
-    @Test
+    //@Test
     public void createTypeFromJSONCorrectInput() throws FileNotFoundException, ConvertationException {
 
         FileInputStream fileInputStream = new FileInputStream(
@@ -225,7 +225,7 @@ public class JsonXMLConverterTest {
 
     }
 
-    @Test
+    //@Test
     public void createTypeFromXMLCorrectInput() throws FileNotFoundException, ConvertationException {
 
         FileInputStream fileInputStream = new FileInputStream(

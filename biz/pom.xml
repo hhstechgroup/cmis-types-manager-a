@@ -56,12 +56,6 @@
 
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
             <version>1.5.2</version>
         </dependency>
