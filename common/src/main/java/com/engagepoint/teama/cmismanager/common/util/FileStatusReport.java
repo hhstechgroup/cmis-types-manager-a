@@ -27,4 +27,22 @@ public class FileStatusReport implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return name + "  " + status;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof FileStatusReport)) return false;
+        FileStatusReport other = (FileStatusReport) obj;
+        if(other.getName().equals(this.getName()) &&
+                other.getStatus().equals(this.getStatus())) {
+            return true;
+        } else
+            return false;
+    }
 }
