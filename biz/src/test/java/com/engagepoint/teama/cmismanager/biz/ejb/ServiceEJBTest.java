@@ -168,7 +168,7 @@ public class ServiceEJBTest {
         service.createTypes(null, sessionID);
     }
 
-    //@Test
+    @Test
     public void testCreateTypesBaseSuccess() {
         List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
 
@@ -189,7 +189,7 @@ public class ServiceEJBTest {
         }
     }
 
-    //@Test
+    @Test
     public void testCreateTypesBaseBaseException() throws CmisBaseException {
         TypeDTO newTypeDTO = createTestType("1");
         List<TypeDTO> typeDTOList = new ArrayList<TypeDTO>();
