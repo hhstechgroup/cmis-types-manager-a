@@ -32,6 +32,7 @@ import java.util.Collections;
 @PrepareForTest({TypeUtils.class, JsonXMLConvertor.class})
 public class JsonXMLConverterTest {
 
+    private static final String MISSING_FILE = "Test file missing";
     private static JsonXMLConvertor jsonXMLConvertor;
     private static TypeDefinition mockedTypeDefinition;
 
@@ -106,27 +107,24 @@ public class JsonXMLConverterTest {
      }
      */
 
-    //@Test
+    @Test
+    public void getXMLFromTypeInByteArrayIsTestFileExists() {
+        Assert.assertNotNull(MISSING_FILE, getClass().getResource("/types/xml/cmis/my-document.xml"));
+    }
+
+    @Test
     public void getXMLFromTypeInByteArrayCorrectInput() throws IOException, ConvertationException {
 
         //create 'expected' byte array
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
 
-        FileInputStream fileInputStream;
-        String pathToTestSource = "src\\test\\resource\\types\\xml\\cmis\\my-document.xml";
-        File testSource = new File("biz\\" + pathToTestSource);
-        if (testSource.exists()) {
-            fileInputStream  = new FileInputStream(testSource);
-        } else {
-            fileInputStream = new FileInputStream( new File(pathToTestSource) );
-        }
-
+        InputStream fileStream = getClass().getResourceAsStream("/types/xml/cmis/my-document.xml");
         int i;
-        while ((i = fileInputStream.read()) >= 0) {
+        while ((i = fileStream.read()) >= 0) {
             byteArrayStream.write((byte) i);
         }
         byte [] expected = byteArrayStream.toByteArray();
-        fileInputStream.close();
+        fileStream.close();
         byteArrayStream.close();
 
         // existed byte array
@@ -149,27 +147,24 @@ public class JsonXMLConverterTest {
         Assert.fail();
     }
 
-    //@Test
+    @Test
+    public void getJSONFromTypeInByteArrayIsTestFileExists() {
+        Assert.assertNotNull(MISSING_FILE, getClass().getResource("/types/json/my-document.json"));
+    }
+
+    @Test
     public void getJSONFromTypeInByteArrayCorrectInput() throws IOException, ConvertationException {
 
         //create 'expected' byte array
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
 
-        FileInputStream fileInputStream;
-        String pathToTestSource = "src\\test\\resource\\types\\json\\my-document.json";
-        File testSource = new File("biz\\" + pathToTestSource);
-        if (testSource.exists()) {
-            fileInputStream  = new FileInputStream(testSource);
-        } else {
-            fileInputStream = new FileInputStream( new File(pathToTestSource) );
-        }
-
+        InputStream fileStream = getClass().getResourceAsStream("/types/json/my-document.json");
         int i;
-        while ((i = fileInputStream.read()) >= 0) {
+        while ((i = fileStream.read()) >= 0) {
             byteArrayStream.write((byte) i);
         }
         byte [] expected = byteArrayStream.toByteArray();
-        fileInputStream.close();
+        fileStream.close();
         byteArrayStream.close();
 
         // actual byte array
@@ -192,19 +187,17 @@ public class JsonXMLConverterTest {
         Assert.fail();
     }
 
-    //@Test
+    @Test
+    public void createTypeFromJSONIsTestFileExists() {
+        Assert.assertNotNull(MISSING_FILE, getClass().getResource("/types/json/my-document.json"));
+    }
+
+    @Test
     public void createTypeFromJSONCorrectInput() throws FileNotFoundException, ConvertationException {
 
-        FileInputStream fileInputStream;
-        String pathToTestSource = "src\\test\\resource\\types\\json\\my-document.json";
-        File testSource = new File("biz\\" + pathToTestSource);
-        if (testSource.exists()) {
-            fileInputStream  = new FileInputStream(testSource);
-        } else {
-            fileInputStream = new FileInputStream( new File(pathToTestSource) );
-        }
+        InputStream fileStream = getClass().getResourceAsStream("/types/json/my-document.json");
 
-        TypeDefinition actual = jsonXMLConvertor.createTypeFromJSON(fileInputStream);
+        TypeDefinition actual = jsonXMLConvertor.createTypeFromJSON(fileStream);
 
         Assert.assertTrue(this.isTypesEquals(actual, mockedTypeDefinition));
     }
@@ -238,19 +231,17 @@ public class JsonXMLConverterTest {
 
     }
 
-    //@Test
+    @Test
+    public void createTypeFromXMLIsTestFileExists() {
+        Assert.assertNotNull(MISSING_FILE, getClass().getResource("/types/xml/oasis/doc1.xml"));
+    }
+
+    @Test
     public void createTypeFromXMLCorrectInput() throws FileNotFoundException, ConvertationException {
 
-        FileInputStream fileInputStream;
-        String pathToTestSource = "src\\test\\resource\\types\\xml\\oasis\\doc1.xml";
-        File testSource = new File("biz\\" + pathToTestSource);
-        if (testSource.exists()) {
-            fileInputStream  = new FileInputStream(testSource);
-        } else {
-            fileInputStream = new FileInputStream( new File(pathToTestSource) );
-        }
+        InputStream fileStream = getClass().getResourceAsStream("/types/xml/oasis/doc1.xml");
 
-        TypeDefinition actual = jsonXMLConvertor.createTypeFromXML(fileInputStream);
+        TypeDefinition actual = jsonXMLConvertor.createTypeFromXML(fileStream);
 
         Assert.assertTrue(this.isTypesEquals(actual, mockedTypeDefinition));
     }
@@ -293,6 +284,6 @@ public class JsonXMLConverterTest {
                 && o1.isControllablePolicy().equals(o2.isControllablePolicy())
                 && o1.isFulltextIndexed().equals(o2.isFulltextIndexed())
                 && o1.isIncludedInSupertypeQuery().equals(o2.isIncludedInSupertypeQuery())
-                );
+        );
     }
 }
