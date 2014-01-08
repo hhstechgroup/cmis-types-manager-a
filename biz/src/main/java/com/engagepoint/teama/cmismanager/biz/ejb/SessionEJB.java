@@ -3,7 +3,6 @@ package com.engagepoint.teama.cmismanager.biz.ejb;
 import com.engagepoint.teama.cmismanager.biz.util.RepositoryInfo;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 @Singleton
 @LocalBean
 public class SessionEJB implements Serializable {
@@ -29,7 +27,6 @@ public class SessionEJB implements Serializable {
 
     private Map<String, RepositoryInfo> idToRepoMap = new ConcurrentHashMap<String, RepositoryInfo>();
 
-    SessionFactory sessionFactory= SessionFactoryImpl.newInstance();
     /**
      * This map contains session pool.
      */
@@ -125,7 +122,7 @@ public class SessionEJB implements Serializable {
         parameter.put(SessionParameter.REPOSITORY_ID, repositoryName);
 
         try {
-            returnedSession = sessionFactory.createSession(parameter);
+            returnedSession = SessionFactoryImpl.newInstance().createSession(parameter);
 
             if (returnedSession == null) {
                 throw new ConnectionException("Can not create session");
