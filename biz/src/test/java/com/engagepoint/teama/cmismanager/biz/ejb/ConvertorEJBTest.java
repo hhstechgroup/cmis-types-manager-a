@@ -9,12 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.*;
-
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 public class ConvertorEJBTest {
     private TypeDTO typeDTO;
@@ -106,24 +101,6 @@ public class ConvertorEJBTest {
         Assert.assertEquals(listFSR.get(0).getName(), convertorEJB.readAndValidate(mapJSON).getStatusReportList().get(0).getName());
         Assert.assertEquals(listFSR.get(0).getStatus(), convertorEJB.readAndValidate(mapJSON).getStatusReportList().get(0).getStatus());
         Assert.assertTrue(typeDTOs.equals(convertorEJB.readAndValidate(mapJSON).getSortedTypeList()));
-
-    }
-
-    @Test
-    public void testReadAndValidateXML() throws Exception {
-        JsonXMLConvertor qwe = new JsonXMLConvertor();
-        JsonXMLConvertor spy = spy(qwe);
-        TypeDefinitionWrapper typeDefinition = new TypeDefinitionWrapper(typeDTO);
-        TypeDefinitionWrapper typeDefinition1 = new TypeDefinitionWrapper(child);
-        InputStream inputStream = new ByteArrayInputStream(typeParentXML);
-//        when(TypeUtils.readFromXML(inputStream)).thenReturn(typeDefinition);
-        //TypeUtils.readFromXML(fileStream)
-        when(spy.createTypeFromXML(inputStream)).thenReturn(typeDefinition);
-        when(spy.createTypeFromXML(new ByteArrayInputStream(typeChildXML))).thenReturn(typeDefinition1);
-        convertorEJB.jsonXMLConvertor = spy;
-        Assert.assertEquals(listFSR.get(0).getName(), convertorEJB.readAndValidate(mapXML).getStatusReportList().get(0).getName());
-        Assert.assertEquals(listFSR.get(0).getStatus(), convertorEJB.readAndValidate(mapXML).getStatusReportList().get(0).getStatus());
-        Assert.assertTrue(typeDTOs.equals(convertorEJB.readAndValidate(mapXML).getSortedTypeList()));
 
     }
 

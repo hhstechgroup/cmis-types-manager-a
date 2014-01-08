@@ -1,7 +1,8 @@
-package com.engagepoint.teama.cmismanager.view.beans;
+package com.engagepoint.teama.cmismanager.view;
 
 import com.engagepoint.teama.cmismanager.common.model.BaseTypeEnum;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
+import com.engagepoint.teama.cmismanager.view.beans.DeleteBean;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
