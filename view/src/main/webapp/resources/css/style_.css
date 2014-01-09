@@ -1,3 +1,23 @@
+.ui-datatable .ui-paginator .ui-paginator-next .ui-icon,
+.ui-datatable .ui-paginator .ui-paginator-prev .ui-icon{
+    background: none 0px 0px repeat scroll rgba(0, 0, 0, 0);
+    color: rgb(0, 117, 172);
+    cursor: pointer;
+    height: auto;
+    line-height: 20px;
+    min-width: 0px;
+    width: auto;
+    border-radius: 0px;
+    padding: 1px 6px;
+    margin: 0px;
+    font-size:20px;
+}
+
+.ui-paginator-pages{
+    font-family: MuseoSans700, sans-serif;
+    font-size:16px;
+    color: rgb(0, 117, 172);
+}
 .ui-tree .ui-treenode-label.ui-state-highlight{
     color: rgb(255, 255, 255);
     background: rgb(86, 86, 85);

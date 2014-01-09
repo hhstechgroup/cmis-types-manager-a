@@ -30,7 +30,7 @@
                         <uib:gridContainer>
                             <uib:gridRow>
                                 <uib:gridColumn column="6">
-                                    <p:selectOneMenu value="#{fileDownloadController.type}">
+                                    <p:selectOneMenu id="export" value="#{fileDownloadController.type}">
                                         <p:ajax update="save"/>
                                         <f:selectItem itemLabel="Select One" itemValue=""/>
                                         <f:selectItems value="#{fileDownloadController.types}" var="type"

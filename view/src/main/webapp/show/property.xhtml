@@ -18,6 +18,8 @@
     <uib:dataTable id="allProperties" var="property"
                    rows="5"
                    paginator="true"
+                   paginatorPosition="bottom"
+                   paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink}"
                    value="#{showBean.currentDTO.propertyRows}" selection="#{showBean.propertyRowList}">
         <f:attribute name="propRow" value="#{property}"/>
 
@@ -37,7 +39,4 @@
             </p:commandLink>
         </p:column>
     </uib:dataTable>
-
-
-
 </h:form>

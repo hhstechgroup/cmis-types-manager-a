@@ -134,14 +134,13 @@ public class LoginBean implements Serializable {
             availableReposList = service.getRepoList(username, password, url);
             chosenRepo = availableReposList[0];
             errorBean.setErrorVisibility("false");
-
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
             errorBean.setErrorMessage(e.getMessage());
             sessionID = null;
             return ERROR_PAGE_REDIRECT;
         } finally {
-            if (chosenRepo.equals("") || chosenRepo == null) {
+            if (chosenRepo == null||chosenRepo.equals("")) {
                 errorBean.setErrorVisibility("true");
                 errorBean.setErrorMessage("Can't find entered URL address");
             }

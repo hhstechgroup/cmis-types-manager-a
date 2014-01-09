@@ -7,18 +7,49 @@
 
     <uib:gridRow>
         <uib:gridColumn column="4">
-    <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
-                     update=":mainForm, :addMetadata"
-                     styleClass="secondary"
-                     action="#{updateBean.clearNewPropertyRow}" oncomplete="addMetadataDialog.show()"/>
+            <p:commandButton title="Add metadata" id="addMetadata" value="Add metadata"
+                             update=":mainForm, :addMetadata"
+                             styleClass="secondary"
+                             action="#{updateBean.clearNewPropertyRow}" oncomplete="addMetadataDialog.show()"/>
         </uib:gridColumn>
         <uib:gridColumn column="1">
-    <p:commandButton title="Update type" id="addType" value="Done" action="/modify/update?faces-redirect=true" actionListener="#{updateBean.updateType}"/>
+            <p:commandButton title="Update type" id="addType" value="Done" action="/modify/update?faces-redirect=true"
+                             actionListener="#{updateBean.updateType}"/>
         </uib:gridColumn>
     </uib:gridRow>
 
+    <uib:dataTable id="allPropertiesUpdate" var="property"
+                   rows="5" paginator="true"
+                   paginatorPosition="bottom"
+                   paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink}"
+                   value="#{updateBean.currentDTO.propertyRows}">
+        <f:attribute name="propRow" value="#{property}"/>
+        <p:column headerText="ID" width="230">
+            <h:outputText value="#{property.id}"/>
+        </p:column>
+        <p:column headerText="Display Name" width="230">
+            <h:outputText value="#{property.displayName}"/>
+        </p:column>
+        <p:column headerText="Description" width="230">
+            <h:outputText value="#{property.description}"/>
+        </p:column>
+        <p:column headerText="Edit" width="30">
+
+            <p:commandLink title="Update property" id="update"
+                           update=":mainForm, :updatePropertyForm"
+                           action="#{updateBean.setNewPropertyRowUpdate(property)}"
+                           oncomplete="updatePropertyDialog.show()">
+
+                <uib:icon value='edit' alt='edit' title='edit icon'/>
+            </p:commandLink>
+
+        </p:column>
+    </uib:dataTable>
+
     <uib:dataTable id="allNewProperties" var="property"
                    rows="5" paginator="true"
+                   paginatorPosition="bottom"
+                   paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink}"
                    value="#{updateBean.newTypeDTO.propertyList}" selection="#{updateBean.propertyRowList}">
         <f:attribute name="propRow" value="#{property}"/>
         <p:column headerText="ID" width="230">
@@ -33,39 +64,13 @@
         <p:column headerText="Full Info" width="30">
 
             <p:commandLink title="Full Info" id="fullInfo" styleClass="secondary"
-                             actionListener="#{updateBean.setNewPropertyRowUpdate(property)}"
-                             update=":updatePropertyForm"
-                             oncomplete="updatePropertyDialog.show()">
+                           actionListener="#{updateBean.setNewPropertyRowUpdate(property)}"
+                           update=":updatePropertyForm"
+                           oncomplete="updatePropertyDialog.show()">
                 <uib:icon id="icon" value='page-details' alt='page-details' title='Full info'/>
             </p:commandLink>
 
         </p:column>
     </uib:dataTable>
-
-    <uib:dataTable id="allPropertiesUpdate" var="property"
-                   rows="5" paginator="true" value="#{updateBean.currentDTO.propertyRows}" >
-        <f:attribute name="propRow" value= "#{property}" />
-        <p:column headerText="ID" width="230">
-            <h:outputText value="#{property.id}"/>
-        </p:column>
-        <p:column headerText="Display Name" width="230">
-            <h:outputText value="#{property.displayName}"/>
-        </p:column>
-        <p:column headerText="Description" width="230">
-            <h:outputText value="#{property.description}"/>
-        </p:column>
-        <p:column headerText="Edit" width="30">
-
-            <p:commandLink title="Update property" id="update"
-                             update=":mainForm, :updatePropertyForm"
-                             action="#{updateBean.setNewPropertyRowUpdate(property)}" oncomplete="updatePropertyDialog.show()">
-
-                <uib:icon value='edit' alt='edit' title='edit icon' />
-            </p:commandLink>
-
-        </p:column>
-    </uib:dataTable>
-
-
 
 </ui:composition>
