@@ -27,7 +27,7 @@ And the user fills 'localnamespace' field with 'testMeta'
 And the user fills 'displayname' field with 'oneMeta'
 And the user fills 'queryname' field with 'twoMeta'
 And clicks on element with id/name/className 'add'
-And press 'Create' button
+And press 'Done' button
 
 Scenario: 4. User updates type
 When the user opens the default page

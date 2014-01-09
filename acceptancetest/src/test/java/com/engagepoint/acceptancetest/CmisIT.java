@@ -4,6 +4,6 @@ import net.thucydides.jbehave.ThucydidesJUnitStories;
 
 public class CmisIT extends ThucydidesJUnitStories {
 //    public CmisIT() {
-//        findStoriesCalled("login.story");
+//        findStoriesCalled("import_export.story");
 //    }
 }

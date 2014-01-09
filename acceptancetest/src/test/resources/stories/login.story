@@ -6,8 +6,8 @@ And press 'Get repo list' button
 And press 'Login' button
 And clicks on element by './/*[@id='topMenuBarForm:settings']/span'
 Then element id/name/className 'form:repo' has text 'A1'
-When clicks on element by './/*[@id='topMenuBarForm:logout']/span'
+When clicks on element by './/*[@id='logoutForm:logoutBtn']'
 And the user fills 'url' field with 'ololololo'
 And press 'Get repo list' button
-Then the text 'Cannot access ololololo/atom11: no protocol: ololololo/atom11' should be in the page source
-When clicks on element by './/*[@id='topMenuBarForm:logout']/span'
+Then the text 'Can't find entered URL address' should be in the page source
+
