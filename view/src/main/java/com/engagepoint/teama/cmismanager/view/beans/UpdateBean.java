@@ -51,7 +51,7 @@ public class UpdateBean {
 
     ///////////////////
 
-    private String canUpdate = null;
+    public String canUpdate = null;
 
     public String getCanUpdate() {
         return canUpdate;
@@ -175,6 +175,7 @@ public class UpdateBean {
             newTypeDTO.setMutabilityCanCreate(Boolean.valueOf(currentDTO.isMutabilityCanCreate()));
             newTypeDTO.setMutabilityCanDelete(Boolean.valueOf(currentDTO.isMutabilityCanDelete()));
             newTypeDTO.setMutabilityCanUpdate(Boolean.valueOf(currentDTO.isMutabilityCanUpdate()));
+
             canUpdate = "true";
         } else {
             canUpdate = null;

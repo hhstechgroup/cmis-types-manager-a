@@ -141,7 +141,7 @@ public class LoginBean implements Serializable {
             sessionID = null;
             return ERROR_PAGE_REDIRECT;
         } finally {
-            if (chosenRepo.equals("") || chosenRepo.equals(null)) {
+            if (chosenRepo.equals("") || chosenRepo == null) {
                 errorBean.setErrorVisibility("true");
                 errorBean.setErrorMessage("Can't find entered URL address");
             }
