@@ -3,8 +3,6 @@ package com.engagepoint.teama.cmismanager.view.beans;
 import com.engagepoint.teama.cmismanager.common.exceptions.BaseException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ConnectionException;
 import com.engagepoint.teama.cmismanager.common.exceptions.ModificationException;
-import com.engagepoint.teama.cmismanager.common.model.PropertyRow;
-import com.engagepoint.teama.cmismanager.common.model.PropertyTypeEnum;
 import com.engagepoint.teama.cmismanager.common.model.TypeDTO;
 import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote;
 import org.apache.log4j.Logger;
@@ -18,7 +16,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "treeBean")
