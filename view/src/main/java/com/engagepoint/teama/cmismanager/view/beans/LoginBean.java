@@ -6,6 +6,7 @@ import com.engagepoint.teama.cmismanager.common.service.ServiceEJBRemote;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -103,7 +104,6 @@ public class LoginBean implements Serializable {
     public String doLogin() {
         String page;
         try {
-
             UUID uuid = UUID.randomUUID();
             sessionID = uuid.toString();
             service.connect(username, password, url, sessionID, chosenRepo);
@@ -118,28 +118,34 @@ public class LoginBean implements Serializable {
         }
         return page;
     }
-    public HttpSession getHttpSessionTrue(){
+
+    public HttpSession getHttpSessionTrue() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         return httpSession;
     }
-    public HttpSession getHttpSessionFalse(){
+
+    public HttpSession getHttpSessionFalse() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         return httpSession;
     }
 
     public String getRepoList() {
-
         try {
             availableReposList = service.getRepoList(username, password, url);
             chosenRepo = availableReposList[0];
+            errorBean.setErrorVisibility("false");
 
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
             errorBean.setErrorMessage(e.getMessage());
-            sessionID = "error";
+            sessionID = null;
             return ERROR_PAGE_REDIRECT;
+        } finally {
+            if (chosenRepo == null || chosenRepo == "") {
+                errorBean.setErrorVisibility("true");
+                errorBean.setErrorMessage("Can't find entered URL address");
+            }
         }
-
         return null;
     }
 

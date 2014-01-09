@@ -2,16 +2,15 @@ package com.engagepoint.teama.cmismanager.view.beans;
 
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 @ManagedBean(name = "error")
 @SessionScoped
 public class ErrorBean implements Serializable {
 
-
-    public String getErrorVisibility() {
-        return errorVisibility;
-    }
 
     public void setErrorVisibility(String errorVisibility) {
         this.errorVisibility = errorVisibility;
@@ -28,6 +27,10 @@ public class ErrorBean implements Serializable {
     public void hideInfoBlock() {
         errorVisibility = "false";
         errorMessage = null;
+    }
+
+    public String getErrorVisibility() {
+        return errorVisibility;
     }
 
     private String errorMessage;

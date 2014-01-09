@@ -1,13 +1,20 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:uib="http://engagepoint.com/uib"
                 template="template.xhtml">
     <h:head>
         <title>Error page</title>
     </h:head>
 
+
     <ui:define name="mainContent">
+
         <h:body>
+        <uib:infoblock id="error" visible="true" type="notification"
+                                       styleClass="ui-messages-warn">
+            Can't connect to url #{login.url}
+        </uib:infoblock>
             <h:form>
                 <p>#{error.errorMessage}</p>
             </h:form>

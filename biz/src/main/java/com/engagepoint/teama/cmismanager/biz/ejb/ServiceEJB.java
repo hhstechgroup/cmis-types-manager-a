@@ -216,13 +216,13 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
      *
      */
     @Override
-    public String[] getRepoList(String username, String password, String url) throws ConnectionException {
+    public String[] getRepoList(String username, String password, String url)
+            throws ConnectionException {
         SessionFactory factory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
         parameter.put(SessionParameter.USER, username);
         parameter.put(SessionParameter.PASSWORD, password);
-
         parameter.put(SessionParameter.ATOMPUB_URL, url + "/atom11");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
         List<Repository> list;
@@ -241,7 +241,6 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
         for (Repository repo : list) {
             array.add(repo.getId());
         }
-
         return array.toArray(new String[1]);
     }
 
