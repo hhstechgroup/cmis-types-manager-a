@@ -23,35 +23,6 @@ public class PropertyRow implements Serializable, Cloneable {
     private CardinalityEnum cardinality = CardinalityEnum.SINGLE;
     private UpdatabilityEnum updatability = UpdatabilityEnum.READWRITE;
 
-    //not use
-    private List choiseList;
-    private List defaultValue;
-    private List extensions;
-
-    public List getChoiseList() {
-        return choiseList;
-    }
-
-    public void setChoiseList(List choiseList) {
-        this.choiseList = choiseList;
-    }
-
-    public List getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(List defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
-    public List getExtensions() {
-        return extensions;
-    }
-
-    public void setExtensions(List extensions) {
-        this.extensions = extensions;
-    }
-
     public String getId() {
         return id;
     }

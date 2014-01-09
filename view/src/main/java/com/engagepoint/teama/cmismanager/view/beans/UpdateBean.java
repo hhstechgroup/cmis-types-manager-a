@@ -51,7 +51,7 @@ public class UpdateBean {
 
     ///////////////////
 
-    public String canUpdate = null;
+    private String canUpdate = null;
 
     public String getCanUpdate() {
         return canUpdate;

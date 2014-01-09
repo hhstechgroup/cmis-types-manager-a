@@ -37,7 +37,7 @@ public class LoginBean implements Serializable {
     private String chosenRepo;
     private String[] availableReposList;
     private boolean logoutVisibility = false;
-
+    private  HttpSession httpSession;
     public boolean isLogoutVisibility() {
         return logoutVisibility;
     }
@@ -120,12 +120,12 @@ public class LoginBean implements Serializable {
     }
 
     public HttpSession getHttpSessionTrue() {
-        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         return httpSession;
     }
 
     public HttpSession getHttpSessionFalse() {
-        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         return httpSession;
     }
 
@@ -141,7 +141,7 @@ public class LoginBean implements Serializable {
             sessionID = null;
             return ERROR_PAGE_REDIRECT;
         } finally {
-            if (chosenRepo == null || chosenRepo == "") {
+            if (chosenRepo.equals(null) || chosenRepo.equals("")) {
                 errorBean.setErrorVisibility("true");
                 errorBean.setErrorMessage("Can't find entered URL address");
             }

@@ -220,6 +220,7 @@ public class TypeDTO implements Serializable, Cloneable {
 
     @Override
     public boolean equals(Object obj) {
+        boolean boolValue;
         if (this == obj) {
             return true;
         }
@@ -233,10 +234,10 @@ public class TypeDTO implements Serializable, Cloneable {
         if (other.getId().equals(this.getId()) && other.getQueryName().equals(this.getQueryName())
                 && other.getDisplayName().equals(this.getDisplayName()) &&
                 other.getLocalName().equals(this.getLocalName())) {
-            return true;
+            boolValue = true;
         } else {
-            return false;
+            boolValue = false;
         }
-
-    }
+        return boolValue;
+  }
 }

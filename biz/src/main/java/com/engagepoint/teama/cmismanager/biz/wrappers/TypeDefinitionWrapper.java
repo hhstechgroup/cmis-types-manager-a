@@ -164,6 +164,7 @@ public class TypeDefinitionWrapper implements Serializable, TypeDefinition {
 
     @Override
     public boolean equals(Object obj) {
+        boolean boolValue;
         if (this == obj){
             return true;
         }
@@ -177,8 +178,10 @@ public class TypeDefinitionWrapper implements Serializable, TypeDefinition {
         if (other.getId().equals(this.getId()) && other.getQueryName().equals(this.getQueryName())
                 && other.getDisplayName().equals(this.getDisplayName()) &&
                 other.getLocalName().equals(this.getLocalName())) {
-            return true;
-        } else
-            return false;
+            boolValue = true;
+        } else {
+            boolValue = false;
+        }
+            return boolValue;
     }
 }

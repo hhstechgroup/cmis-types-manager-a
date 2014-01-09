@@ -35,6 +35,7 @@ public class FileStatusReport implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        boolean boolValue;
         if (this == obj) {
             return true;
         }
@@ -47,10 +48,11 @@ public class FileStatusReport implements Serializable {
         FileStatusReport other = (FileStatusReport) obj;
         if (other.getName().equals(this.getName()) &&
                 other.getStatus().equals(this.getStatus())) {
-            return true;
+            boolValue = true;
         } else {
-            return false;
+            boolValue = false;
         }
+        return boolValue;
 
     }
 }
