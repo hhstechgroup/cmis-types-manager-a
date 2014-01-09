@@ -12,8 +12,10 @@ import java.util.List;
 public class SelectColumnValidator implements Validator {
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object o) throws ValidatorException {
-        List<String> columns =(List<String>) o;
-        if(columns.size()>4)
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR,"too many columns selected. maximum - 4","too many columns selected. maximum - 4"));
+        List<String> columns = (List<String>) o;
+        if (columns.size() > 4) {
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "too many columns selected. maximum - 4", "too many columns selected. maximum - 4"));
+
+        }
     }
 }

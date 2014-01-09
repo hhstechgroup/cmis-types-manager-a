@@ -112,6 +112,8 @@ public class JsonXMLConverterTest {
         Assert.assertNotNull(MISSING_FILE, getClass().getResource("/types/xml/cmis/my-document.xml"));
     }
 
+
+
     @Test
     public void getXMLFromTypeInByteArrayCorrectInput() throws IOException, ConvertationException {
 
@@ -150,6 +152,14 @@ public class JsonXMLConverterTest {
     @Test
     public void getJSONFromTypeInByteArrayIsTestFileExists() {
         Assert.assertNotNull(MISSING_FILE, getClass().getResource("/types/json/my-document.json"));
+    }
+
+    @Test(expected = IOException.class)
+    public void getJSONFromTypeInByteArrayIOException(){
+        try {
+            jsonXMLConvertor.getJSONFromTypeInByteArray(mockedTypeDefinition);
+        } catch (ConvertationException e) {
+        }
     }
 
     @Test

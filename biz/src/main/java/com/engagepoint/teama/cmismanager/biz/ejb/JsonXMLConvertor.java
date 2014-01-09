@@ -78,7 +78,7 @@ public class JsonXMLConvertor {
                 LOG.error(e.getMessage(), e);
             }
         }
-        return returnedByeArray  ;
+        return returnedByeArray;
     }
 
     public byte [] getXMLFromTypeInByteArray(TypeDefinition parentType) throws ConvertationException {

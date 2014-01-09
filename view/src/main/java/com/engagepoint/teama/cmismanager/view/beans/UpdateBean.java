@@ -117,11 +117,12 @@ public class UpdateBean {
         newPropertyRow.setPropertyType(
                 PropertyTypeEnum.fromValue(linkToUpdatedPropertyRow.getPropertyType().toString()));
 
-        newPropertyRow.setQueryable(new Boolean(linkToUpdatedPropertyRow.isQueryable()));
-        newPropertyRow.setOrderable(new Boolean(linkToUpdatedPropertyRow.isOrderable()));
-        newPropertyRow.setRequired(new Boolean(linkToUpdatedPropertyRow.isRequired()));
-        newPropertyRow.setInherited(new Boolean(linkToUpdatedPropertyRow.isInherited()));
-        newPropertyRow.setOpenChoice(new Boolean(linkToUpdatedPropertyRow.isOpenChoice()));
+        newPropertyRow.setQueryable(Boolean.valueOf(linkToUpdatedPropertyRow.isQueryable()));
+        newPropertyRow.setOrderable(Boolean.valueOf(linkToUpdatedPropertyRow.isOrderable()));
+        newPropertyRow.setRequired(Boolean.valueOf(linkToUpdatedPropertyRow.isRequired()));
+        newPropertyRow.setInherited(Boolean.valueOf(linkToUpdatedPropertyRow.isInherited()));
+        newPropertyRow.setOpenChoice(Boolean.valueOf(linkToUpdatedPropertyRow.isOpenChoice()));
+
     }
 
     public void submitChanges () {
@@ -162,19 +163,18 @@ public class UpdateBean {
             newTypeDTO.setParentTypeId(new String(currentDTO.getParentTypeId()));
             newTypeDTO.setBaseTypeId(BaseTypeEnum.fromValue(currentDTO.getBaseTypeId().toString()));
 
-            newTypeDTO.setCreatable(new Boolean(currentDTO.isCreatable()));
-            newTypeDTO.setFileable(new Boolean(currentDTO.isFileable()));
-            newTypeDTO.setQueryable(new Boolean(currentDTO.isQueryable()));
+            newTypeDTO.setCreatable(Boolean.valueOf(currentDTO.isCreatable()));
+            newTypeDTO.setFileable(Boolean.valueOf(currentDTO.isFileable()));
+            newTypeDTO.setQueryable(Boolean.valueOf(currentDTO.isQueryable()));
 
-            newTypeDTO.setIncludedInSupertypeQuery(new Boolean(currentDTO.isIncludedInSupertypeQuery()));
-            newTypeDTO.setControllableAcl(new Boolean(currentDTO.isControllableAcl()));
-            newTypeDTO.setControllablePolicy(new Boolean(currentDTO.isControllablePolicy()));
-            newTypeDTO.setFulltextIndexed(new Boolean(currentDTO.isFulltextIndexed()));
+            newTypeDTO.setIncludedInSupertypeQuery(Boolean.valueOf(currentDTO.isIncludedInSupertypeQuery()));
+            newTypeDTO.setControllableAcl(Boolean.valueOf(currentDTO.isControllableAcl()));
+            newTypeDTO.setControllablePolicy(Boolean.valueOf(currentDTO.isControllablePolicy()));
+            newTypeDTO.setFulltextIndexed(Boolean.valueOf(currentDTO.isFulltextIndexed()));
 
-            newTypeDTO.setMutabilityCanCreate(new Boolean(currentDTO.isMutabilityCanCreate()));
-            newTypeDTO.setMutabilityCanDelete(new Boolean(currentDTO.isMutabilityCanDelete()));
-            newTypeDTO.setMutabilityCanUpdate(new Boolean(currentDTO.isMutabilityCanUpdate()));
-
+            newTypeDTO.setMutabilityCanCreate(Boolean.valueOf(currentDTO.isMutabilityCanCreate()));
+            newTypeDTO.setMutabilityCanDelete(Boolean.valueOf(currentDTO.isMutabilityCanDelete()));
+            newTypeDTO.setMutabilityCanUpdate(Boolean.valueOf(currentDTO.isMutabilityCanUpdate()));
             canUpdate = "true";
         } else {
             canUpdate = null;

@@ -164,9 +164,15 @@ public class TypeDefinitionWrapper implements Serializable, TypeDefinition {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (!(obj instanceof TypeDefinitionWrapper)) return false;
+        if (this == obj){
+            return true;
+        }
+        if (obj == null){
+            return false;
+        }
+        if (!(obj instanceof TypeDefinitionWrapper)){
+            return false;
+        }
         TypeDefinitionWrapper other = (TypeDefinitionWrapper) obj;
         if (other.getId().equals(this.getId()) && other.getQueryName().equals(this.getQueryName())
                 && other.getDisplayName().equals(this.getDisplayName()) &&

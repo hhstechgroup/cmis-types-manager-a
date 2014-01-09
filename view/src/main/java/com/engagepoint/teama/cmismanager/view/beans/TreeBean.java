@@ -27,8 +27,8 @@ public class TreeBean implements Serializable {
 
     public static final Logger LOG = Logger.getLogger(TreeBean.class);
     private static final long serialVersionUID = 2023524722101427935L;
-    private  static final String TRUE = "true";
-    private  static final String ROOT = "Root";
+    private static final String TRUE = "true";
+    private static final String ROOT = "Root";
     public static final String ERROR_PAGE = "/error";
 
     //move to import/export bean
@@ -134,7 +134,6 @@ public class TreeBean implements Serializable {
             list = service.getAllTypes(sessionID);
             root = new DefaultTreeNode(ROOT, null);
             render(list, root);
-            // newDTO = new TypeDTO();
         } catch (BaseException e) {
             LOG.error(e.getMessage(), e);
             errorBean.setErrorMessage(e.getMessage());

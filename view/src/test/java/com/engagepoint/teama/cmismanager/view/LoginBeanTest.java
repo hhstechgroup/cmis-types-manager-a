@@ -47,6 +47,4 @@ public class LoginBeanTest {
         spyBean.doLogout();
     }
 
-
-
 }
