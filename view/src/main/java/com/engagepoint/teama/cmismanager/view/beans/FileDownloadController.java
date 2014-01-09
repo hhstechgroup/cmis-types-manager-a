@@ -142,20 +142,22 @@ public class FileDownloadController {
 
         try {
             out = new ZipOutputStream(new FileOutputStream(new File(path)));
+      } catch (FileNotFoundException e) {
+            LOG.error(e.getMessage(), e);
+        }
 
-            for (String fileName : map.keySet()) {
-                try {
-                    out.putNextEntry(new ZipEntry(fileName));
-                    out.write(map.get(fileName));
-                    out.closeEntry();
-
-                } catch (IOException e) {
-                    LOG.error(e.getMessage(), e);
-                }
+        for (String fileName : map.keySet()) {
+            try {
+                out.putNextEntry(new ZipEntry(fileName));
+                out.write(map.get(fileName));
+                out.closeEntry();
+            } catch (IOException e) {
+                LOG.error(e.getMessage(), e);
             }
+        }
 
+        try {
             returnedInputStream = new FileInputStream(path);
-
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
         }

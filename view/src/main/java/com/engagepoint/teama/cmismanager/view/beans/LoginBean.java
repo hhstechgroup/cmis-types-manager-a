@@ -108,7 +108,7 @@ public class LoginBean implements Serializable {
             sessionID = uuid.toString();
             service.connect(username, password, url, sessionID, chosenRepo);
             page = INDEX_PAGE_REDIRECT;
-            HttpSession httpSession = getHttpSessionTrue();
+            httpSession = getHttpSessionTrue();
             httpSession.setAttribute(SESSION_ID, sessionID);
             logoutVisibility = true;
         } catch (BaseException e) {
@@ -141,7 +141,7 @@ public class LoginBean implements Serializable {
             sessionID = null;
             return ERROR_PAGE_REDIRECT;
         } finally {
-            if (chosenRepo.equals(null) || chosenRepo.equals("")) {
+            if (chosenRepo.equals("") || chosenRepo.equals(null)) {
                 errorBean.setErrorVisibility("true");
                 errorBean.setErrorMessage("Can't find entered URL address");
             }
