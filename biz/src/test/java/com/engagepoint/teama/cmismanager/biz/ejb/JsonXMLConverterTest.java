@@ -154,13 +154,6 @@ public class JsonXMLConverterTest {
         Assert.assertNotNull(MISSING_FILE, getClass().getResource("/types/json/my-document.json"));
     }
 
-    @Test(expected = IOException.class)
-    public void getJSONFromTypeInByteArrayIOException(){
-        try {
-            jsonXMLConvertor.getJSONFromTypeInByteArray(mockedTypeDefinition);
-        } catch (ConvertationException e) {
-        }
-    }
 
     @Test
     public void getJSONFromTypeInByteArrayCorrectInput() throws IOException, ConvertationException {
