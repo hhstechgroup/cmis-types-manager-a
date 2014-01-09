@@ -289,31 +289,4 @@ public class ServiceEJB implements ServiceEJBRemote, ServiceEJBLocal, Serializab
         }
     }
 
-    /**
-     * Get type by ID from repository.
-     * @param sessionID every user must have unique session ID
-     * @param id some TypeDTO instance ID
-     * @return new instance if created, null if not
-     * @throws ModificationException
-     * @throws ConnectionException
-     * @throws BaseException
-     */
-
-//    private ObjectType getTypeById(String id, String sessionID) throws BaseException {
-//        ObjectType returnedType;
-//        Session session = sessionEJB.getSession(sessionID);
-//
-//        try {
-//            returnedType = session.getTypeDefinition(id);
-//        } catch (CmisObjectNotFoundException cp) {
-//            throw new ModificationException(cp.getMessage(), cp);
-//        } catch (CmisPermissionDeniedException cp) {
-//            throw new ConnectionException(cp.getMessage(), cp);
-//        } catch (CmisBaseException cbe) {
-//            throw new BaseException(cbe.getMessage(), cbe);
-//        }
-//
-//        return returnedType;
-//    }
-
 }
